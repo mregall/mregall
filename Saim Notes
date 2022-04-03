@@ -1,0 +1,4244 @@
+
+
+3/30/2022
+
+Day 39 ArrayList
+
+day39_arraylist
+____________________________________________________________
+
+Tomorrow: No Class
+____________________________________________________________
+
+ArrayList
+____________________________________________________________
+
+ArrayList methods:
+	
+	add(element) --> adds the element to the end of the ArrayList
+		returns boolean
+
+	add(index, element): puts the element at the given index number. All the other elements are moved over
+		void
+
+	get(index) --> returns the element at the given index
+
+	size() --> returns how many elements the ArrayList has
+
+		last index in ArrayList: name.size() - 1
+
+	remove(index): removes the element at the given index number and returns that element value 
+		-> what if you try to remove with an index that doesn't exist: it will go out of bounds
+
+	remove(element): removes the given element and returns a boolean value if it was removed or not
+		-> what if you try to remove with an element that doesn't exist: the list will not be changed and the method would return false
+
+Iterating through an ArrayList
+
+	ArrayList<Integer> nums = new ArrayList<>();
+	nums.add(1);
+	nums.add(2);
+	nums.add(3);
+
+	for(int i = 0; i < nums.size(); i++){
+		System.out.println(nums.get(i));
+	}
+
+	or
+
+	for(int each : nums){
+		System.out.println(each);
+	}
+
+____________________________________________________________
+
+Example of adding, removing
+
+        ArrayList<String> list = new ArrayList<>();
+        list.add("computer");
+        list.add("screen");
+        list.add("mouse");
+        list.add("keyboard");
+
+        String item = list.remove(0); // removes the first index of the ArrayList, which is (computer) and it returns that element (computer) from the method. We store the return value into a String variable called item
+        System.out.println(item);
+        System.out.println(list);
+
+        boolean bool = list.remove("mouse");
+        System.out.println(bool);
+        System.out.println(list);
+
+____________________________________________________________
+
+More ArrayList methods:
+
+	contains(element): check if the given element is in the ArrayList. Return boolean. True if the element is there or false if it is not
+
+	clear(): remove all the elements in the ArrayList
+
+		void: no return
+
+	isEmpty(): return boolean. 
+		true: whenever there is no element in the ArrayList
+		false: whenever there is any element in the ArrayList
+
+	set(index, element): replace the element at the given index number (1st parameter) with the given element (2nd parameter)
+
+	indexOf(element): return an int
+		first occurrence of the index of the given element
+
+		if the element does not exist in the ArrayList: it returns -1
+
+____________________________________________________________
+
+Convert an Array to an ArrayList
+
+	for array we were able to declare values using curly brackets
+
+		int [] a = { 1, 2, 3, 4};
+
+	We can't just do this for ArrayList
+
+	But ArrayList can be made in other ways:
+
+		ArrayList<type> name = new ArrayList<>(); // makes empty ArrayList, no elements
+
+		ArrayList<type> name = new ArrayList<>( ArrayList object ); // make an ArrayList with a copy of the elements from another ArrayList
+
+			--> this one is more generic: 
+			ArrayList<type> name = new ArrayList<>( collection type );
+
+	so
+
+		we can use Arrays.asList() method which accepts an array parameter and return a collection type
+
+	All the points combined:
+
+		ArrayList<type> name = new ArrayList<>( Arrays.asList() );
+
+		this will create a new ArrayList object by giving values into the asList method
+
+Note: the asList method is a var arg method, which means the parameter is an array, but we can add the numbers ourselves using the element and a comma
+
+	method(int ... nums) --> same as --> method(int [] nums)
+
+	but the ..., the var arg method allow you to type the element in the parenthesis 
+
+
+
+3/28/2022
+
+Day 38 ArrayList
+
+day38_arraylist
+____________________________________________________________
+
+ArrayList
+____________________________________________________________
+
+Recap
+
+Wrapper Classes
+
+	object representation of primitive datatypes 
+
+	these classes are in the java.lang package
+
+Converting types
+
+	Autoboxing: converts the primitive datatype into an object type (Wrapper Class Objects)
+
+	Unboxing: converts the object type into a primitive datatype
+
+When to use Wrapper classes
+
+	1) ArrayList and other collections can't work with primitive datatypes
+
+	2) Useful methods, information 
+
+		Ex: parse methods, MAX_VALUE
+
+____________________________________________________________
+
+ArrayList
+
+	a class that works like a dynamic array that also has some methods
+
+	located in the java.util package
+		--> Anytime you want to use an ArrayList you must import it
+
+	the size is flexible
+	we can print the ArrayList objects normally 
+	only work with Objects type --> primitive datatypes do not work 
+
+	ArrayList will take more memory than an array
+	Arrays itself is faster, whenever there is set of data that doesn't change
+
+	Syntax:
+
+		ArrayList<datatType> name = new ArrayList<>();
+
+ArrayList methods:
+
+	add(element): add the given element to the ArrayList at the end
+
+		returns boolean --> returns true, but we don't normally use this return value
+
+	add(index, element): adds the given element at the given index of the ArrayList. All elements are moved positions
+
+	get(index): returns the element at the given index number
+
+	size(): returns the number of how many elements the ArrayList has
+
+	remove(index): remove the element at the given index and it returns the element that was removed
+		all the elements move over
+
+	remove(element): remove the given element from the ArrayList and it returns a boolean
+		true -> remove an element
+		false -> element doesn't exist
+
+
+
+
+3/26/2022
+
+Day 36 Overloading Methods
+
+day36_methods
+____________________________________________________________
+
+Overloading methods
+____________________________________________________________
+
+Method overloading
+
+How to have methods with similar idea, first we can try with different name:
+but that means we would have to use so many more methods names
+
+	ex:
+		sumInt(int numOne, int numTwo)
+		sumDouble(double, numOne, numTwo)
+		sumString(String str, String str2)
+
+	* method that has the same name, but different parameters
+
+		-> allows us to have different methods, different code, but the same name
+
+		overloading happens inside of a class, between methods
+
+	ex:
+		substring(start)
+		substring(start, end)
+
+		indexOf()
+
+Q: Can you overload a method by changing the return type
+	no, methods are overloaded by changing the parameters
+
+Q: After you overload a method, can you change the return type
+	yes, after a method is overloaded you can change the return type if you want
+
+
+    public static void method(){
+        System.out.println("default empty method");
+    }
+
+	// I will try to overload by changing the return type
+
+	//    public static int method(){
+	//
+	//    }
+	//    this is not valid, changing the return type does not overload
+
+	public static int method(int a){
+	        return 0;
+	}
+
+var args
+variable arguments
+
+	allow you to create methods that accept an array as the parameter, but we can type all the elements directly, separated by commas, without making an array object
+
+	syntax: 
+
+		normal --> 	(int [] nums)
+		var args --> (int ... nums)
+
+			ex:	method(element, element, element)
+
+			public static int sum(int ... nums){
+
+			call the method:
+			System.out.println(sum(4, 6, 2, 6, 12, 4));
+
+datatype promotion
+
+	whenever you give an argument it will try to match with the specified type
+
+	but if the type is not matched directly it will try to automatically promote to the closest type bigger than it
+
+	byte --> short --> int --> long --> float --> double
+
+	if there is no type available, then the code will not compile
+
+summary:
+
+Method overloading allows methods to be created with the same name
+The parameters must be different (number of parameters, or the types of the parameters)
+The return types should be the same, but if a method is overloaded it can be changed
+Improve re-usability and readability 
+
+____________________________________________________________
+
+Git: Keep track of changes
+
+project: B26_Git_Project
+
+right click on project level -> new -> file -> .gitignore
+
+What does the git ignore file do
+
+	any files or folders in this file will not be tracked
+
+Common java files to ignore:
+.idea
+*.iml
+*.xml
+/out
+
+# comment with hashtag
+
+-----------------------------------------------------------------
+Scenario about versions 
+
+	you do code in office hours
+	office hours code was shared to the remote repository
+	I wrote code in class
+	try to share code to remote repository
+
+		-> faced issue because my project was not the same as the project in the remote repository
+
+	to fix the issue, I should update/or pull my project
+
+		--> now my local repository is the same as the remote repository, so now I can commit and push my changes
+
+	Monday class: 4.0
+	Tuesday, office hours: 5.0
+	Tuesday, in class: 4.0
+		trying to share 4.0 --> 5.0 	
+			x doesn't work
+
+		to fix: I need to get version 5.0 to my computer --> update/pull
+
+		now my computer has 5.0 version it means I can share the new code, which would share version 5.2
+
+
+as a rule: you should always update your projects before pushing
+-----------------------------------------------------------------
+
+From the VCS option on the top we select enable version control system integration and pick git
+
+	--> creates a local repository in this project
+	--> VCS option becomes Git 
+
+commit the changes so far, which was just the .gitignore
+
+Went to Git option on the top -> Github -> share project
+
+	1) creates a remote repository 
+	2) links the local repository with the remote repository 
+	3) pushes the first changes/commits
+
+How to open the project on github?
+right click on the project level --> open in --> github
+
+created a new package day0
+created a new class HelloWorld
+wrote some code
+
+commit -> selected the HelloWorld file
+push from local repository to remote repository 
+
+Note: The add option window was given to us about if we automatically want to keep track of all files
+	if we cancel all files will be created un-versioned 
+	if we add then all files will be tracked upon creation
+
+created a new class called First
+added some code/comments
+commit those changes
+go back to the First class and add more changes
+commit those changes
+after committing there was something wrong with commit message, so we edit it
+
+	-> How to edit: right click on the commit in the git log and select edit commit message
+
+	Note: If you pushed changes already you will not be able to change the commit message. It is not only local now
+
+created the JamesBond.java file on github
+	(create an idea that someone else made changes to the same remote repository)
+wrote some code
+commit the changes on the remote repository (save)
+to get the changes from the remote repository to our local repository
+	fetch: go the information without making any changes to our project
+
+	Git -> fetch
+
+	update: actually get the changes from the remote repository to our computer, which allows us to run the file now
+
+	Git --> update
+
+
+
+3/26/2022
+
+Day 36 Overloading Methods
+
+day36_methods
+____________________________________________________________
+
+Overloading methods
+____________________________________________________________
+
+Method overloading
+
+How to have methods with similar idea, first we can try with different name:
+but that means we would have to use so many more methods names
+
+	ex:
+		sumInt(int numOne, int numTwo)
+		sumDouble(double, numOne, numTwo)
+		sumString(String str, String str2)
+
+	* method that has the same name, but different parameters
+
+		-> allows us to have different methods, different code, but the same name
+
+		overloading happens inside of a class, between methods
+
+	ex:
+		substring(start)
+		substring(start, end)
+
+		indexOf()
+
+Q: Can you overload a method by changing the return type
+	no, methods are overloaded by changing the parameters
+
+Q: After you overload a method, can you change the return type
+	yes, after a method is overloaded you can change the return type if you want
+
+
+    public static void method(){
+        System.out.println("default empty method");
+    }
+
+	// I will try to overload by changing the return type
+
+	//    public static int method(){
+	//
+	//    }
+	//    this is not valid, changing the return type does not overload
+
+	public static int method(int a){
+	        return 0;
+	}
+
+var args
+variable arguments
+
+	allow you to create methods that accept an array as the parameter, but we can type all the elements directly, separated by commas, without making an array object
+
+	syntax: 
+
+		normal --> 	(int [] nums)
+		var args --> (int ... nums)
+
+			ex:	method(element, element, element)
+
+			public static int sum(int ... nums){
+
+			call the method:
+			System.out.println(sum(4, 6, 2, 6, 12, 4));
+
+datatype promotion
+
+	whenever you give an argument it will try to match with the specified type
+
+	but if the type is not matched directly it will try to automatically promote to the closest type bigger than it
+
+	byte --> short --> int --> long --> float --> double
+
+	if there is no type available, then the code will not compile
+
+summary:
+
+Method overloading allows methods to be created with the same name
+The parameters must be different (number of parameters, or the types of the parameters)
+The return types should be the same, but if a method is overloaded it can be changed
+Improve re-usability and readability 
+
+____________________________________________________________
+
+Git: Keep track of changes
+
+project: B26_Git_Project
+
+right click on project level -> new -> file -> .gitignore
+
+What does the git ignore file do
+
+	any files or folders in this file will not be tracked
+
+Common java files to ignore:
+.idea
+*.iml
+*.xml
+/out
+
+# comment with hashtag
+
+-----------------------------------------------------------------
+Scenario about versions 
+
+	you do code in office hours
+	office hours code was shared to the remote repository
+	I wrote code in class
+	try to share code to remote repository
+
+		-> faced issue because my project was not the same as the project in the remote repository
+
+	to fix the issue, I should update/or pull my project
+
+		--> now my local repository is the same as the remote repository, so now I can commit and push my changes
+
+	Monday class: 4.0
+	Tuesday, office hours: 5.0
+	Tuesday, in class: 4.0
+		trying to share 4.0 --> 5.0 	
+			x doesn't work
+
+		to fix: I need to get version 5.0 to my computer --> update/pull
+
+		now my computer has 5.0 version it means I can share the new code, which would share version 5.2
+
+
+as a rule: you should always update your projects before pushing
+-----------------------------------------------------------------
+
+From the VCS option on the top we select enable version control system integration and pick git
+
+	--> creates a local repository in this project
+	--> VCS option becomes Git 
+
+commit the changes so far, which was just the .gitignore
+
+Went to Git option on the top -> Github -> share project
+
+	1) creates a remote repository 
+	2) links the local repository with the remote repository 
+	3) pushes the first changes/commits
+
+How to open the project on github?
+right click on the project level --> open in --> github
+
+created a new package day0
+created a new class HelloWorld
+wrote some code
+
+commit -> selected the HelloWorld file
+push from local repository to remote repository 
+
+Note: The add option window was given to us about if we automatically want to keep track of all files
+	if we cancel all files will be created un-versioned 
+	if we add then all files will be tracked upon creation
+
+created a new class called First
+added some code/comments
+commit those changes
+go back to the First class and add more changes
+commit those changes
+after committing there was something wrong with commit message, so we edit it
+
+	-> How to edit: right click on the commit in the git log and select edit commit message
+
+	Note: If you pushed changes already you will not be able to change the commit message. It is not only local now
+
+created the JamesBond.java file on github
+	(create an idea that someone else made changes to the same remote repository)
+wrote some code
+commit the changes on the remote repository (save)
+to get the changes from the remote repository to our local repository
+	fetch: go the information without making any changes to our project
+
+	Git -> fetch
+
+	update: actually get the changes from the remote repository to our computer, which allows us to run the file now
+
+	Git --> update
+
+
+
+Day 35 Return Methods
+day35_methods
+____________________________________________________________
+Method Practice
+Utility Classes
+____________________________________________________________
+recap
+
+return type method
+a method: it has some code statement meant to be executed 
+many times. It has some action
+return type: some value will be given from the method
+
+general syntax:
+public static RETURN_TYPE methodName(){
+}
+creating a method with a return type, which means it is 
+not void, there must be a return value given matching the datatype of the 
+RETURN_TYPE
+--> the value is returned from a method using 
+keyword: return
+when the return keyword is executed a value is passed 
+from the method to where the method was called, and the method stops 
+execution
+
+How to call a method that is outside of the package?
+
+1) import the class where the method is created
+import packageName.className;
+import: keyword
+packageName: package where the file 
+being used was created
+className: class where the method you 
+want to use is created
+
+2) use the method by the class name
+className.method()
+
+Note: if you are in the same package you don't need to 
+import
+Note: if you are in the same class you don't need to put 
+the class name part
+
+How to import the whole package:
+import packageName.*;
+* is wildcard. It will import all classes in the defined package
+Ex:
+import java.util.*;
+you can access Scanner or Arrays classes
+plus many more
+
+Shortcuts in IntelliJ
+search for anything in IntelliJ: shift twice
+command/control + shift + f: search for exact text in the files
+
+==================================================================================================
+
+3/23/2022
+Day 34 Return Methods
+day34_methods
+____________________________________________________________
+Return type methods
+https://codingbat.com/java
+Quizzes, check quizzes_and_assignments channel
+Arrays Short quiz - Tonight
+Unit 2 Assessment - Opening Friday
+Saturday: java/git
+Sunday: java
+____________________________________________________________
+Recap: Methods
+a group of statements that have some action and those actions become 
+re-usable anywhere in the project
+2 types of methods:
+void: executes some action, but it doesn't give any 
+information/value back
+public static void methodName(){
+}
+return: execute some actions, and it returns some value
+public static RETURN_TYPE methodName(){
+}
+parameters:
+allowing the method to get some data/information to use 
+inside of the method
+parameters are defined in the parenthesis of a method
+--> to add multiple parameters use a comma 
+and define:
+datatype name, datatype name, etc
+any parameter is local to that method
+ex:
+charAt(index)
+charAt(0)
+charAt --> method name
+(index) --> parameter, some information 
+of this type must be given to run the method
+(0) --> the 0, or any other number 
+given, is the argument - the actual value that will be used in the method 
+code
+____________________________________________________________
+return type
+public static RETURN_TYPE methodName(){
+}
+method that does an action, but it will return/give back 
+a single value
+RETURN_TYPE: any type
+these method use the keyword:
+return
+-> this keyword with values is how we will 
+get information out of the methods
+the return keyword also stops the method, because a value 
+was passed out of it already
+Debugging method
+instead of step over, select step into in on the method line, select 
+which method you want to debug
+
+====================================================================================================
+
+3/20/2022
+
+Day 33 Void Methods
+
+day33_methods
+____________________________________________________________
+
+Void Methods
+____________________________________________________________
+
+Recap
+
+	1D Single Dimensional Arrays
+
+		int [] nums = {1, 2, 5}
+		String [] words = {"a", "b", "c"}
+
+
+	2D Array
+
+		array inside of an array - the elements were arrays
+
+		int [][] n = { {2, 3, 5, 6}, {1, 5, 123, 51} };
+
+		n[0] --> {2, 3, 5, 6}
+		n[1] --> {1, 5, 123, 51}
+
+		n[0][0] --> 2
+		n[0][1] --> 3
+		n[0][2] --> 5
+		n[0][3] --> 6
+
+		n.length --> 2
+
+		n[0].length --> 4
+
+	loop through 2d array
+
+	for each
+
+		for(int [] arr : n){
+			// this loop goes through the 2d array. The elements are arrays
+
+			for(int number : arr){
+				// this loop goes through each inner array, which will see each number
+
+			}
+
+		}
+
+	traditional
+
+		for(int i = 0; i < n.length; i++){
+			// this loop goes through the 2d array. The elements are arrays
+			// to access each array element --> n[i]
+
+			for(int j = 0; j < n[i].length; j++ ){
+
+				// this loop goes through each inner array, which will see each number
+				// to access every inner element --> n[i][j]
+
+			}
+		}
+
+declaring 2D array
+
+	datatType [][] arrayName = new dataType[x][z];
+
+		where x is how many elements the 2D array has - number of arrays
+
+		where z is the size of each inner array
+			-> is optional to define. If it is not defined then the inner arrays sizes do not matter, they can be different
+
+	datatType [][] arrayName = { arrayName1, arrayName2, etc}
+
+	dataType [][] arrayName = { {element, element, element, etc}, {element, element, element, etc}, {element, element, element, etc} };
+
+Q: Why is it giving NullPointerException
+String [][] str = new String[2][];  // [ null, null ]
+        str [0][0] = "str"; // no array yet, this code will cause problems
+
+       String [] a = {"element", "element"};
+       str[0] = a;
+
+       str[1] = new String[]{"element", "element"}
+
+String s = null;
+s.charAt(0); --> null.charAt(0) --> NullPointerException
+
+____________________________________________________________
+
+Methods
+
+	a code block that has reusable code
+
+	There is ready methods from java: String methods, Arrays class methods, Scanner method, etc
+		-> Code already written and is used by programmers
+
+	We can create our own custom methods, which means we can create reusable code. After writing a method we can call/use the method anywhere in the project
+
+	in other language you may hear function, but in java they are call methods
+
+	Ex:
+
+		public static void hello(){
+			System.out.println("Hello");
+		}
+
+		public --> access modifier, allows us to call the method in the whole project
+			-> Until we say or see anything else, we will use public or our methods
+
+		static --> allows us to call the method by the class name
+
+			className.method()
+
+			-> in the same file, you don't need to give the class name
+
+		void --> no return value. The method will execute some code, but no value is going to come out of it
+
+			Ex: Arrays.sort()
+
+		hello() --> name of the method
+			-> Names should be clear about the action of the method
+
+	main method: a special method that is executed when the code is run 
+
+	custom method: will not run by themselves, we have to call/use them somewhere
+
+Parameters:
+
+	to allow our methods to have input we are able to defined parameters
+
+	if a method has a parameter then a value must be given into order to call the method
+
+		-> parameter: name inside of the method
+
+		-> argument: value given to call the method
+
+	the parameters are local variables in the method
+
+		-> the variables cannot be used outside of the method
+
+	you can have multiple parameters by using a comma to separate them 
+
+	there is no restriction to the types, to the number of parameters
+
+	Ex:
+
+		printNumber(int n)  --> method has an int parameter that will be references by the n variable
+
+		to use this method:
+
+		printNumber(5) --> when calling the method an int type value must be given, and that is called the argument
+
+
+=================================================================================================
+
+3/19/2022
+
+Day 32 Multidimensional Arrays
+
+day32_array
+____________________________________________________________
+
+Arrays Class
+Multidimensional arrays
+____________________________________________________________
+
+Arrays Class
+
+	utility class for arrays. Has useful methods/action for array objects
+
+	Ex: int [] n = { 5, 1, 4};
+
+
+	Arrays.toString(): printing array objects
+
+		Arrays.toString(n) --> [5, 1, 4]
+
+	Arrays.sort(): rearrange elements to be in order of smallest to largest
+		-> for String elements: Lexicographical
+
+		Arrays.sort(n) --> [1, 4, 5]
+
+	Arrays.equals(): compare two array objects to see if they have the same elements
+
+		int [] a = {1, 4, 5};
+		int [] b = {1, 4, 5, 6};
+
+		Arrays.equals(n, a) --> true   | Remember we sorted the n array
+		Arrays.equals(a, b) --> false
+
+String methods:
+	
+	String.join(): allows the array to be separated by a certain character/s
+
+		String.join("*", n) --> 1*4*5
+
+	--> method works for String array types
+
+____________________________________________________________
+
+More Arrays Class
+
+	Arrays.copyOf()
+
+		two arguments:
+
+			(array, size)
+
+				array: the array you want to copy the elements from
+				size: the size of the new array
+
+	Arrays.binarySearch()
+		find/search for the position of an element in the array
+
+		--> in order for the method to work, the array must be sorted
+
+		two arguments:
+			
+			(array, element)	
+
+				array: the sorted array you are checking in
+				element: the element you are trying to find the index/position of
+
+		if the element you are looking for is not in the array, then it returns a negative number based on where the position would be + 1
+
+____________________________________________________________		
+
+Multidimensional Arrays
+
+	Array inside of an array. The elements of a 2D array is a single dimensional array
+
+	single dimensional array:
+
+		int [] a = {1, 2, 3};
+
+	2D array:
+
+		int [][] arr = {
+
+			{1, 2, 3},
+			{4, 5, 6}
+
+		}
+
+		arr[0] --> {1, 2, 3}
+		arr[1] --> {4, 5, 6}
+
+		How to access the first element of each inner array
+
+			arr[0][0] --> 1
+			arr[1][0] --> 4
+
+	How to print multi dimensional arrays
+
+		Arrays.deepToString()
+
+	int [][][] 
+		3D array --> elements are 2D --> 1D array
+
+
+3/16/2022
+
+Day 31 Arrays
+
+day31_array
+____________________________________________________________
+
+Arrays Class
+____________________________________________________________
+
+String Methods with Arrays
+
+	toCharArray(): convert a String to a char array, where each elements is every character from the the String
+
+	split(): convert a String to a String array, where each element is the sequence of characters between the given separator
+
+____________________________________________________________
+
+Arrays Class
+
+	https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html
+
+	a class that has methods for arrays
+
+	located in the java.util
+
+		-> so to use this class you must import java.util.Arrays;
+
+	Methods:
+
+		Arrays.toString(arr): allowed us to print arrays objects as a String
+
+			--> array is the argument
+
+			Ex:
+				String [] s = {"a", "b", "c"};
+				Arrays.toString(s) --> [a, b, c]
+
+
+		Arrays.sort(arr): sort the elements in ascending order (smallest to largest)
+
+			--> array is the argument
+
+			does not return anything
+
+			for String/character types: lexicographical, means order in ascii table
+
+				special characters --> number --> uppercase (A-Z) --> lowercase(a-z)
+
+				aaa, aab aac
+
+			--> this method does not have a return(nothing to store), it will sort the object
+				array object are mutable, you can change the object after making
+					-> The size is fixed
+
+		Arrays.equals(arr, arr2): checks if the two given arrays are equal - they have the same elements
+
+			--> two array argument
+			--> returns boolean
+
+String method: 
+
+	String.join()
+
+		two arguments:
+			String: which characters you want to separate, or be in between the elements 
+			array: the data structure where the elements come from
+
+		lets you convert the array object to a String using a different format. You able to define the sequence of characters that will separate the element from the array
+
+
+
+3/14/2022
+
+Day 30 Arrays
+
+day30_arrays
+____________________________________________________________
+
+String methods:
+    toCharArray()
+    split()
+____________________________________________________________
+
+for each loop
+
+    a loop used to iterate through a collection/data structure 
+
+        there is many collections, right now we are using arrays
+
+    it will always iterate through the elements from the beginning to the end
+
+    syntax:
+
+        for(datatype name : array){
+
+        }
+
+
+        datatype is the type of each element in the array
+
+
+        name: represent every element during the execution
+            in traditional loop the way to get every element is using array[i]
+
+
+    When to use for each
+
+        - whenever you need to check each element of your array
+
+        - whenever you need to only read values, meaning no values in the array will be changed
+
+    When not to use for each
+
+        - whenever you need to use indexes 
+
+        - whenever you would need to change the array
+
+____________________________________________________________
+
+String methods that are related to arrays
+
+    toCharArray()
+        no arguments
+        returns a char []
+
+        --> converts the String to a char array
+
+            Ex:
+                String s = "abc";
+                s.toCharArray() --> [ 'a', 'b', 'c' ];
+
+Note: String class works with char [] internally
+
+    - converting a char [] to a String: 
+
+        using the new String approach of creating an array and giving the char [] as the argument
+
+        ex:
+            char [] arr = {'z', 'y', 'x'};
+
+            String str = new String(arr); // "zyx"
+
+    split(): 
+        String argument 
+        returns a String []     
+
+    --> converts the String into a String [] by separating the String into different parts, which become the elements of the String
+
+    -> the delimiter/separator is not included as an element. This determine how the String will be split it
+
+    most common use case:
+
+        convert a sentence to an array, where every word is an element
+
+        Ex:
+
+            String str = "Today is Monday";
+            String [] words = str.split(" ")  --> [Today, is, Monday]
+
+            words[0] --> Today
+            words[1] --> is
+            words[2] --> Monday
+
+    if you split by empty space
+        it returns back a String [] of each character in the String
+
+        Ex:
+            String s = "abc";
+
+            s.split("") --> [ "a", "b", "c"];
+
+
+3/13/2022
+
+Day 29 Arrays
+
+day29_array
+____________________________________________________________
+
+Array
+for each loop
+__________________________________________________________
+
+Array: a data structure that holds multiple pieces of information 
+
+	2 ways to make arrays
+
+		datatype [] name = { elements, elements, elements};
+
+		int [] a = { 1, 2, 3, 4, 5};
+
+	or
+
+		datatype [] name = new datatype[size];
+
+		int [] b = new int[5];
+
+		--> When you create an array this way, an empty array is made with default values based on your datatype
+
+			String --> null
+			int --> 0
+			double --> 0.0
+			boolean --> false
+			char --> '\u0000' // don't worry about it so much
+
+Read elements from an array
+
+	name[index]  --> gives back the element
+
+Assign/reassign elements in an array
+
+	name[index] = value;
+
+Printing the whole array
+
+	the array object cannot be printed directly in the print statement
+
+	we must use Arrays.toString() method which accepts an array as an argument and returns a String format of our array 
+
+How to iterate through an array
+
+	name[i]   where i is an int number in some loop that will go up by one
+
+__________________________________________________________
+
+For Each Loop
+
+	used with data structures/collections
+
+	so we know arrays
+
+	syntax:
+
+		for(datatype variableName : array/collection){
+
+		}
+
+		action: the loop will iterate through the array on the right side of the colon.
+				it goes from the first element to the last elements always
+				each iteration the element value will be used in the loop as the variableName defined 
+
+		datatype in the loop declaration is the type of the elements
+
+		ex:
+
+			int [] arr = {10, 20, 30};
+
+			for(int num : arr){
+				System.out.println(num);
+			}
+
+			iteration 1:
+				num would be 10, prints 10
+
+			iteration 2:
+				num would be 20, prints 20
+
+			iteration 3:
+				num would be 30, prints 30
+
+
+		traditional loop vs for each loop iteration: 
+
+			array[i] is the same as num in the for each loop
+
+	When should you use for each:
+
+		- if you want to iterate through all the elements
+
+		- read the values
+
+	When can you not use for each:
+
+		- use indexes: to change/update a variable dynamically 
+	
+		- modify the array in any way
+
+3/12/2022
+
+Day 28 Arrays
+
+day28_array
+____________________________________________________________
+
+Array
+for each loop
+____________________________________________________________
+
+Array: a data structure, which is a collection of data in one object
+
+	Before we had normal variables that stored one piece of information at a time 
+
+	In programming working with multiple data is very common
+
+	Arrays are objects
+
+How to create arrays
+
+	there is two ways to make an array
+
+	1) datatype [] arrayName = { element, element, element };
+
+		able to make an array with initial elements. These elements are given between the curly brackets. Each element is separated by a comma
+
+		Ex:
+
+			String [] cities = { "Chicago", "New York" , "Houston", "Denver", "Pittsburgh" };
+
+			int [] nums = { 1, 2, 3, 4};
+
+	2) datatype [] arrayName = new datatype[size];
+
+		able to make an array of a certain size. These elements have a default value. There is elements created for each position made in the array
+
+		Ex: String [] cities = new String[5]; [ null, null, null, null, null ]
+
+			int [] nums = new int[4]; [0, 0, 0, 0]
+
+			boolean [] bool = new boolean[2]; [false, false]
+
+		Default values for array types
+
+			String --> null
+			int --> 0
+			double --> 0.0
+			boolean --> false
+
+		Q: What is the difference between null and "" (empty space)
+
+			null means nothing, for objects
+			empty space is a String, but it has no characters
+
+			Scanner input = null; // no actually Scanner object
+
+	Note: 
+
+		int [] name
+			vs
+		int name []
+
+		both make an array, but the brackets in the middle are preferred 
+
+How to read/use elements from an array
+
+	using the name of the array and the index number you are able to use that element
+
+	arrayName[index] --> gives back the element
+
+How do you know the number of elements
+
+	using the length value
+
+	arrayName.length --> gives back how many elements there is
+
+	Q: What is the difference between length() and length
+
+		length() is a String method to return the number of characters
+
+		length is an array property that returns the number of elements
+
+	Q: How can you access the last element
+
+		last index --> length - 1
+
+		arrayName[ arrayName.length - 1 ]
+
+How to print all the elements in the array
+
+	by default print an array:
+		System.out.println(arrayName)
+
+		will show the hash location of the object in the memory
+
+	We must use the Arrays class
+
+		Arrays class is a utility class, which has some useful methods
+
+			in order to use a class we need to import it:
+				import java.util.Arrays;
+
+		Arrays.toString() --> returns a String format of the whole array
+
+		System.out.println(Arrays.toString(arrayName));
+
+How to assign/reassign elements in an array
+
+	arrayName[index] = value;
+
+Looping through an array
+
+	in for loop:
+
+		arrayName[i] 
+
+			where i is a variable declared in the loop that iterates 1 index at a time
+
+			
+3/9/2022
+
+Day 27 Nested Loops
+
+day27_nested_loops
+____________________________________________________________
+
+nested loop
+__________________________________________________________
+
+Nested Loop
+
+	a loop inside of another loop
+
+	ex:
+
+		//outer loop
+		for(int i = 0; i < 5; i++){
+
+
+			// inner loop
+			for(int j = 0; j < 2; j++){
+
+			}
+
+		}
+
+		the outer loop will execute for 5 times
+
+		every iteration of the outer loop will execute the inner loop from beginning to end 
+
+			so, how many times total does the inner loop run? 10 times
+
+		i: 0
+			j: 0
+			j: 1
+		i: 1
+			j: 0
+			j: 1
+		i: 2:
+			j: 0
+			j: 1
+		i: 3:
+			j: 0
+			j: 1
+		i: 4:
+			j: 0
+			j: 1
+__________________________________________________________
+
+continue and break in nested loops
+
+	whichever loop the continue or break statements are in is the one that gets effected
+
+
+3/8/2022
+
+Day 26 Nested Loops
+
+day26_nested_loops
+____________________________________________________________
+
+nested loop
+____________________________________________________________
+
+Nested Loops
+
+	loop inside of a loop
+
+	ex:
+
+		// outer loop
+        for(int week = 1; week <= 4; week++){  
+
+            System.out.println("Week: " + week);
+
+            // inner loop
+            for(int day = 1; day <= 7; day++){
+                System.out.println("\tDay: " + day);
+            }
+
+        }
+
+
+        outer loop: first loop that has another loop inside of it
+        	- determines how many executions of the code you want inside of this block
+
+        	- in our example: we wanted to run for 4 times, because there is 4 weeks 
+
+        inner loop: loop inside of another one
+
+        	- treat this as a normal loop that will be executed from beginning to end EACH ITERATION OF THE OUTER LOOP
+
+        	- in our example it means the days will go from 1 to 7 for every week
+
+
+No Day 25 Notes
+
+3/6/2022
+
+Day 24 Loops
+
+day24_loops
+____________________________________________________________
+
+for loop
+break and continue statements
+__________________________________________________________
+
+Recap
+
+	while/do while: when the number of iterations is not known, it is based on other factors
+
+	for loop: used when the number of iterations is fixed/known
+
+	for(initialization; termination condition; update){
+
+		statements
+	}
+
+	--> for syntax each section is optional. You must have the semi colon
+
+		for( ; ; ) --> infinite loop
+
+		for(int i = 0 ; i < 5 ; ) --> infinite loop
+
+		for(int i = 0 ; ; i++ ) --> infinite loop
+
+	flow of the for loop:
+
+		1) initialization: declare and assign a variable that is used in the loop. Usually used to keep track of the number of iterations. Other use of the variable can be done, for example using the number as an index of a String
+
+			--> this runs once, in the beginning
+
+		2) termination condition: the boolean that determines if you should run/continue the loop
+
+			if the boolean is true: the statements in the loop will execute 
+
+			if the boolean is false: the loop stop
+
+
+		3) the code in the loop body is executed - this is one iteration of the statements
+
+		4) update: changes the variable to avoid infinite loop
+
+		5) going back up to step 2 - iteration is complete, next cycle will start
+
+Strings with loops
+
+	Q: What does a loop iterating through a String loop like
+
+		for(int i = 0; i < s.length(); i++){
+
+
+		}
+
+		These are possible ways to write the termination condition:
+
+		i < s.length();
+		i <= s.length() - 1;
+
+			ex: String s = "java"
+					i < s.length();  i < 4   --> stop before 4 because it is not a valid index
+					i <= s.length() - 1; i <= 3  --> stops at the last index of 3
+
+		--> indexes start from 0, so our loop value i is set to start at 0, then it updates by 1 each iteration. The loop will continue as long as the number i is less than the length, which means the loop will only used valid index numbers
+
+	Q: What does a loop look like if you go backward in the String
+
+		for(int i = s.length() - 1; i >= 0; i--){
+
+
+		}
+
+		--> we start our loop from the last index of the String. To get the last index of a String we can use the length - 1. Then the loop will update by subtracting 1 each iteration as long as the number is more than or equal to 0, because those are the valid index numbers
+
+	Q: How to dynamically read each character
+
+		s.charAt(i)
+
+			where i is the variable name declare in the loop
+
+intellij shortcut: fori
+
+
+	break statement in loop:
+
+		stops and exits the loop
+
+	continue statement in loop:
+
+		it will skip the rest of the iteration and goes to the update part. 
+		any code after a continue will not run for that iteration
+
+
+		ex: 
+
+        for(int i = 1; i <= 100; i++){
+
+            if(i % 2 == 1){
+                continue;
+            }
+
+            System.out.print(i + " ");
+
+        }
+
+
+3/6/2022
+
+Day 24 Loops
+
+day24_loops
+____________________________________________________________
+
+for loop
+break and continue statements
+__________________________________________________________
+
+Recap
+
+	while/do while: when the number of iterations is not known, it is based on other factors
+
+	for loop: used when the number of iterations is fixed/known
+
+	for(initialization; termination condition; update){
+
+		statements
+	}
+
+	--> for syntax each section is optional. You must have the semi colon
+
+		for( ; ; ) --> infinite loop
+
+		for(int i = 0 ; i < 5 ; ) --> infinite loop
+
+		for(int i = 0 ; ; i++ ) --> infinite loop
+
+	flow of the for loop:
+
+		1) initialization: declare and assign a variable that is used in the loop. Usually used to keep track of the number of iterations. Other use of the variable can be done, for example using the number as an index of a String
+
+			--> this runs once, in the beginning
+
+		2) termination condition: the boolean that determines if you should run/continue the loop
+
+			if the boolean is true: the statements in the loop will execute 
+
+			if the boolean is false: the loop stop
+
+
+		3) the code in the loop body is executed - this is one iteration of the statements
+
+		4) update: changes the variable to avoid infinite loop
+
+		5) going back up to step 2 - iteration is complete, next cycle will start
+
+Strings with loops
+
+	Q: What does a loop iterating through a String loop like
+
+		for(int i = 0; i < s.length(); i++){
+
+
+		}
+
+		These are possible ways to write the termination condition:
+
+		i < s.length();
+		i <= s.length() - 1;
+
+			ex: String s = "java"
+					i < s.length();  i < 4   --> stop before 4 because it is not a valid index
+					i <= s.length() - 1; i <= 3  --> stops at the last index of 3
+
+		--> indexes start from 0, so our loop value i is set to start at 0, then it updates by 1 each iteration. The loop will continue as long as the number i is less than the length, which means the loop will only used valid index numbers
+
+	Q: What does a loop look like if you go backward in the String
+
+		for(int i = s.length() - 1; i >= 0; i--){
+
+
+		}
+
+		--> we start our loop from the last index of the String. To get the last index of a String we can use the length - 1. Then the loop will update by subtracting 1 each iteration as long as the number is more than or equal to 0, because those are the valid index numbers
+
+	Q: How to dynamically read each character
+
+		s.charAt(i)
+
+			where i is the variable name declare in the loop
+
+intellij shortcut: fori
+
+
+	break statement in loop:
+
+		stops and exits the loop
+
+	continue statement in loop:
+
+		it will skip the rest of the iteration and goes to the update part. 
+		any code after a continue will not run for that iteration
+
+
+		ex: 
+
+        for(int i = 1; i <= 100; i++){
+
+            if(i % 2 == 1){
+                continue;
+            }
+
+            System.out.print(i + " ");
+
+        }
+
+
+3/2/2022
+
+Day 22 Loops
+
+day22_loops
+____________________________________________________________
+
+while loop
+do while loop
+____________________________________________________________
+
+Recap
+
+	Ternary
+		types need to match
+		type s = boolean (type) ? (type)
+
+	Loops
+
+		repeating some code statements multiple times
+
+	while loop: repeat some code statements using a boolean value. 
+
+		usually used when the number of iterations are not defined.  
+
+		flow/execution order of while loop:
+
+			1) checks the boolean expression
+
+				-> when the boolean is true:
+
+					execute the statements inside of the while block (inside of the curly brackets), top to bottom
+
+					the loop goes back to step 1)
+
+				-> when the boolean is false:
+
+					the loop stops. the code resume execution from after the loop
+
+	iteration: one cycle/execution of the code
+
+	infinite loop: the loop continues to run, with no stop
+
+		-> in while loop it means the boolean will never be false, it stays always true
+
+		avoid infinite loops
+
+
+do while
+
+    similar to the while loop but the first iteration/execution always happens no matter the boolean expressions 
+
+    do{
+
+        // statements
+
+    } while(boolean_expression);
+
+
+3/1/2022
+
+Day 21 Loops
+
+day21_loops
+____________________________________________________________
+
+Loops introduction
+while loop
+__________________________________________________________
+
+[Middle char]
+	Given a String, write a program to display the middle character of a string
+	a) If the length of the string is even there will be two middle characters. b) If the length of the string is odd there will be one middle character.
+	Ex:
+	Input: elephant
+	Output: The middle characters: ph
+
+__________________________________________________________
+
+Loops
+
+	Loops in programming are used to repeat statements multiple times
+
+	Loop types: 
+
+		while loop, do while loop, for loop, for each loop
+
+	while loop: loop that continues to run as long as the boolean value is true
+
+	syntax:
+
+		while(boolean_expression){
+
+			// statements that are repeated
+
+		} // while loop ending point
+
+	while loop execution flow:
+
+		boolean expression is checked
+
+			-> if the boolean is true
+
+				the loop will run, which means the code inside of the while loop are executed top to bottom
+
+				then it goes back up to check the boolean expression again
+
+			-> if the boolean is false: the loop will stop
+
+	infinite loop: a loop that will continue to run, over and over again without stopping. The boolean will never be false
+
+	iteration: each cycle of the loop. The statements are run each time you iterate
+
+
+Factorial 
+	5! = 5 * 4 * 3 * 2 * 1
+
+	120
+
+2/28/2022
+
+Day 20 String Practice
+
+day20_string
+___________________________________________________________________
+
+Recap
+
+	general syntax to use methods: 	stringObject.method()
+
+	Index: a number position. Every character in a String has an index
+		indexes start from 0
+
+		String s = "apple";
+					01234
+
+	charAt(int index): returns the character at the given index
+		ex:	s.charAt(0) --> 'a'
+			s.charAt(3) --> 'l'
+			s.charAt(6) --> StringIndexOutOfBoundsException	
+
+				-> If you use any index that is not valid you will get the exception/error
+
+	indexOf(): returns the index (int) based on the given argument
+
+		(char): return the index where the given char is found in the String. It returns the first occurrence of that character
+
+			ex:
+				s.indexOf('a') --> 0
+				s.indexOf('p') --> 1
+				s.indexOf('z') --> -1
+
+					-> When a char is not found in the String, it returns -1
+
+		(String): returns the index of the character sequence in the String. It returns the index where the sequence starts
+
+			ex:
+				s.indexOf("ppl") --> 1
+				s.indexOf("le") --> 3
+				s.indexOf("pear") --> -1
+				s.indexOf("a") --> 0
+
+		(char, int): it returns the index of the given char, but it starts looking at the given int index number
+
+				ex:
+					String a = "applep"
+								012345
+					a.indexOf('p', 2) --> 2
+					a.indexOf('p', 3) --> 5
+
+		(String, int)
+
+	lastIndexOf(): returns the index (int) based on the given argument, but it checks from the end of the String
+
+		ex:
+
+			s.lastIndexOf('p') --> 2
+
+	substring(): returns part of a String based on the arguments
+
+		(int): return the String characters starting from the given index (starting point) until the end of the String. This given index is included in the resulting String
+
+			Ex:
+
+				String str = "monday";
+							  012345
+
+				str.substring(3) --> day
+				str.substring(1) --> onday
+				str.substring(10) --> StringIndexOutOfBoundsException
+
+		(int, int): returns the String characters from the first argument (index) until the second argument (index). The first index is included in the resulting String, but the second index is not included (the stopping point)
+
+				String str = "monday";
+							  012345
+
+				str.substring(2, 5) --> nda
+				str.substring(2, 6) --> nday
+				str.substring(2, 7) --> StringIndexOutOfBoundsException
+
+		these two code do similar thing
+
+		s.charAt(0)  -> gives char type
+
+		s.substring(0,1) -> gives String type
+
+how to convert any type to String
+
+	concatenate a space
+
+	usually empty space ""
+
+
+        // ( "" + firstName.charAt(0)).method --> this will also give you the first character, but as a char type
+
+
+    replace(): allows you to change a certain character/s to another character/s. Replaces all occurrences of those characters in the String
+
+    	(char, char): first char is the value you are trying to change and the second char is the value you are changing it to 
+
+    		Ex:
+    			String a = "apple";
+    			a.replace('p', 'z') --> azzle
+
+    	(String, String): first String is the value you are trying to change and the second String is the value you are changing it to
+
+    		String str = "today is monday";
+    		str.replace(" ", "") --> todayismonday
+
+    		str.replace("monday", "tuesday") -> today is tuesday
+
+    replaceFirst(): replaces the first occurrence of the characters
+
+
+2/27/2022
+
+Day 19 String
+
+day19_string
+
+____________________________________________________________
+
+Recap
+
+String methods:
+
+    general syntax: stringObject.method()
+
+    equals(): checks if the Strings value/objects have the same characters
+        -> cares about case sensitivity
+
+        returns boolean
+
+    equalsIgnoreCase(): checks if the String value/object have the same characters, but it ignores case sensitivity
+
+        returns boolean
+
+    length(): checks and returns the number of characters
+
+        -> spaces are characters
+
+        returns int
+
+    toUpperCase(): converts all the characters in the String to uppercase letters
+
+        returns String
+
+    toLowerCase(): converts all characters in the String to lowercase letters
+
+        returns String
+
+    startsWith(""): checks if the String starts with the characters given in the parenthesis
+
+        returns boolean
+
+    endsWith(""):  checks if the String ends with the characters given in the parenthesis
+
+        return boolean
+
+    contains(""): checks if the String has the given character sequence in it
+
+        returns boolean
+
+    isEmpty(): checks if your String has characters or not. If there is no characters, it is empty
+
+        return boolean
+
+    isBlank(): checks if your String has non white space characters or not. If there is only white spaces it is blank
+
+        return boolean
+
+    trim(): removes spaces in the beginning and end
+        -> spaces anywhere between other characters are not removed
+
+        return String
+
+____________________________________________________________
+
+Indexes
+
+    every character in a String has a position where it is located called an index
+
+    index numbers start from 0
+
+    Q: How can I find the last index of a String
+
+        length - 1
+
+        Why does that work? Because index starts from 0
+
+    method(_______)  <-- when you give some information in the parenthesis of a method it is called an argument
+
+    charAt(index): returns the character at the given index number
+
+        returns char
+
+    substring(): returns part of a String
+
+        (int): the returned String starts from the given index number until the end of the String.
+
+        (int, int): the returned String starts from the first given index number until the second given index number. The first index is included, but the last index is not included in the characters
+
+        Ex: 
+        String s = "abc";
+        s.substring(1) --> bc
+
+    indexOf(): returns the index number of the given char/String argument
+
+        returns int
+
+        -> if you try to find a character that does not exist in the String, the method will return -1
+
+        (char): it will find the first occurrence of the given character in the String and returns the index of that character
+
+        (String): it will find the first occurrence of the given character sequence (String) and it returns the index of the first character of that sequence
+
+        (char/String, int): it will find the char/String (first argument) in the String starting from the index of the second argument
+
+Later:
+
+    lastIndexOf()
+
+    replace()
+
+    replaceFirst()
+
+2/26/2022
+
+Day 18 String
+
+day18_string
+____________________________________________________________
+
+Recap
+String class
+__________________________________________________________
+
+String 
+
+	String is a class, so we make objects to use it
+
+		-> holds multiple characters 
+
+	the class is found in the java.lang package
+
+		-> is imported automatically 
+
+2 ways to create String objects
+
+	1) String literal: using double quotations with nothing else
+		Ex: String s = "Saturday";
+
+		-> made in the String pool
+
+	2) new keyword: new String("");
+		Ex: String s = new String("Saturday");
+
+Memory
+
+	Stack: references (variable name)
+
+	Heap: objects (variables), String pool
+
+	String pool: a special memory location for String literals. It saves memory by not having to make Strings over and over again 
+
+String is immutable: String objects cannot be changed after being created
+
+
+--> to compare Strings we should never use == 
+
+	== with Strings compare the objects to each other
+
+String methods:
+
+	general syntax: stringObject.method()
+
+	equals(): checks if the Strings value/objects have the same characters
+		-> cares about case sensitivity
+
+		returns boolean
+
+	equalsIgnoreCase(): checks if the String value/object have the same characters, but it ignores case sensitivity
+
+		returns boolean
+
+	length(): checks and returns the number of characters
+
+		-> spaces are characters
+
+		returns int
+
+	toUpperCase(): converts all the characters in the String to uppercase letters
+
+		returns String
+
+	toLowerCase(): converts all characters in the String to lowercase letters
+
+		returns String
+
+	startsWith(""): checks if the String starts with the characters given in the parenthesis
+
+		returns boolean
+
+	endsWith(""):  checks if the String ends with the characters given in the parenthesis
+
+		return boolean
+
+	contains(""): checks if the String has the given character sequence in it
+
+		returns boolean
+
+	isEmpty(): checks if your String has characters or not. If there is no characters, it is empty
+
+		return boolean
+
+	isBlank(): checks if your String has non white space characters or not. If there is only white spaces it is blank
+
+		return boolean
+
+	trim(): removes spaces in the beginning and end
+		-> spaces anywhere between other characters are not removed
+
+		return String
+
+__________________________________________________________
+
+ask the user to enter a message
+clean the message for empty spaces in the beginning and end
+check the message for bad phrases:
+	
+	java is bad
+	quit
+	have fun
+	crying
+
+if there is a bad phrase in the message print:
+	
+	message failed to send
+
+otherwise print:
+
+	$message sent
+
+
+2/23/2022
+
+Day 17 String
+
+day17_string
+____________________________________________________________
+
+String class
+Start String methods
+____________________________________________________________
+
+String
+
+	String is a class 
+		the class is in package: java.lang	
+			-> java.lang is automatically imported 
+
+	-> Scanner class was in java.util
+
+	Strings are object types, not primitive data types
+		object types (non primitive)
+
+	immutable: cannot change it
+
+	-> in java: an immutable object cannot be changed after it is made. The value cannot be changed
+
+	Memory 
+
+	in general: 
+		hard drive storage - where you store data
+
+		ram: memory used by the computer
+
+		Stack: variable names/reference 
+
+		Heap: objects are stored
+
+			String pool:
+				located in the heap
+
+				it is a special memory location for String literals
+
+	2 ways to create String objects
+
+		- String literal
+
+			just giving double quotations
+
+		- new keyword
+
+			using new String("value");
+
+
+Q: What is the difference between == and .equals()
+
+	== compares the objects in the memory
+
+	.equals() compares the value, meaning the characters 
+
+
+String methods:
+
+	equals():	compares two Strings and give a boolean
+		it gives true if the String characters are exactly the same. 
+
+	equalsIgnoreCase(): compare two Strings and given a boolean
+		it gives true if the String characters are the same characters, while ignoring case sensitivity 
+
+	length(): gives an int of how many characters are in the String
+
+		Q: Are spaces characters: yes. Counts as a character for the length method
+
+
+2/22/2022
+
+Day 16 Review
+
+day16_review
+________________________________________________________________
+
+review
+
+multi branch/ternary - retake
+
+nested if - movie ticket
+nested if - soccer game
+
+switch - calculator 
+switch - author
+switch - hotel
+
+extra:
+casting
+operators
+________________________________________________________________
+
+Switch
+
+	control flow statement that allows us match values via cases. Checks if the given value is equal to any defined case 
+
+	switch(value){
+
+		case possible_value: 
+			// statements
+			break;
+		default:
+			// statements
+
+	}
+
+	case possible_value: expected value that you are checking equality with. Datatype matches the value datatype
+ 
+		valid datatypes: byte, short, int, String, char
+
+		invalid datatypes: float, double, boolean, long
+
+		cannot have duplicates cases. cases must be unique
+
+	break: stops the switch statement
+
+	default: case that is executed if no other case matches
+
+		it be anywhere in the switch 
+
+	Execution flow:
+
+		takes the value and tries to match it with a case. If the case is there, the statements are executed from that point, top to bottom, until the end of the switch or a break statement
+
+	What is the difference between if, switch, and ternary
+
+		if statements:
+			in most cases if statements are used for controlling the flow of a program
+
+			work with boolean logic
+
+			able to use all datatypes
+
+			multiple types that handle multiple different scenarios
+
+
+		switch statements:
+			can only compare values, check if the values are equal
+
+			when the cases are known, when there is a fixed number of exact possible values
+
+
+		ternary:
+
+			used sometimes when there is simple boolean logic and a value must be given back
+				the value is usually assigned to a variable or used right away
+
+				- cannot be used when there is only one possible outcome
+
+		any switch or ternary can be converted to an if statement
+________________________________________________________________
+
+Todo:
+
+	Short videos:
+		
+		String Intro
+		String Methods Part 1
+		String Methods Part 2
+		String Methods Part 3
+
+
+2/20/2022
+
+Day 15 Switch Statements
+
+day15_switch
+____________________________________________________________
+
+switch statements
+____________________________________________________________
+
+Switch
+
+conditional statement: controlling the program 
+
+	switch statements only compare exact values ==
+
+		-> relational operators ( > < >= <= !=) are not allow in switch
+
+	switch(variable) {
+
+		case x:
+			// statements
+			break;
+
+		default:
+
+	}
+
+	switch: keyword to make a switch statement
+
+	variable: value being checked/compared in the switch
+		on these types are allowed as the input variable: byte, short, int, char, String
+
+		which means these types are not allowed as the input variable: float, double, long, boolean
+
+	case: value that you are checking for. The datatype of the case should match the datatype of the variable being checked
+
+	statements: any code you want to run when the case matches
+
+	break: stops and exits the switch statement
+
+	default: case when no other cases match
+
+		example:
+
+			int a = 3;
+
+			switch(a) {
+
+				case 1:
+					// statements
+					break;
+				case 2:
+					// statements
+					break;
+				case 3:
+					System.out.println("Three");
+					break;
+			}
+
+	Execution Flow
+
+		if statements: go top to bottom. Checks each condition one at a time until a condition is true or there is no more conditions
+
+		switch statement: the case matches first, then the statements are executed, top to bottom, from that case until the end of the switch or break key-words.
+
+
+Declare: price and calories variables
+
+Ask the user to enter which size drink they want
+
+Based on the drink size determine the price and calories of the order
+
+	data:
+
+		size: tall
+		price: 2.50
+		calories: 100
+
+		size: grande
+		price: 4.00
+		calories: 150
+
+		size: venti
+		price: 4.50
+		calories: 200
+
+
+
+2/19/2022
+
+Day 14 Nested If statements
+
+day14_if_statements
+____________________________________________________________
+
+nested if statements
+__________________________________________________________
+
+Warm Up 
+[Pandemic Checker]
+
+Write a program that will read a number from the user. This number will be a year. Use that given year to figure out if there was a pandemic in that year, and if there was which one. 
+
+	Data to use:
+		1346-1353: The Black Death
+		1665-1666: Great Plague of London
+		1770-1772: Russian plague
+		1889-1890: Flu pandemic
+		1916: American polio epidemic
+		1918-1920: Spanish Flu 
+		2009-2010: H1N1 Swine Flu pandemic
+		2014-2016: West African Ebola epidemic
+		2020-2022: COVID-19
+		Any year not in those ranges: No Pandemic
+__________________________________________________________
+
+Nested if statements
+	
+	if statement inside of if statement
+
+	if( 1 ) {
+
+		if( 2 ){
+			A
+		}
+
+	} else {
+
+		if( 3 ){
+			B
+		} else {
+			C
+		}	
+
+	}
+
+	 1       2
+	true	true  	--> A
+	false	true	--> goes to else
+	true    false	--> nothing happens, there is no else
+
+
+	1 		3
+	false 	true	--> B
+	false	false	--> C
+
+
+Format the code
+	
+	windows: control + alt + l
+	mac: command + option + l
+
+inputs:
+declare and assign a 4 digit pin code
+declare and assign the last 4 digits of ssn: 1234
+
+declare and assign expected values for both
+	example expected:
+		pin: 1552
+		ssn: 1234
+
+outputs:
+	
+	when the pincode and ssn match the expected print:
+		Authentication successful
+
+	when the pincode or ssn are not correct print:
+		Authentication failed
+
+	when the pincode was not correct print:
+		incorrect pin code
+
+	whent he ssn is not correct print:
+		invalid ssn 
+
+
+2/16/2022
+
+Day 13 If statements
+
+day13_if_statements
+____________________________________________________________
+
+multi branch if statements
+if without brackets
+ternary
+__________________________________________________________
+
+Recap
+
+	Q: When to use multi branch statements: 
+		when you have multiple conditions that you want to check and when those statements are related to each other
+
+	if (condition) {
+		// if the condition is true, this code will run
+	} else if(condition 2){
+		// if the condition 2 is true, this code will run
+	} else if(condition 3){
+		// if the condition 3 is true, this code will run
+	} else {
+		// if all the conditions were false, then this code will run
+	}
+
+	Q: How many else if can you have
+		as many as you want
+
+	Q: How many else can you have
+		only one at the end
+
+	Q: Is else block mandatory 
+		no, it possible to have just single if statement
+
+	Multi branch if statements will execute top to bottom like other code, the condition will be checked and if there is a true condition that code block will be executed and if statement will be done
+
+	Q: What if there is more than 1 true statement
+		since the code goes from top to bottom, the first true statement will decide which code block will be run
+
+	single if vs multi branch
+
+		single if: for each if statement each condition is checked
+
+			if(){
+
+			}
+
+			if(){
+
+			}
+
+		multi branch: each if condition will be checked, until there is a true result
+
+			if(){
+
+			} else if(){
+
+			}
+
+__________________________________________________________
+
+if statements without brackets
+
+	you can create if statements without brackets
+
+		with brackets:
+
+			if(4 > 5){
+				System.out.println("hello");
+			}
+
+		without brackets:
+
+			if(4 > 5)
+				System.out.println("hello");
+
+	when there is an if statement without brackets, only the line after it is the if block
+	without brackets, you cannot have more than one line of code in that if block
+
+	suggestion: don't be lazy, always use brackets
+
+__________________________________________________________
+
+Ternary 
+
+	a way to write an if statement quickly
+
+	syntax:
+
+		resultVariable = boolean_expression ? trueValue : falseValue;
+
+			? -> if, but it comes after boolean
+
+			: -> else
+
+	ex:
+		int score = 90;
+
+		if(score > 75){
+			System.out.println("pass");
+		} else {
+			System.out.println("fail");
+		}
+
+
+		-------
+
+		int score = 90;
+		String result;
+
+		if(score > 75){
+			result = "pass";
+		} else {
+			result = "fail";
+		}
+
+		System.out.println(result);
+
+		-------
+		int score = 90;
+		String result;
+
+		result = score > 75 ? "pass" : "fail";
+
+
+short videos
+	sat: nested if
+	sun: switch
+
+
+2/15/2022
+
+Day 12 If statements
+
+day12_if_statements
+____________________________________________________________
+
+if statements 
+if/else statements 
+multi branch if statements
+__________________________________________________________
+
+Recap
+
+	single if statement:
+
+		if(boolean_expression){
+			// statement
+		}
+
+		if the boolean expression is true, then the code in the if block will be run
+		if the boolean expression is false, not code is executed 
+
+	if else statement
+
+		if(boolean_expression){
+			// statement
+		} else {
+			// statement
+		}
+
+		if the boolean expression is true, then the code in the if block will be run
+		if the boolean expression is false, then the code in the else block will be run
+__________________________________________________________
+
+What is debugging:
+	to find the reason of your issue/error in the code, you are able to check line by line
+
+Debug:
+	
+	1) create a breakpoint by clicking on the gray bar next to the code lines
+
+	2) click the on the green run button, but select the debug option
+
+	3) then to progress from line to line you can click the step over button (execute 1 line at a time)
+
+	4) Debugger window/ Console: you can swap between the windows to see the console and the debugger information
+
+__________________________________________________________
+
+
+2/14/2022
+
+Day 11 If statements
+
+day11_if_statements
+____________________________________________________________________
+
+if statements 
+if/else statements 
+____________________________________________________________________
+
+Control Flow Statements
+
+	code that allows you to control how your program runs
+
+	if statements:
+
+		single if statement
+
+		if / else statement
+
+		multi branch if statement if/ else if / else
+
+		nested if
+
+	single if
+
+		if(boolean_expression){
+			// statements
+		}
+
+		when the boolean expression is true -> the statements inside of the if block will be executed
+
+		when the boolean expression if false -> nothing will happen, the code will resume execution after the if statement
+
+	if else 
+
+		if(boolean_expression) {
+			// statements for if block
+		} else {
+			// statements for else block
+		}
+
+		when the boolean expression is true -> the statements inside of the if block will be executed
+
+		when the boolean expression is false -> the statements inside of the else block will be executed
+
+	What is the difference between the single if statement and the if else statement?
+
+		For both the if block is executed if the boolean is true
+
+		but when the boolean is false
+
+			single if: nothing happens
+
+			if else: else block runs
+____________________________________________________________________
+
+Format the code
+
+	Mac: Command + Option + L
+
+	Windows: Control + Alt + L
+
+Sharing code in discord
+
+```
+code
+
+```
+2/13/2022
+
+Day 10 Scanner
+
+day10_scanner
+____________________________________________________________
+
+Scanner
+Practice
+__________________________________________________________
+
+Recap
+
+Scanner 
+
+	hard code: values directly in the code
+
+		ex: int a = 450; // 450 is hard coded
+
+		ex: String url = "www.google.com";
+
+	dynamic values: value that come from outside of the code
+		ex: Scanner, website, db, file
+
+		ex: int b = SCANNER CODE;
+
+	Scanner is a class that allows us to get values from the console. The Scanner methods allow us to type into the console and depending on the method, we are able to get different datatypes.
+
+	class: java file, has methods and variables. Non primitive datatype
+
+	method: group of code, has some functionality 
+
+		ex: nextInt() method allows us to type a number in the console and save it to a variable or use it
+
+	How do you use the Scanner and its methods
+
+		1) import the class
+
+			to use a file from a different package we must import the file we want to use
+
+			general syntax:
+
+				import package name.class name;
+
+				popular names for Scanner: scan, input, scanner, keyboard
+
+			for Scanner:
+
+				import java.util.Scanner;
+			
+			-> imports go between the package and the class
+
+					PIC: order of the java file content: package, import, class
+
+			-> What about String?
+
+				String class is in a different package, how are we using it?
+
+				package: java.lang is automatically imported
+
+		2) make a Scanner object (declare a Scanner variable)
+
+				syntax:
+
+					Scanner name = new Scanner(System.in);
+
+
+				-> only declared once in each class
+
+		3) use the Scanner methods with the name you declared
+
+			ex:
+
+				name.method()
+
+				Scanner methods:
+
+					nextByte()
+					nextShort()
+					nextInt()
+					nextLong()
+					nextFloat()
+					nextDouble()
+					nextBoolean()
+
+					next(): gives you a String, but it only accepts one word
+
+					nextLine(): gives you a String, but it allows multiple words. This method also accepts enter inputs
+
+
+				problem:
+
+					whenever we use nextLine() method after any other Scanner methods the input is consumed by the enter from the previous input
+
+				solution:
+
+					add an extra nextLine() just to handle the enter input, then you can use nextLine() to read a String value
+
+__________________________________________________________
+
+Short videos this week:
+
+	If Statements: Single If
+	If Statements: If & Else
+	If Statements: Multi Branch If
+	If Statements: Nested If
+	Ternary
+	Switch Statement
+
+	more replit added
+		[B] Print Variable 4
+		[B] Print Variable 5
+		[B] Print Variable 6
+		[B] Phone Number
+		[B] Time 
+		[B] Print Variable 7
+		[I] Add Numbers
+		[A] Patient Information
+		[A] Seconds Converter
+
+	variables short quiz solution on canvas
+
+
+2/12/2022
+
+Day 9 Logical Operators & Scanner
+
+day09_scanner
+____________________________________________________________
+
+Recap
+Logical Operators
+Precedence of all operators
+Scanner class
+____________________________________________________________
+
+Todo:
+
+	- get ready to move away from okta
+	- quiz due by tonight 11:59 EST
+
+____________________________________________________________
+
+Recap
+
+	Shorthand Operators
+		+=
+		-=
+		*=
+		/=
+		%=
+
+	Relational Operators
+		statements return a boolean value
+
+		>
+		<
+		>=
+		<=
+		== 
+		!=
+____________________________________________________________
+
+Right click -> refactor -> rename
+
+Logical Operators
+
+	I want to do this:
+
+		5 < num < 10 --> cannot do this in java
+
+	Evaluate/compare two boolean expressions and result in a boolean value
+
+	one comparison and one comparison -> result
+
+		num > 5 AND num < 10
+
+	AND Logic
+
+		&&
+
+		both expressions need to be true for the result to be true
+
+	OR logic
+
+		||
+
+		at least one expressions to be true for the result to be true
+
+	NOT logic
+
+		!
+
+		opposite boolean value
+
+	short circuit: more efficient. if the output of the expression is known the other condition is not executed  
+
+		&& AND checks if both boolean expressions are true.
+			If the first expressions is true it checks the second one for true to get a result of true
+			If the first expression is false then the second expression is not executed at all 
+
+		|| OR checks if both boolean expressions are true. 
+			If the first expressions is true it doesn't execute the second 					expressions
+			If the first expression is false then the second expressions is executed  
+
+
+		& 		execute both expressions not matter what
+		|		execute both expressions not matter what
+____________________________________________________________
+
+Scanner
+
+	Scanner is a CLASS that has METHODS that allow us to get input values from the console
+
+	classes are java files 
+
+	methods are a block of code that is ready to use. do/have actions
+
+	Why do we use Scanner?
+		To avoid hard coded information, we want to use/get information from outside of the code
+
+	How can you use Scanner
+
+		1) import the class 
+
+				allow us to use a different class/file that are in different packages
+
+				for Scanner: import java.util.Scanner;
+
+			-> imports go between the package and class
+					PIC: package, import, class
+
+			-> you must import to use Scanner
+
+
+		2) 	creating the Scanner object(variable)
+
+			object allows us to use the methods
+
+			syntax:
+
+				Scanner nameOfScanner = new Scanner(System.in);
+
+		3) use the methods
+
+			to use the actions that are defined we can use Scanner method with the object we made (step 2)
+
+				general syntax:
+					nameOfScanner.method()
+
+
+				methods:
+
+					nextByte()
+					nextShort()
+					nextInt()
+					nextLong()
+					nextFloat()
+					nextDouble()
+					nextBoolean()
+
+					String types:
+
+					next() : one word
+					nextLine(): multiple words
+
+____________________________________________________________
+
+2/12/2022
+
+Day 9 Logical Operators & Scanner
+
+day09_scanner
+____________________________________________________________
+
+Recap
+Logical Operators
+Precedence of all operators
+Scanner class
+____________________________________________________________
+
+Todo:
+
+	- get ready to move away from okta
+	- quiz due by tonight 11:59 EST
+
+____________________________________________________________
+
+Recap
+
+	Shorthand Operators
+		+=
+		-=
+		*=
+		/=
+		%=
+
+	Relational Operators
+		statements return a boolean value
+
+		>
+		<
+		>=
+		<=
+		== 
+		!=
+____________________________________________________________
+
+Right click -> refactor -> rename
+
+Logical Operators
+
+	I want to do this:
+
+		5 < num < 10 --> cannot do this in java
+
+	Evaluate/compare two boolean expressions and result in a boolean value
+
+	one comparison and one comparison -> result
+
+		num > 5 AND num < 10
+
+	AND Logic
+
+		&&
+
+		both expressions need to be true for the result to be true
+
+	OR logic
+
+		||
+
+		at least one expressions to be true for the result to be true
+
+	NOT logic
+
+		!
+
+		opposite boolean value
+
+	short circuit: more efficient. if the output of the expression is known the other condition is not executed  
+
+		&& AND checks if both boolean expressions are true.
+			If the first expressions is true it checks the second one for true to get a result of true
+			If the first expression is false then the second expression is not executed at all 
+
+		|| OR checks if both boolean expressions are true. 
+			If the first expressions is true it doesn't execute the second 					expressions
+			If the first expression is false then the second expressions is executed  
+
+
+		& 		execute both expressions not matter what
+		|		execute both expressions not matter what
+____________________________________________________________
+
+Scanner
+
+	Scanner is a CLASS that has METHODS that allow us to get input values from the console
+
+	classes are java files 
+
+	methods are a block of code that is ready to use. do/have actions
+
+	Why do we use Scanner?
+		To avoid hard coded information, we want to use/get information from outside of the code
+
+	How can you use Scanner
+
+		1) import the class 
+
+				allow us to use a different class/file that are in different packages
+
+				for Scanner: import java.util.Scanner;
+
+			-> imports go between the package and class
+					PIC: package, import, class
+
+			-> you must import to use Scanner
+
+
+		2) 	creating the Scanner object(variable)
+
+			object allows us to use the methods
+
+			syntax:
+
+				Scanner nameOfScanner = new Scanner(System.in);
+
+		3) use the methods
+
+			to use the actions that are defined we can use Scanner method with the object we made (step 2)
+
+				general syntax:
+					nameOfScanner.method()
+
+
+				methods:
+
+					nextByte()
+					nextShort()
+					nextInt()
+					nextLong()
+					nextFloat()
+					nextDouble()
+					nextBoolean()
+
+					String types:
+
+					next() : one word
+					nextLine(): multiple words
+
+____________________________________________________________
+
+2/8/2022
+
+Day 7 Unary & Shorthand Operator
+
+day07_unary_operators
+____________________________________________________________
+
+Recap
+Operator Precedence
+Unary Operators
+____________________________________________________________
+
+Recap
+
+	replit difficulty
+
+		B - beginner
+		I - Intermediate
+		A - Advanced 
+
+	Arithmetic Operators
+
+		+ - * / %
+
+		Calculations when there is different datatypes: The result is the bigger datatypes
+
+			int * int -> int
+			int * double -> double
+			float * long -> float
+			short * byte -> int 
+
+			-> Whenever we use short or byte, they will be turned to int during the calculation, so the result is given as int
+
+		parenthesis group statements together
+____________________________________________________________
+
+Unary Operators
+
+	+ 	(plus) positive number
+	-	(minus) negative number
+	++	incrementing, adding 1
+	--	decrementing, subtracting 1
+
+	int num = 0;
+
+	pre-increment: increment the value before the rest of the statement is run
+
+		++num
+
+	pre-decrement: decrements the value before the rest of the statement is run
+
+		--num
+
+	post-increment: increments the value after the statement is run
+
+		num++
+
+	post-decrement: decrements the value after the statement is run
+
+		num--
+
+
+	int x = 50;
+
+	x = x + 5;
+
+	x? 55
+
+	----------
+
+	int a = 10;
+	int b = a + 2;
+
+	a? 10
+	b? 12
+
+what is the difference between ( ++ X) and (X= X+1)
+	the result is the same
+
+	the ++X can be used in the middle of a statement, with other code
+
+        int i = 5; // i = 6
+        int z = ++i; // z = 6
+
+        System.out.println(i);
+        System.out.println(z);
+
+2/7/2022
+
+Day 6 Arithmetic Operators
+
+day06_arithmetic_operators
+____________________________________________________________
+
+Recap
+Arithmetic Operators
+Operator Precedence
+____________________________________________________________
+
+Short videos this week
+
+	Arithmetic Operators
+	Unary Operators
+	Short hand Operators
+	Relation operators
+____________________________________________________________
+
+Recap
+
+	char
+
+		a single character in a single quote ' '
+		every character has a number related to it
+
+	boolean
+
+		true or false
+
+	String
+
+		multiple characters in double quotations " "
+
+		concatenation: whenever anything/any type is concatenated with a String, the result becomes a String and the two data are put together
+
+		String is not a primitive datatype. its a class
+
+	Type casting
+
+		changing the datatype from one to another
+
+		order:  [SMALL] byte -> short -> int -> long -> float -> double [LARGE]
+
+		Smaller datatype --> Larger datatype	
+			Widening convention happens automatically
+
+			int --> double
+
+		Larger datatype --> Smaller 
+			Narrowing convention happens manually
+
+			double --> int
+
+		Formula to cast:
+			datatype variable = (datatype you are casting to) variable/value
+
+			Data loss: sometimes when going from a bigger number to a smaller number or a decimal number to a whole number there can be data loss, which means the value is changed
+
+		char <> int
+
+------------------------------------------------------------
+Create a class House
+    create a main method
+
+    - Each the datatype you feel is most appropriate for each variable. 
+
+    - Create the following variables:
+        house type, number of bedrooms, number of bathrooms, number of kitchens, is there a basement?, is there an attic, is there a pool, is the house for sale?, cost of the house, address, zipcode, is a park near by, Rating of surrounding school districts (out of 5), 
+
+    - Print each variable with a message with the value
+        Ex: The number of bedrooms is: 4
+            The number of bathrooms is: 3
+
+------------------------------------------------------------
+____________________________________________________________
+
+Number 
+	1.0E7 
+	1.0 x 10^7 
+____________________________________________________________
+
+Arithmetic Operators
+
+	+ addition
+	- subtraction
+	* multiplication
+	/ division
+	% remainder/modulus
+
+	When you use arithmetic operators between two different datatypes the result will be the bigger type.
+
+	- When you use datatypes like short or byte and use some arithmetic operators the values are changed to int, so the result of the operation is also int
+
+____________________________________________________________
+
+
+2/6/2022
+
+Day 5 Variables
+
+day05_variables
+____________________________________________________________
+
+Recap
+char
+boolean
+String
+primitive casting
+____________________________________________________________
+
+Recap
+
+	What are variables?
+
+		container/storage that holds information/data/values
+
+		-> Why do we need variables: improves re-usability, reduces repetitive code. Also it makes easier to change the information
+
+		-> Can you store a variable in another variable: it will assign the value from the first variable to the other one
+
+	How to declare variables
+
+		Create a container that can store data and you clarify the type of data that it will store. Must declare before using it. Creates the variable name that is used to access the data.
+
+		-> How do you access variables: you give the variable name, with no quotations
+
+		- syntax:
+
+			dataType variableName
+
+			int age;
+
+	How to assign to variables
+
+		Puts a value(data/information) into a variable using the assignment operator =
+
+		- syntax:
+
+			variableName = value
+
+			age = 10;
+
+	How to declare and assign variables
+
+		Instead of creating the variable and storing information into the variable at separate time, it is done at the same time
+
+		- syntax:
+
+			dataType variableName = value
+
+	Naming rules for variables
+
+		use any letter (A-Z or a-z)
+		contains numbers (0-9), but can't start with a number
+			can have: age2
+			cannot have: 2age
+		special characters: dollar sign $ and underscore _
+		no reserved words
+		no spaces
+		cannot have repeating names, names must be unique
+		should follow camel case:
+			starts with lowercase and every other word in the name should start with a uppercase
+
+	How to reassign
+
+		change the value in a variable. Updates the value
+
+	How to concatenate variables with characters
+
+		add a group of characters in double quotations with a variable using the plus operator + 
+
+		When you concatenate with a String, the result is a String
+
+	What are the datatypes types
+
+		in java there is primitive datatypes and non primitive types
+
+		- we will learn non primitive later
+
+		what kind of information
+
+	What are primitive datatypes
+
+		whole numbers (Integers)
+			byte
+			short
+			int 		<- default type by compiler
+			long
+
+		floating numbers (Decimal numbers)
+			float
+			double		<- default type by compiler
+
+		character
+			char : holds a single character
+
+				-> each character is represented in a single quote 'a'
+
+			unicode: character have numbers related to them
+				ASCII - part of unicode
+
+		boolean
+
+			boolean: true or false statements
+
+	Non primitive datatype
+
+			String
+				not a primitive datatype. Class
+
+				holds multiple characters using the double quotations
+
+				concatenations vs addition
+					String + String -> concatenation
+					String + number -> concatenation
+						values of the String and number type are combined, output value is String
+					String + char -> concatenation
+						values of the String and a char are combined, output value is String
+					number + number -> addition 
+					char + char -> addition 
+
+				Q: What is the difference between 'a' and "a"
+
+					the types are different. The 'a' is a char type and the "a" is a String type
+
+____________________________________________________________
+
+Task
+
+	create a class MyName
+	create a main method
+	create multiple char variables, one for each letter of your name
+	print your name 
+		print each letter in a different line
+		print your name in the same line
+
+____________________________________________________________
+
+Task
+
+	create a class CellPhone
+	create a main method
+	declare and assign these variables:
+		brand, model, color, price, storage, hasCamera, sim(char A, B, C)
+
+	Print all the variables
+
+		sample data: apple, iphone 10, black, 1000.99, 128, true, A
+
+____________________________________________________________
+
+Task
+
+	create a class EmployeeInfo
+	create a main method
+	declare and assign these variables:
+		first name, last name, gender, age, company name, are the full time, job title, salary, number of pto (0-25), are they married, suite(char - A, B, C, D)
+
+	Print all the variables
+____________________________________________________________
+
+	In numbers you can use underscore to make the number more readable
+
+	java doesn't allow you to type commas in number
+
+		Example:
+			1,000,00
+
+			java: 1_000_000
+
+____________________________________________________________
+
+Type casting
+
+	Convert from one primitive datatype to another
+
+		- going from a smaller datatype to a bigger datatype happens automatically
+
+				int i = 40;
+				long l = i;
+
+		- going from a bigger datatype to a smaller datatype needs manually casting
+
+				long l = 100;
+				int i = (int) l;
+
+
+		Casting Formula:
+				smallerDatatype varName = (smallerDatatype) biggerDatatypeValue
+
+____________________________________________________________
+
+2/5/2022
+
+Day 4 Variables Intro
+
+day04_variables
+____________________________________________________________
+
+Recap
+Variable declaration and assignment
+Variable naming rules
+Primitive datatypes
+
+Replit
+____________________________________________________________
+
+Recap
+
+	Comments
+
+		text directly in the code, it is used to explain the code, have reminders of what it does
+
+		does not get executed
+
+		-> When there is an issue in the code, we can comment out the code as well
+
+		types:
+
+			// single line comment - comments one lines
+
+			/* multi line comment - comments multiple lines */
+
+			/** java docs comment - comments multiple lines with more functionality */
+
+		TODO: allows you to create a reminder, intellij has a built in feature to show all todo comments
+
+	Escape Sequences 
+
+		allows to use certain characters that are also part of java syntax
+
+		\'	'
+		\"	"
+		\\	\
+		\n	new line
+		\t	tab
+____________________________________________________________
+
+Shortcut to comment
+
+command/control + /
+
+____________________________________________________________
+
+Variables
+
+	container to hold data/information
+
+	allow the values of information to changed, used multiple times
+
+	Declare a variable: makes a container/variable ready to be used
+
+		dataType variablName;
+		int age;
+
+	Assign a value to a variable: store some value/number into your container
+
+		variableName = value;
+		age = 10;
+
+	Declaring and assigning at the same time
+
+		dataType variableName = value;
+		int age = 10;
+
+DataTypes
+
+	In java there is many types. 
+
+	Primitive datatypes: byte, short, int, long, float, double, boolean, char
+
+	Object types: (we will spend more time on this later)
+		-> String
+
+	-> all primitives are lowercase
+
+		whole numbers: (ex: 40)
+			byte
+			short
+			int   <- by default
+			long
+		floating numbers: (ex: 24.62)
+			float
+			double  <- by default
+
+	-> compiler uses int and double by default
+
+	How to tell the compiler you want long number: use an 'L' at the end of the number
+	How to tell the compiler you want float number: use an 'F' at the end of the number
+
+concatenation
+
+	we can use + to add variables to characters, to make a message
+
+reassigning
+
+	changing the value something else, old value is lost. Updating the variable
+
+
+Q: Can you write numbers starting with 0
+	
+	no, it becomes a different number
+	for whole numbers
+
+Hardcoded: directly in the code, so it is difficult to change
+
+shortcut for printing variables: soutv
+
+Need to talk about:
+floating numbers
+concatenation
+reassigning
+variable naming rules
+
+class name Olympics
+
+create a variable for the year
+print the country and year for next couple events
+reassign year value each time. Country name is hard coded
+
+data:
+	
+	China 2022
+	France 2024
+	Italy 2026
+
+Look forward to the year $year for the Olympics to be in $location
+
+Task:
+
+	class name: School
+
+declare and assign these variables
+	number of students in grade 1
+	number of students in grade 2
+	number of students in grade 3
+	number of students in grade 4
+	number of students in grade 5
+
+	total number of students in your school
+
+	number of days in a year (have some half day = ~ 100.5)
+	number of snow days in a year (double)
+	average gpa in school (3.5) [ranges 1.0 - 4.0]
+
+	print all of the variables with unique messages
+
+____________________________________________________________
+
+Variable naming rules
+
+	- make the variable names are clear as possible
+		dont do:
+
+			int x;
+			int a;
+
+	- Variables can contains these:
+		- any letter (A-Z, or a-z)
+		- any number (0-9)
+		- only special characters allowed are dollar sign $ and underscore _
+
+	- for multiple words: use camel case.
+		each new word starts with an uppercase
+
+			words: today is saturday
+			camel case: todayIsSaturday
+			Pascal case( class names) TodayIsSaturday
+
+	- don't use reserved words
+
+	- Can't start with a number
+		int 1age --> invalid
+		int age1 --> valid
+
+____________________________________________________________
+
+Summary:
+
+	What are variables?
+	How to declare variables
+	How to assign to variables
+	How to declare and assign variables
+	How to reassign
+	How to concatenate variables with characters
+	What are primitive datatypes
+	What are the default types
+
+____________________________________________________________
+
+
+2/2/2022
+
+Day 3 Comments & Escape Sequence
+
+day03_comments_escape_sequence
+____________________________________________________________
+
+Recap
+Comments
+Escape Sequence
+Using Github
+____________________________________________________________
+
+Short videos for the weekend:
+	
+	Primitive Data Types
+	Primitive Type Casting
+____________________________________________________________
+
+Warm up:
+
+	- Create todays package: day03_comments_escape_sequence
+
+	- Create a new class in todays package: Goals
+
+		- Create a main method
+
+		- Using print statements print out 3 different goals you have for yourself in this course. Print each on a different line
+
+____________________________________________________________
+
+Recap
+
+If you don't have group: 
+	Omer#9709
+	Guljannat#2209
+
+	Canvas
+
+	IntelliJ
+
+		project: folder where all the other files are in
+
+		src: source folder, where we will write java code
+
+		package: folders in src, that will organize/group code
+
+		java class: .java file that will have java code
+
+		main method: a place to write and run code
+
+			code: public static void main (String [] args) {}
+
+			shortcut in Intellij: main
+
+		console: window that shows the output of your code
+
+		out: folder that stores your bytecode. DO NOT TOUCH
+
+	Print statements
+
+		Code: System.out.println();
+
+			this allows us to output something to the console
+
+		How do we print letters/characters: double quotations ""
+
+		shortcut in Intellij: sout
+
+	- Java is case sensitive
+	- Java is not space sensitive
+
+	How to change the name of something:
+
+		right click -> refactor -> rename
+____________________________________________________________
+
+Github
+
+	See all the code we do together, online
+
+	Go to okta -> click the github enterprise button -> Java Programming Project -> src -> package -> code
+
+____________________________________________________________
+
+println() vs print()
+
+	System.out.println(); 
+
+		prints whats given to the console. Then goes to the next line
+
+	System.out.print();	
+
+		prints whats given to the console, but all in the same line
+
+		-> Cannot be used without input
+
+____________________________________________________________
+
+Comments
+
+	in our java files we can write comments which are just text that will not be executed(run)
+		-> compiler ignores these lines because they are not code
+
+	Comments are used to explain the code. Creates notes, reminders
+
+	Comments helps with documentation 
+
+	Q: When you use comments do you need quotation marks: No, because it is not code
+
+Types of comments
+
+	- Single line comments: comments everything in that line
+
+		syntax: 
+
+			// comments this whole line
+
+	- multi line comments:  allows us to write multiple lines of text
+
+		syntax:
+
+			/*
+				any number of lines 
+				can be be put between
+				the syntax
+			*/
+
+	- Java doc comments: similar to multi line comments, so it allows you to write comments in multiple lines, but this provides extra function for html documentation
+
+		syntax:
+
+			/**
+			*
+			*
+			*/
+
+	- TODO: allows you to create reminders. IntelliJ has separate window to keep track of all the todos on the bottom left corner
+
+	view -> tool windows -> todo
+
+____________________________________________________________
+
+Escape Sequence
+
+Q: How can you output this:
+
+		I like "java" programming
+
+We can use the backslash to define a character we want to output
+	
+	\
+
+	for example: if we want to output a " quotation mark we can do:
+		\"
+
+	for example: if we want to output a \ backslash we can do:
+		\\
+
+	some more useful escape characters:
+
+		code 	-> output
+		\" 		-> "
+		\\ 		-> \
+		\'		-> '
+		\n 		-> next line
+		\t 		-> tab
+
+	- Escape sequences are using in quotations
+
+____________________________________________________________
+
+Todo: 
+	
+	watch short videos
+	practice tasks
+	get good sleep on Friday
+
+
+2/1/2022
+
+Day 2 Intellij & Print Statements
+
+day02_print_statements
+____________________________________________________________
+
+Intellij Set Up
+Print Statements
+First Java Program
+____________________________________________________________
+
+Recap:
+
+	What do computer understand:
+		binary (0s and 1s)
+
+	input -> [process/algorithm] -> output
+
+	algorithm: step by step of how to solve the problem
+
+	code (high level) -> compile/interpret (translates) -> machine level (low level)
+
+	File.java -> compiler -> File.class (bytecode) -> JVM will translate and run
+
+		-> Where does the compiler come from: JDK
+
+		-> Whats the point of having the middle step of bytecode: it means you ran run java code anywhere there is a JVM (Platform independent)
+____________________________________________________________
+
+Project name: Java_Programming_B26
+
+By default all projects are made in a folder called IdeaProjects
+	
+	this folder is under your user
+
+
+IntelliJ project components
+
+	project name: Project folder
+
+	src: source folder
+
+	package: folder
+
+	class: java file
+
+	console: window that shows your outputs
+
+	out: folder that has the bytecode
+
+	IntelliJ saves automatically
+
+Class: HelloWorld
+	no space
+
+Java is not space sensitive  (in the code)
+Java is case sensitive (the lowercase and uppercase letter matter)
+
+What is this
+
+	public static void main (String [] args) {
+		
+
+	}
+
+	-> main method: allows you to run code
+
+	-> When do you make main method: in every class, every separate file in only have one main method
+
+What is this
+
+	System.out.println();  
+
+	-> lets your output something to console
+
+
+We use quotation marks to display characters
+
+	is space a character -> yes
+
+Task: 	create a new java file called: TellMeAboutYourSelf under day2 package
+
+		add a main method
+
+		try and print your name
+
+Shortcuts:
+
+	main method: main or psvm
+
+	printing: sout
+
+
+How to rename things
+	for packages, for classes
+
+	right click -> refactor -> rename
+
+Task:
+	
+	add more code to TellMeAboutYourself
+
+		try to add more lines that print:
+
+			- where you live
+			- a hobby you enjoy
+			- a random number
+
+Task:
+	
+	create a class called MyTriangle under the day 2 package
+
+	try to print a triangle
+
+		 *
+		* *
+	   *****
+
+Naming conventions
+	
+	package: lowercase, no spaces. to separate words you can use underscore. 
+		periods/dot for sub package
+
+	class: Pascal Case - Words are together with no spaces, Each word starts with uppercase letter
+
+		words: today we learned java
+
+
+		normal: todaywelearnedjava
+
+		camel case: todayWeLearnedJava
+			first letter is lowercase and the rest of the words start with an uppercase
+
+		Pascal Case: TodayWeLearnedJava
+
+Github: place where we will store code
+
+Todo:
+
+	Make sure you have github access on okta, if you don't contact support
+
+	Finish watching the rest of the short videos
+		Single line & multi line comments
+		Escape Sequences
+
+	A little practice with making classes, main method and print statements
+
+
+1/31/2022
+
+Day 1 Introduction to Programming
+____________________________________________________________
+
+Get Started
+____________________________________________________________
+
+Short videos for this week:
+
+	Creating Java Project
+	Main Method & Print statements
+	How Java works
+	Single line & multi line comments
+	Escape Sequences
+____________________________________________________________
+
+Saim (dime)
+
+Discord:
+
+	general: off topic
+
+	class chat: during class
+
+	q&a: where you ask your questions
+
+	saim_only
+
+	create_a_ticket: contact support
+
+Schedule
+	
+	Friday: off
+
+	M T W S SU: technical days
+	TH: soft skills with Nadir
+
+		Weekdays: 7 pm - 10 pm
+		Weekends: 10 am - 5 pm
+
+Class flow:
+
+	45 - 50 minutes (review/recap)
+	15 minute break
+	45 - 50 minutes
+	15 minute break
+	45 - 50 minutes
+
+What im using: Sublime text
+
+____________________________________________________________
+
+binary:
+	language that the computer understands
+
+	made of 0s and 1s
+
+ASCII: American Standard Code for Information Interchange
+
+	every character has a number related to it
+
+	A -> 65
+
+How do you represent 5 as binary?
+	
+	101 == 5
+
+	011 == 3
+
+What is an algorithm?
+	
+	step by step solution to a problem
+
+pseudocode: step by step solution what the code should do, but it isn't code. It is in English 
+
+How does a computer understand our needs/action
+
+	We write high level code (human understandable)
+
+	Translated: compile / interpret
+
+	Turns to low level code so computer can understand (machine level)
+
+Java can be used in many ways, but our focus is on automation
+
+Where do programmers write code?
+	
+	any text file
+
+	IDE: integrated development environment 
+
+		-> a tool to help us write code
+
+		we will use IntelliJ
+
+How does java work:
+	
+	write code 		-> 	compile 	-> bytecode
+	(.java)								(.class)
+
+	bytecode runs in the jvm. The jvm translates to binary		
+
+Symbols:
+
+	{ } curly brackets
+	[ ] square brackets
+	( ) parentheses
+	 ;  semi colon
+
+File:  stores some data
+
+extensions:
+
+	.doc
+	.pdf
+	.ppt
+	.png
+	.img
+	.txt
+
+	.java
+	.class
+
+What is the different between JDK, JRE, JVM
+
+	JDK: Java development kit	
+		allows you to write java code
+		contains the JRE and JVM, and compiler
+
+	JRE: Java runtime environment
+		contains JVM, JRE libraries(files), which allows java code to be run
+
+	JVM: Java virtual machine
+		runs the java code
+		interprets
+
+____________________________________________________________
+
+Typing:
+	typing.com
+	typeracer
+	ztype
+
+Shortcuts:
+
+			mac / windows
+	
+	copy: command/control + c
+
+	paste: command/control + v
+
+	cut: command/control + x
+
+	undo: command/control + z
+
+	save: command/control + s
+
+	screenshot: 
+
+		mac:
+			command + shift + 5
+
+		windows:
+			windows key + shift + s
+____________________________________________________________
+
+Keywords from today:
+
+	binary, ascii, algorithm, pseudocode, IDE, bytecode, compiler, high level/lower level, syntax
+
+	syntax: grammar for code
+____________________________________________________________
+
+For tomorrow:
+
+	- make sure you have java installed
+		use the command: java -version
+			command prompt (windows) / terminal (mac)
+
+	- IntelliJ - jetbrains toolbox
+
+	- Short videos
+		Creating Java Project
+		Main Method & Print statements
+		How Java works
+
+
+

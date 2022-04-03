@@ -1,4 +1,114 @@
+4/3/2022
 
+Day 40 ArrayList
+
+day40_arraylist
+____________________________________________________________
+
+ArrayList
+____________________________________________________________
+
+ArrayList
+
+	a part of the collection framework
+
+	Creating ArrayList objects
+
+		ArrayList<type> name = new ArrayList<>();
+
+			-> makes an empty ArrayList 
+
+		ArrayList<type> name = new ArrayList<>( int );
+
+			-> make an ArrayList with int number of capacity 
+
+				size: how many elements there is 
+				capacity: internal storage to be used
+					default capacity is 10
+
+		ArrayList<type> name = new ArrayList<>( collection type );		
+
+			-> it will create an ArrayList with the values from the given collection type
+
+			--> collection type: so far we only know ArrayList
+
+				ArrayList<type> name = new ArrayList<>( ArrayList );	
+
+		Q: Are array objects a collection type
+
+			No, they are not in the collection framework, but we can use the Arrays utility class to help us convert an array into a collection type
+
+				INVALID --> ArrayList<type> name = new ArrayList<>( array [] );	
+				VALID 	--> ArrayList<type> name = new ArrayList<>( Arrays.asList( array []) );	
+
+		Arrays.asList()
+			parameters: array objects (var arg)
+			return: collection type
+
+			Note: this method is a var arg method, so we are able to type elements in the parenthesis and those will be taken as the array elements
+
+	ex of var arg method
+
+		normal: public static void method(int [] arr)
+			to call this method you must give an array object
+
+			int [] a = {4, 5, 1, 2};
+			method(a)
+
+		var arg: public static void method(int ... arr)
+			to call this method you can either give an array object,
+			or type the element values right away with commas
+
+			int [] a = {4, 5, 1, 2};
+			method(a)
+
+			or
+
+			method(4, 1, 5, 1);
+
+More ArrayList methods:
+
+	bulk operation methods:
+
+		the arguments of these methods are collection types
+
+		addAll(collection type): add all of the given collection type elements to the ArrayList
+		removeAll(collection type): remove all the elements that match from the argument
+		containsAll(collection type): checks if the ArrayList contains all of the defined elements from the argument
+		retainAll(collection type): keep all matching elements from the argument. The rest are removed
+
+Collections
+
+	a utility class for collections
+
+	located in the java.util package
+
+	https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collections.html
+
+	there is no sort method in ArrayList
+		ArrayListObject.sort() is not valid
+
+		ArrayObject.sort() is not valid
+
+	Collections.sort(collection type): sort the given collection
+		void method
+
+	Collections.reverse(collection type): reverse the order of the elements in given collection	
+		void method
+
+	Collections.max(collection type): returns the biggest elements in the collection
+		returns int
+
+	Collections.min(collection type): returns the smallest elements in the collection
+		returns int
+
+	Collections.swap(collection type, index1, index2): swap the elements in the collection based on the defined indices. The element in index1 is put into the index2 and vice versa
+		return void
+
+	Collections.frequency(collection type, element): return how many times the given element is found in the collection
+		returns int
+
+ come back at 3:21 est
 
 3/30/2022
 

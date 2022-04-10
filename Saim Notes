@@ -1,3 +1,134 @@
+4/9/2022
+
+Day 42 Custom Classes
+
+day42_custom_classes
+____________________________________________________________
+
+Custom Classes
+____________________________________________________________
+
+Continue practicing problem solving 
+	3x problem a day
+	automation
+	soft skills
+
+	hackerrank 
+	leetcode
+
+Talk about reversing a String
+
+interview pdf
+
+____________________________________________________________
+
+What is a class?
+	
+	a template/blueprint for objects. It will have data and actions
+
+	the class name must match the file name
+
+What is an object?
+
+	instance of a class - meaning a copy of the class
+
+	each object has a copy of all the information in a class
+
+What is an instance variable?
+
+	variables made in a class
+
+	these variables belong to the objects of the class
+		-> Each object has its own copy of the variables
+
+What is static?
+	
+	belongs to the class
+
+	instance: object
+	static: class
+
+How to create an object?
+
+	ClassName referenceName = new ClassName();
+
+	instantiation: creating an object
+		in-stan-shi-ation
+____________________________________________________________
+
+Example class and objects:
+
+Student.java
+
+		public class Student{
+			
+			String name;
+			int batchNumber;
+			int groupNumber;
+			boolean inEveningBatch;
+
+			public void study(){
+				System.out.println("Studying");
+			}
+
+		}
+
+Student is the class
+name, batchNumber, groupNumber, and inEveningBatch are the instance variables 
+study() is an instance method
+
+Zoom.java
+
+		public class Zoom {
+			
+			public static void main(String [] args){
+				Student studentOne = new Student();
+				studentOne.name = "James";
+				studentOne.study();
+			}
+		}
+
+Student studentOne = new Student(); this line is creating an object of the Student class
+studentOne.name = "James"; this line is accessing the instance variable name from the studentOne object
+studentOne.study(); this line calls the instance study() method from the studentOne
+
+____________________________________________________________
+
+How to print the objects
+
+	by default if you try to print an object it will give some memory location
+
+	Ex: 	Student obj = new Student();
+			obj.name = "James";
+			obj.batchNumber = 26;
+			System.out.println(obj); --> memory location
+
+	all classes have a method called toString which is automatically called when printing
+
+	so if we made the toString method in the Student class:
+
+		public String toString(){
+			return name + " " + batchNumber
+		}
+
+	now if we print the object: 
+
+		System.out.println(obj); -->  James 26
+
+Shortcut:
+
+	DO NOT WORRY ABOUT @OVERRIDE
+	
+	right click in the class -> generate option -> toString -> select the variables you want to include
+
+	shortcut for generate window
+		command + n (mac)
+		alt + insert
+
+Java prioritizes local variables
+
+	if there is a local variable and an instance variable that have the same name the local variable is the one used
+
 4/3/2022
 
 Day 40 ArrayList

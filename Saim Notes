@@ -1,4 +1,91 @@
-4/9/2022
+4/10/2022
+
+Day 43 Custom Classes
+
+day43_custom_classes
+____________________________________________________________
+
+Custom Classes
+____________________________________________________________
+
+A class is a blueprint/template for objects
+
+A class can define data or actions
+
+    data: instance variables
+    action: instance methods
+
+An object is an instance of a class
+    physical copy of a class
+
+    creating an object is called instantiation
+
+instance members belong to objects
+    do not have static
+
+instance variables
+    every object will have a copy of the instance variables
+
+    memory: objects are created in the heap
+
+    instance variables have default values
+
+toString()
+
+    a method that allows us to print our objects 
+
+    the method returns a String that is made of the information of a method
+
+    this method is called automatically when printing
+        by default the objects print the memory location
+Example class and object
+
+    public class Room {
+
+        int doors;
+        boolean hasFan;
+        double length;
+        double width;
+
+        public void goToRoom(){
+            // code
+        }
+
+        public String toString(){
+            return "Room has " + doors + " doors."
+        }
+
+    }
+
+Class: Room
+instance variables: doors, hasFan, length, width
+instance methods: goToRoom, toString
+toString(): will print how many doors the room object has
+
+    public class UseRoom {
+
+        public static void main(String [] args){
+            Room livingRoom = new Room();
+            livingRoom.doors = 4;
+            livingRoom.instanceVariable;
+            livingRoom.instanceMethod();
+            System.out.println(livingRoom);
+        }
+
+    }
+
+Object reference: Room livingRoom
+Actual Object: new Room();
+Accessing instance members:
+    livingRoom.instanceVariable;
+    livingRoom.instanceMethod();
+
+When printing the object directly: 
+    System.out.println(livingRoom); --> Room has 4 doors
+
+    -> If we did not make our own toString() in the class then we would use only some memory information
+
+ 4/9/2022
 
 Day 42 Custom Classes
 

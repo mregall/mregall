@@ -12,78 +12,213 @@ A class is a blueprint/template for objects
 
 A class can define data or actions
 
-    data: instance variables
-    action: instance methods
+	data: instance variables
+	action: instance methods
 
 An object is an instance of a class
-    physical copy of a class
+	physical copy of a class
 
-    creating an object is called instantiation
+	creating an object is called instantiation
 
 instance members belong to objects
-    do not have static
+	do not have static
 
 instance variables
-    every object will have a copy of the instance variables
+	every object will have a copy of the instance variables
 
-    memory: objects are created in the heap
+	memory: objects are created in the heap
 
-    instance variables have default values
+	instance variables have default values
 
 toString()
 
-    a method that allows us to print our objects 
+	a method that allows us to print our objects 
 
-    the method returns a String that is made of the information of a method
+	the method returns a String that is made of the information of a method
 
-    this method is called automatically when printing
-        by default the objects print the memory location
+	this method is called automatically when printing
+		by default the objects print the memory location
+
 Example class and object
 
-    public class Room {
+Room.java
+	public class Room {
 
-        int doors;
-        boolean hasFan;
-        double length;
-        double width;
+		int doors;
+		boolean hasFan;
+		double length;
+		double width;
 
-        public void goToRoom(){
-            // code
-        }
+		public void goToRoom(){
+			// code
+		}
 
-        public String toString(){
-            return "Room has " + doors + " doors."
-        }
+		public String toString(){
+			return "Room has " + doors + " doors.";
+		}
 
-    }
+	}
 
 Class: Room
 instance variables: doors, hasFan, length, width
 instance methods: goToRoom, toString
 toString(): will print how many doors the room object has
 
-    public class UseRoom {
+UseRoom.java
+	public class UseRoom {
 
-        public static void main(String [] args){
-            Room livingRoom = new Room();
-            livingRoom.doors = 4;
-            livingRoom.instanceVariable;
-            livingRoom.instanceMethod();
-            System.out.println(livingRoom);
-        }
+		public static void main(String [] args){
+			Room livingRoom = new Room();
+			livingRoom.doors = 4;
+			livingRoom.instanceVariable; // general syntax
+			livingRoom.instanceMethod(); // general syntax
+			System.out.println(livingRoom);
+		}
 
-    }
+	}
 
 Object reference: Room livingRoom
 Actual Object: new Room();
 Accessing instance members:
-    livingRoom.instanceVariable;
-    livingRoom.instanceMethod();
+	livingRoom.instanceVariable;
+	livingRoom.instanceMethod();
 
 When printing the object directly: 
-    System.out.println(livingRoom); --> Room has 4 doors
+	System.out.println(livingRoom); --> Room has 4 doors
 
-    -> If we did not make our own toString() in the class then we would use only some memory information
+	-> If we did not make our own toString() in the class then we would see only some memory information
+
+____________________________________________________________
+
+Constructor
+
+	a special method that is called when the objects are created
+		-> constructors do not have a return type
+
+	syntax:
+
+		public ClassName(){
+
+		}
+
+	constructor is used with the new keyword to create objects
+
+		Ex:
+			new ClassName() --> calls the constructor from the class
+
+			constructor is called once when object is created
+
+	one of the main uses of a constructor is to initialize the instance variables of an object
+		-> sets up an object when being created
+
+	if no constructor is made manually, then the compiler has a default constructor that has no arguments
+		-> if you make a constructor the default constructor is not there anymore
+
+	Item.java
+		
+		public class Item{
+
+			String name;
+			double price;
+
+			public Item(String inputName, double inputPrice){
+				name = inputName;
+				price = inputPrice;
+			}
+
+		}
+
+class: Item
+instance variables: name, price
+constructor: 
+	public Item(String inputName, double inputPrice){ }
+
+		-> in this example has 2 parameters
+			inputName and inputPrice are local to the constructor 
+
+assigning the value to the instance variable from the parameters
+			name = inputName;
+			price = inputPrice;
+
+	UseItem.java
+
+		public class UseItem{
+
+			public static void main(String [] args){
+
+				Item item = new Item("Pen", 1.5);
+
+			}
+		}
+
+class: UseItem
+creating an Item object with reference: Item item = new Item("Pen", 1.5);
+		
+	 new Item("Pen", 1.5); -> creating an object
+
+	 	calls the Item constructor with 2 arguments
+
+	 	The order of the arguments matters. 
+	 	"Pen" is the value used for inputName
+	 	1.5 is the value used for the inputPrice
+____________________________________________________________
+
+this keyword
+
+ 	it is a reference to the object/instance
+
+ 	mainly it used to tell the compiler the difference between local variables and instance variables
+
+ 	when there was variables in different levels, with the same name, java prioritizes the local variables
+
+public class Address {
+
+    String street;
+    String city;
+    String state;
+    String zipcode;
+
+    // unique parameter names
+
+//    public Address(String inputStreet, String inputCity, String inputState, String inputZipcode){
+//        street = inputStreet;
+//        city = inputCity;
+//        state = inputState;
+//        zipcode = inputZipcode;
+//    }
+
+// 	same parameter names as instance variables
+
+    public Address(String street, String city, String state, String zipcode){
+        this.street = street; // assigning the value of the local street from the parameters to the instance variable street
+        this.city = city;
+        this.state = state;
+        this.zipcode = zipcode;
+    }
+
+}
+
+____________________________________________________________
+
+Constructors can be overloaded
+
+	overloading means to have different parameters
+
+	enables you to create objects in different way and with different data
+
+	Ex:
+
+		new ArrayList<>()
+		new ArrayList<>(collection type)
+		new ArrayList<>(capacity)
+
+
+String str=new String("apple") is it constructor? yes
+
+Right click -> show Diagrams 
+
+	summary of classes/packages
+
 
  4/9/2022
 

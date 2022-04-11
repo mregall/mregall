@@ -25,7 +25,7 @@ public class ABCError {
         String u1="", u2="", u3="";
         //Will start a loop to store my sequences for each user
         for (String each : logs) {
-//  If current value ends with 1 than will store it to String for user 1 sequence
+        //  If current value ends with 1 than will store it to String for user 1 sequence
             if (each.endsWith("1")) u1 += ""+each.charAt(0);
             if (each.endsWith("2")) u2 += ""+each.charAt(0);
             if (each.endsWith("3")) u3 += ""+each.charAt(0);

@@ -1,3 +1,81 @@
+4/11/2022
+
+Day 44 Custom Classes
+
+day44_custom_classes
+____________________________________________________________
+
+Custom Classes
+Constructor 
+____________________________________________________________
+
+Constructor 
+
+	a special method that is executed when the object is created
+	does not have a return type
+	run one time
+	usually used to initialize the object, set the initial values to the instance variables
+
+	public class Paper{
+
+		public Paper(){
+
+		}
+
+	}
+
+class: Paper
+
+constructor:
+
+	Paper(){
+
+	}
+
+calling the constructor to create an object
+
+	new Paper() --> this creates an object of the Paper class and it does this by calling the constructor from that class
+
+overloading the constructor
+	
+	create multiple constructors in a class by making different constructors with different parameters
+
+	-> this means you create different ways to make the objects of the class
+
+this keyword
+
+	it is a reference to the objects/instance of the class 
+
+	mainly used to tell the compiler the difference between a instance variable and a local variable
+
+		-> java prioritizes the local variables
+
+	any variables made in a method, loop, if statement etc, is a local variable which belongs to that code block. It is available to use until the close bracket
+
+	instance variable belonging to each object. Make object to use those variables
+
+constructor chaining
+
+	constructor calling another constructor in the same class
+
+	this()
+
+	helps to reduce repetition
+
+	rules:
+
+		- constructor call must be on the first line
+		- cannot do more than one constructor call
+		- constructor cannot call itself or contain itself
+			-> the constructor that is called should not call back to current constructor 
+		- this() can only be used in a constructor 
+
+this vs this()
+
+	this: reference to instance members: instance variable and instance methods
+
+	this(): call another constructor 
+
 4/10/2022
 
 Day 43 Custom Classes

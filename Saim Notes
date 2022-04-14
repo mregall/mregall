@@ -1,3 +1,87 @@
+4/13/2022
+
+Day 46 Custom Classes
+
+day46_static
+____________________________________________________________
+
+Custom Classes
+Static
+____________________________________________________________
+
+Static
+
+	instance: belongs to the object
+		every object has its own copy of the members
+
+	static: belongs to the class
+		there is a single copy of the members shared with the class, and all objects of that class
+
+	Ex:
+
+		public class Water{
+
+			int amount;
+
+			static String planet = "Earth";
+
+		}
+
+class: Water
+instance variable: amount
+static variable: planet
+
+Static members:
+	variables
+	methods
+	blocks
+	class
+
+To access any static member use the className.static
+
+Note: Objects of a class can access the static members, but it is not recommended
+
+		Water obj = new Water();
+		Water.planet; --> proper way to access this variable
+		obj.planet; --> works, but not recommended
+
+Static methods:
+
+	methods: doing some actions
+
+	static method: you can do the actions without needed an object. Use just the class name
+		-> there is a single copy of this method belonging to the class
+
+		ex:
+
+			Arrays.toString()
+			Arrays.sort()
+			String.join()
+
+		Use case: utility classes, group useful methods into one file
+			Ex: Arrays, Collections
+
+	instance method: you must create an object in order to use these methods. Accessed by the object
+		-> every object has a copy of this method
+
+		ex:
+
+			new Scanner().nextInt()
+			String s = "java";
+				s.charAt()
+				s.length()
+
+Static block
+
+	code block that will be executed once in the beginning when the class is used for the first time
+
+	static {
+		// code
+	}
+
+	can be used to initialize static variables
+
+
 4/11/2022
 
 Day 44 Custom Classes

@@ -1,3 +1,117 @@
+4/16/2022
+
+Day 47 Encapsulation
+
+day47_encapsulation
+____________________________________________________________
+
+Static
+Access Modifiers
+OOP: Encapsulation
+____________________________________________________________
+
+Static
+
+	static members
+
+		variables: data that will be shared with all objects of the class
+
+		methods: action/code block that has some purpose not related to an object. It is usually a useful action to be called anytime. We don't need objects to call these methods
+
+		block: block of code in the class that is executed when the class is used for the first time
+
+			--> can be used to execute any code that used in the class. (Set up)
+
+			static {
+
+			}
+
+		class: lets not worry about it
+
+	Static members belong to the class not the objects
+
+		instance: objects
+			-> each object gets a copy of the instance members
+
+		static: class
+			-> one copy of the members
+
+		-> access the members by the class name, which also means you don't need any object to use these members
+
+Access Modifiers:
+
+	keywords used to define the scope or visibility, where you can use/ access the variables, methods, etc
+
+	[Most Visible] public  -> protected  -> default -> private [Least Visible]
+
+	public: access everywhere in the project
+	default: access within the same package
+		-> when there is no other access modifier
+
+	private: access only in the same class
+
+	protected: we will talk about later
+
+the java file name must match the public class name
+
+
+What is OOP?
+
+	Object Oriented Programming
+
+	OOP concepts
+
+		Encapsulation
+		Inheritance
+		Abstraction
+		Polymorphism 
+
+What is encapsulation?
+
+	encapsulations allow you to hide your information from direct access. We are able to limit the access to variables by using the private keyword and allowing PUBLIC getters and setters
+
+	getter: method used to see the value of that specific variable
+
+	setter: method used to change/resign the value of that specific variable
+
+Ex:
+	
+	public class Pen {
+
+		private String brand;
+
+		public String getBrand(){
+			return brand;
+		}
+
+		public void setBrand(String brand){
+			this.brand = brand;
+		}
+
+	}
+
+class: Pen
+instance variable: brand
+	-> private access modifiers makes brand only available in the class
+
+getter:
+
+		public String getBrand(){
+			return brand;
+		}
+
+		the get method returns the value of the brand. It is how you can access the brand variable anywhere
+
+setter:
+
+		public void setBrand(String brand){
+			this.brand = brand;
+		}
+
+		the set method will accept a parameter and assign the instance variable from the value in the parameter. Void method because we don't return anything
+
+
+
 4/13/2022
 
 Day 46 Custom Classes

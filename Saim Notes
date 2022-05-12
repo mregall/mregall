@@ -1,4 +1,994 @@
-4/16/2022
+5/10/2022
+
+Day 56 Polymorphism 
+
+day56_polymorphism
+____________________________________________________________
+
+OOP: Polymorphism
+____________________________________________________________
+
+Objects
+
+	String str = "Java";
+
+	String str --> reference 
+
+	"Java" --> object
+
+	--
+
+	Scanner input = new Scanner(System.in);
+
+	Scanner input  --> reference
+	new Scanner(System.in); --> actual object that the methods we can 
+
+Polymorphism
+
+	objects being able to have different references 
+
+possible references of an object
+
+	- itself: reference is the same class that the object was made from
+	- any super class: any class where there "is a" relation(both direct and not direct parents)
+	- interface: any interface that is implemented to the class
+
+** Note: Execution will happen on the object. That means the implemenation from the object will be run
+	A reference must have accessibility to the method/variable
+
+	--> dynamic binding: execution happens from the overridden implementation of the object
+		runtime
+
+day56_polymorphism.book
+
+Reference type casting
+
+	you can cast the references of an object to other types as long as there is a relation
+
+	upcasting: going from the child class to a parent class 
+
+		automatically/implicitly 
+
+	downcasting: going from a parent class to a child class
+
+		manually/explicitly  
+
+Use case:
+	
+	WebDriver driver = new ChromeDriver();
+
+	you run tests, if a test fails you would want to take a screenshot and add it to the report
+
+	((ChromeDriver)driver).takeScreenshot()
+
+instanceof
+
+	operator that helps to determine the type/class of an object
+
+	general syntax: 
+
+		object instanceof className/type
+
+	statements returns a boolean
+
+		if the object is the type of the className/type it returns true
+		otherwise it would return false
+
+	Ex:
+
+		Animal 
+
+		Dog extends Animal
+
+		new Dog() instanceof Animal --> true
+
+		new Dog() instanceOf String --> false
+
+day56_polymorphism.cars
+
+One benefit of Polymorphism: 
+
+	with methods:
+
+	Polymorphism allows our methods to be flexible to work with many classes if they share IS A relation
+
+	+ having a super class as the parameter means any class that inherits that class can be given as the argument of that method
+
+	+ having a super class as the return type means any class that inherits that class can be returned 
+
+
+Day 55 Polymorphism 
+
+day55_polymorphism
+____________________________________________________________
+
+Interface
+OOP: Polymorphism
+____________________________________________________________
+
+day55_polymorphism.shopping
+
+	Inheritance between:
+
+	class -> class
+		extends
+
+	interface -> class
+		implements
+
+	interface -> interface
+		extends
+
+inheritance in interface
+	
+	interface is not a class, it does not follow the same rules as classes
+
+	in java a class cannot have more than 1 direct parent class
+
+	but a class can implement as many interfaces as it wants
+
+	Ex:
+
+		Cat extends Animal implements Playable, Petable
+
+		Tiger extends Animal implements Swimmable
+
+		Cow extends Animal implements Consumable, Petable
+
+		Shark extends Animal implements Swimmable, Consumable
+
+		Duck extends Animal implements Playable, Swimmable, Consumable, Petable
+
+	public interface Aqua extends Swimmable, Consumable {
+
+	}
+
+	Shark extends Animal implement Aqua
+
+	Duck extends Animal implement Playable, Aqua
+
+	public interface isFriendly extends Playable, Petable {
+
+	}
+
+	Duck extends Animal implement isFriendly, Aqua // same as line 41
+
+methods in interfaces
+
+	day55_polymorphism.interface_methods
+
+	able to create 3 types of methods in an interface
+
+	abstract methods: any method created will be abstract by default
+
+	static method: a method that has implementation in the interface
+		static: access by the interface
+
+			-> not inherited to the class that implement
+
+	default method: a method that has implementation in the interface
+		instance for the classes that implement 
+
+	Note: static and default methods were added in java 8
+
+abstract class vs interface
+
+	Both: 
+		can't objects
+		can create abstract methods
+		can create static methods
+		can be inherited (class to class and interface to interface)
+		create an is a relation
+
+	Abstract class:
+		can have constructors
+		can have instance variables
+		can have blocks (static block)
+		can use any access modifier on any variables/method
+		class can only have one parent
+
+	interface:
+		public access modifier on variables/method by default
+		methods created here are abstract by default
+		only has static final variables
+			no instance variables
+		can create default methods
+		static methods are not inherited
+		not a class, so more flexible for inheritance. A class can inherit as many interfaces as needed and an interface can inherit as many interfaces 
+
+Note: java 9 added ability to use private and protected access modifiers
+____________________________________________________________
+
+Polymorphism 
+
+Objects and References
+
+	public interface Driveable {}
+
+	public class Street implements Driverable{
+		
+	}
+
+	Street obj = new Street();
+
+		Street obj --> reference
+		new Street(); --> object
+
+	Street obj2; --> only a reference
+
+	Street obj3 = null; --> no object here
+
+	new Street(); --> object with no reference
+
+Polymorphism 
+	
+	the object taking different forms
+
+	an object is able to take different form by the reference
+
+	** what are the possible references of an object?
+
+		- itself: the reference is the same type as the object
+			Street obj = new Street();
+
+		- any super class: any direct or indirect super class can be the reference	
+			Object obj = new Street();
+
+		- any interface that is implemented
+			Driveable obj = new Street();
+
+	the reference of an object must have access to the variable or method, otherwise the code will not compile
+
+	the execution happens on the object side
+		ex: if a method is overridden the implementation of the object is executed
+
+WebDriver driver = new ChromeDriver()
+
+WebDriver driver = new FireDriver()
+
+day55_polymorphism.animal
+day55_polymorphism.clothes
+
+
+
+Day 54 Abstraction
+
+day54_abstraction
+____________________________________________________________
+
+OOP: Abstraction
+Abstract Class
+Interface
+____________________________________________________________
+
+Abstraction 
+
+	concept that allows us to hide the implementation of a method, meaning we can create ideas/actions without worrying about how those idea or action are done
+
+	create methods that have no implementation
+
+		-> This allows us to establish common methods that would shared with multiple classes/object but not having to worry about what the methods does
+
+	abstraction in java
+
+		1) abstract class
+		2) interface
+
+Abstract class
+
+	class that has the abstract keyword 
+
+	ex: public abstract class Example {}
+
+	- abstract classes can make abstract methods
+
+	- abstract classes cannot be instantiated (cannot create object of the class)
+
+		cannot do: Example obj = new Example();
+
+Abstract method:
+
+	a method without a code body ( no implementation )
+
+	-> these methods must be overridden (implemented) in the sub classes that inherit them
+
+	ex: public abstract int getNumber();
+
+concrete class:
+
+	first non-abstract(normal) class which must override all abstract methods from any super classes or interfaces
+
+	-> reasons: normal classes cannot have abstract methods, so if any abstract method is inherited it must be implemented
+
+day54_abstraction.animal
+
+day54_abstraction.creating
+
+day54_abstraction.language
+
+____________________________________________________________
+
+Interface
+
+	another way to make abstract methods
+
+	they will be declare with keyword interface, instead of keyword class
+
+	public interface Go {
+
+	}
+
+	-> Note: the interfaces are made in .java files, so the interface name will match the .java file name
+
+	method created in an interface are public abstract by default
+
+	variables created in an interface are public static final by default
+
+	-> no instance members in an interface
+
+	Interface are not the class, there is no constructor, no blocks
+
+	How to use an interface
+
+		when you go from an interface to a class, use keyword implements
+
+In java we cannot have more than one direct parent
+
+The interfaces are not a class, so they do not follow the same rules, and so we are able to implement multiple interfaces to one class
+
+
+
+Day 53 Abstraction
+
+day53_abstraction
+____________________________________________________________
+
+OOP: Abstraction
+Abstract Class
+____________________________________________________________
+
+OOP: principles that help design our classes and organize code in a way so that its reusable and maintainable 
+
+Encapsulation: data hiding, used to protect the information by using private keyword and allowing indirect access to those variables with public getters and setters
+
+Inheritance: passing information from one class to another. The class that gives the information is called the ( Parent/Super/Base ) and the class that gets the information is called the ( Child/Sub/Derived ) class
+
+How does Encapsulation work with Inheritance?
+
+    private information does not get inherited to child classes, does it means we cannot use Encapsulation with Inheritance?
+
+    We can use them together because even if the variables cannot be inherited directly to the child, the child class will inherit the public getters and setters that will allow the variable be assigned to and to read from
+
+____________________________________________________________
+
+Abstraction 
+
+	concept that allows us to hide the implementation of a method
+
+		focus on what the method does, not how it does it
+
+	implementation: the code, the actions the method do
+
+	abstraction cannot exist without inheritance
+
+How to achieve abstraction in java
+
+	1) abstract class
+	2) interface
+
+Abstract class:
+
+	a class that uses the keyword abstract
+
+	public abstract class hello {
+
+	}
+
+	able to define abstract methods
+
+	not able to create objects of this class
+
+Q: Can you create an object of a abstract class, even if there is no abstract methods created?
+
+	no, abstract class can never create objects of it
+
+Q: Can you have non-abstract methods in abstract classes
+
+	yes, you can define any number of abstract or non-abstract methods
+
+Abstract method:
+
+	a method without any implementation (no code body)
+
+	public abstract void eat();
+
+day53_abstraction.cars
+
+concrete class: 
+	
+	first non-abstract class (normal class) that inherits abstract methods
+
+	the concrete classes must implement all abstract methods
+
+day53_abstraction.exercise
+
+
+
+Day 52 Inheritance 
+
+day52_inheritance 
+____________________________________________________________
+
+final keyword
+static in inheritance
+____________________________________________________________
+
+Practices Today:
+Color, Book, TJMaxx Replit
+Unit 5 Problem Set
+Abstraction Short Video
+
+Later:
+Cities Project
+Encapsulation & Inheritance short quiz
+____________________________________________________________
+
+Method Overriding
+
+	changing the implementation/code of a method that is defined and inherited in a super class
+
+	why do we need overriding? 
+		define a more specific method for the sub classes
+
+Q: What is the difference between overloading and overriding
+
+	overloading is to change the number or type of parameters to allow another method with the same name and this happens in the same file
+
+	overriding is changing the implementation of the method between a super and sub class, so the method in the sub classes works differently for the sub class objects
+	
+____________________________________________________________
+
+final keyword
+	
+	not being able to change
+
+	final variable:  variable that cannot be changed, after it has a value it cannot be reassigned
+
+		Ex: final int a = 5;
+			a = 10; // this will give problem
+
+		Q: What are constants?
+
+			static final variables. Information that cannot be changed. Can be access anywhere by class name
+
+			Ex: Math.PI
+
+		Note: Convention for constant variables is to define the name in all uppercase
+
+	final method: method that cannot be overridden, which means you cannot change the implementation
+
+		Q: Can you overload a final method
+
+			yes, you create a method with the same name and different parameters
+
+	final class: this class cannot be the parent of another class
+
+		Q: Can a final class be a child class
+
+			yes, at least it will be the child of the Object class
+
+day52_inheritance.final_example
+
+How to access anything in IntelliJ
+	
+	hover over + press command/control + click on highlighted item
+
+Can you have multiple classes in a file
+
+	yes, but the public class must match the .java file name
+
+	you should only have 1 public class in a file
+
+day52_inheritance.hiding
+
+Q: Can you override static methods?
+	
+	No, you cannot override static method, They will become hidden
+
+	You will have access to both methods, the original one in the parent class (hidden) and the new one you make in the child class
+
+	instance method: we can override which means we can change the implementation
+
+	static methods: we cannot override
+
+		if we create a static method with the same name the parent class method will become hidden
+
+Q: Can you override variables
+
+	No, but you can hide them
+
+	If you declare a variable in the child class which was also declare in the parent class, then the parent class variable will be hidden
+
+
+
+Day 51 Inheritance
+
+day51_inheritance 
+____________________________________________________________
+
+OOP: Inheritance
+Protected keyword
+Method Overriding
+final keyword
+____________________________________________________________
+
+Sunday: Off
+Monday: Alumni sessions start
+	DO NOT join regular class
+____________________________________________________________
+
+Constructor in inheritance 
+
+	constructor is not inherited
+
+	- The sub class constructor must still call the super class constructor 
+
+super
+	
+	reference of the parent class objects
+
+	-> just like this keyword is the reference of the current instances
+
+	super(): call the parent constructor
+
+	this(): calls a constructor in the same class
+
+	super vs super()
+
+		super is the reference of a parent object
+			instance variables, instance methods
+
+		super(): constructor calling
+
+Object class:
+
+	parent of all other classes in java
+
+	this is where toString method is defined
+
+When you created a new java class/file, these were the things there:
+
+Tester.java
+
+	import java.lang;
+
+	public class Tester extends Object {
+
+		public Tester(){
+			super();
+		}
+
+	}
+
+Note: Remember that creating a constructor gets rid of the default constructor, so you must handle the rules about calling the parent class constructor
+
+What you see:
+
+Tester.java
+
+	public class Tester {
+
+
+	}
+
+day51_inheritance.app 
+
+Inheritance relationships
+
+	Java does not support multiple inheritance
+
+		A class cannot have more than one parent
+
+	Single level inheritance: relationship between two classes
+
+		public class Animal {}
+
+		public class Cow extends Animal {}
+
+	Multi level inheritance: relationship between more than 2 classes. One parent inherits to another class, which becomes the parent of other classes, etc
+
+		public class Person {}
+
+		public class Employee extends Person {}
+
+		public class Tester extends Employee {}
+
+	Hierarchical inheritance: relationship between more than 2 classes. One class is the parent of all other classes
+
+		public class Season {}
+
+		public class Winter extends Season {}
+
+		public class Summer extends Season {}
+
+		public class Spring extends Season {}
+
+Access modifiers with Inheritance 
+
+	(most visible -> least visible)
+
+	public: inherit to anywhere in the project
+
+	protected: protected members are directly accessible in the same package and by sub classes in any package
+
+		-> inherit anywhere in the project
+
+		-> direct access, only in the same package
+
+		with no inheritance, protected works like default
+
+	default: inherit only within the same package
+
+	private: cannot inherit, because private makes everything accessible only in the same class
+
+
+day51_inheritance.access.a
+day51_inheritance.access.b
+day51_inheritance.shapes
+day51_inheritance.lyft
+
+Method Overriding
+
+	changing the implementation(code) of a method that is defined in the super class
+
+		-> simpler way to say: after inheriting a method we can change how it works
+
+	Uses of overriding: able to define method/action that can become more specific in child class
+
+		-> used much more in abstraction
+
+@Override
+
+	this is an annotation
+	makes sure the method is being overridden correctly
+	it is optional, but in general recommended to use
+
+Method overriding rules:
+
+    - method needs to be inherited
+    - the method signature needs to be same 
+    	method signature: name and parameters
+    - access modifier can stay the same, or be changed to more visibility, but not less
+
+        public > protected > default > private
+
+        ex: 
+            String getName(){
+        		return "name";
+    		}
+
+    		at this moment the getName() method is default, so it is possible to override and change the access modifier to public or protected, because they are more visible
+
+    - return type: must be the same
+
+    - overriding is for instance methods
+
+IQ: What is the difference between method overloading and overriding
+
+    overloading: have a method with the same name, different parameters 
+        -> happens in the same class
+
+    overriding: changing the implementation of a method that comes from a super class
+        -> happens between the super and sub class
+
+    summary:
+    	Method overloading is used to create multiple ways to call and use a method by changing the parameters. It allows more methods to be created with the same name, but different inputs. Method overriding is for changing the implementation of a method that was inherited from a super class and allowing to be more specific for the sub class objects
+
+
+Day 50 Inheritance 
+
+day50_inheritance 
+____________________________________________________________
+
+OOP: Inheritance
+____________________________________________________________
+
+creating sub-packages:
+
+day50_inheritance.book
+day50_inheritance.computer
+
+	today we used the above two packages to work
+	the day50_inheritance was the base package and putting a dot with a package after allowed us to create a sub package (package inside of the package)
+
+	so doing day50_inheritance.book directly in the src created the base day50_inheritance package with the book sub package inside
+
+	then later we did day50_inheritance.computer which made another sub package, computer, in todays back package: day50_inheritance
+
+constructor with inheritance
+
+	- constructor is not inherited
+
+	- the child class constructor must always call the parent class constructor
+
+	-> using super() we can call the parent constructor
+
+	-> default constructor always called super() in the first line 
+
+	the rules of super() are the same as this()
+
+Q: What is the difference between this vs super
+
+	this: reference of the current object
+
+	super: reference of the parent class object
+
+Q: What is the difference between this() vs super()
+
+	this(): used to chain the constructor in the same class
+
+	super(): used to call the parent constructor from a different class
+
+Object class
+
+	the parent of all classes
+
+	located in the java.lang package
+
+	- doesn't need to be defined, it is automatically inherited
+
+	this is were the toString method is coming from
+
+____________________________________________________________
+
+- Take a look at the Book class from today
+
+	we originally had String author
+	but this was only a String type so it could only have characters
+	We made a separate Author class, so be able to define the information of an Author better
+	That allowed us to replace the String author with Author
+
+		-> Author author 
+			becomes an instance variable, it belongs to the objects of the class, which were Book objects
+
+	summary: Give us more information about the author besides just a name 
+
+
+
+Day 49 Inheritance 
+
+day49_inheritance 
+____________________________________________________________
+
+OOP: Inheritance
+____________________________________________________________
+
+Inheritance 
+
+	allows a class to inherit(get) information and actions from different classes
+
+		define a general class --> go to a more specific class
+
+	+ provide code re-usability and maintainability 
+
+	+ a good way to organize and group common information and actions
+
+Names of class with inheritance
+
+	parent == super == base
+
+	child == sub == derived
+
+How to inherit in java
+
+	we use extends keyword on the class we want to inherit to
+
+How inheritance works
+	
+	pass the information and actions from the parent class to the child class
+
+	Ex: 
+
+		public class Planet {
+			int distanceFromSun;
+		}
+
+		public class Earth extends Planet {
+
+		}
+
+	Planet is the super class
+	Earth is the sub class
+
+	The Planet class will pass its information to the Earth class
+
+Is A Relations
+
+	Inheritance creates is a relation between classes. It is a way to describe how the classes are related to each other
+
+	generic syntax:
+		child is a parent
+		sub is a super
+
+	Earth is a Planet
+
+What is inherited?
+
+	- all public variables and methods
+	- all protected variables and methods
+	- default variables and method when the classes are in the same package
+
+What is not inherited?
+
+	- constructors 
+	- all private variables and methods
+	- default variables and method when the classes are not in the same package
+
+
+Day 48 Encapsulation
+
+day48_encapsulation
+____________________________________________________________
+
+OOP: Encapsulation
+OOP: Inheritance Intro (Maybe or static import)
+
+Unit 4: April 22 - April 26
+____________________________________________________________
+
+access modifiers
+
+	controlling the access of data and actions
+
+	public: accessible anywhere in the project 
+	default: accessible only within the same package
+		(no other access modifier was applied)
+	private: accessible only within the same class
+
+	Q: Can local variable have access modifiers
+
+		local variable belong the code block they are created, so no you can't use access modifiers with local variables
+
+	What can you use access modifiers on:
+
+		variables, methods, and constructors can have any access modifier
+
+		classes: public and default
+
+	Ex:
+
+		Paper.java
+
+		package p1;
+
+		public class Paper {
+
+			public void write() {}
+
+			void fold() {}
+
+			private void mail() {}
+
+		}
+
+		Main.java
+
+		package p1;
+
+		public class Main {
+
+			public static void main(String [] args){
+				Q: What do you have access to here
+			}
+
+		}
+
+		access to: 
+			write() because it is public
+			fold() because it is default and we are in the same package
+
+		don't have access to:
+			mail() because it is private so it can't be access outside of the class
+
+		--------------------
+
+		Other.java
+
+		package p2;
+
+		public class Other {
+
+			public static void main(String [] args){
+				Q: What do you have access to here from Paper class
+			}
+
+		}
+
+		access to: 
+			write() because it is public
+			
+		don't have access to:
+			fold() because it is default and we are not in the same package
+			mail() because it is private so it can't be access outside of the class
+
+Q: How can you access any of the methods?
+
+	They are instance methods, so you must make objects to use them
+
+OOP Concepts
+
+	Object Oriented Programming
+
+	Encapsulation
+	Inheritance
+	Abstraction
+	Polymorphism 
+
+Encapsulation: 
+
+	a concept that allows us to protect our information from direct access and allows us to define and limit how the information should be used
+
+	How to achieve encapsulation in java:
+
+		add private access modifier to the variables
+
+			-> this stops anyone can using the variable outside of the class
+
+		create getters and setters methods
+
+			-> these methods allow you to access and use the information, but in a protected way
+
+			getters: method to give the value of your variable
+
+			setters: method to change the value of your variable
+
+Ex:
+
+	public class Water  {
+
+		private int oz;
+
+		public int getOz(){
+			return oz;
+		}
+
+		public void setOz(int oz){
+			this.oz = oz;
+		}
+
+	}
+
+Sub package
+
+	package inside of a package
+
+	you can create a sub package 2 ways
+
+		right click on src -> new package
+			type existing package name and add a period (dot)
+			type the sub package after the dot
+		or
+
+		right click on current package -> new package 
+			current package name will appear with a dot at the end
+			type the sub package after the dot
+
+
+Static imports
+
+    allows you to use specific static members from a certain class without the class name
+
+    Arrays.sort() -> sort()
+
+    syntax:
+
+        import static packageName.className.staticMember -> specific static member
+
+        import static packageName.className.* -> all static members in this class
+
+        Ex: import static java.util.Arrays.sort;
+            import static java.util.Arrays.*;
+
 
 Day 47 Encapsulation
 

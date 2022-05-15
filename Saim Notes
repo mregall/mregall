@@ -1,4 +1,147 @@
-5/10/2022
+5/14/2022
+
+Day 57 Exceptions 
+
+day57_exceptions
+____________________________________________________________
+
+Exceptions
+try/catch
+finally
+throws
+____________________________________________________________
+
+day57_exceptions.webelement
+
+day57_exceptions.learn
+
+Exceptions
+
+	What is an exception:
+		something that stops the normal flow of the program. Some problem in the code
+
+	What are the 2 types of exception:
+
+		checked (compile time): exception that must be handled in order to compile
+
+			Ex: Thread.sleep()
+
+		unchecked (runtime): exception that happen after the program is run. You can handle unchecked exceptions, but you don't need to
+
+		compile time: while compiling
+
+		runtime: when you execute
+
+	How do you handle exceptions:
+
+		with try catch 
+
+		try block defined any code that will be execute top to bottom and if any exception occurs in from the code in the try block it can be caught and handled in the catch block. The catch block defined the code that will run if an exception occurs
+
+		Ex: try{
+			WebDriver driver = null;
+			driver.get("google.com");
+		} catch(NullPointerException e){
+			System.out.println("No Object Created");
+		}
+
+		-> Remember the 'e' is just a name/reference so it can called anything, but 'e' is commonly used for exceptions
+
+	Common exceptions you faced?
+
+		NullPointerException, IndexOutOfBoundsExceptions, NoSuchElementException, StaleElementException
+
+	What is an error?
+
+		stops the normal flow of execution, but errors are issues not directly related to the code
+
+		you might not be able to handle/fix it
+
+		ex: memory issue, internet, issue, environments
+
+	multiple catch blocks
+
+		it is possible to have multiple catch blocks to handle different kinds of exceptions
+
+		-> Note: you want to make the exceptions as specific as possible to not allow anything that you did not intend
+
+		rule: order of the catch blocks does matter. The Exceptions should be most specific at the top and become more general towards the end
+
+	finally block:
+
+		its optional to add to try/catch
+
+		this code block will run no matter, if there is an exception or not
+
+		- common use case:
+			helps to close and shut down properly. 
+				Ex: Scanner close the object 
+					File is open -> File closes properly so there is no issue
+
+	ex: 
+
+	    Scanner input = new Scanner(System.in);
+
+        try {
+            System.out.println("enter a number");
+            int num = input.nextInt();
+
+            System.out.println("enter number 2");
+            int num2 = input.nextInt();
+
+            System.out.println(num/num2);
+
+        }catch (InputMismatchException obj){
+            obj.printStackTrace(); // shows the exception message in the console
+        }catch (ArithmeticException e){
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("FINALLY BLOCK");
+            input.close();
+        }
+
+	Exception as object
+	
+		Exceptions are object which means there is methods that can be used
+
+			-> 'e' is a common name for the Exception object in the catch blocks
+
+			useful methods:
+ 
+				printStackTrace():	void
+					outputs the full exception message to the console
+
+				getMessage(): return String
+					display the message of an exception, which is usually defined by the exception
+
+		Ex:
+
+        try {
+            System.out.println("Start");
+            Thread.sleep(-2000);
+            System.out.println("Finish");
+        } catch (Exception e) {
+           e.printStackTrace();
+           System.out.println(e.getMessage());
+        }
+
+        printStackTrace():	
+			java.lang.IllegalArgumentException: timeout value is negative
+				at java.base/java.lang.Thread.sleep(Native Method)
+				at day57_exceptions.learn.FourthTry.main(FourthTry.java:8)
+
+		getMessage():	
+				timeout value is negative
+
+____________________________________________________________
+
+Todo:
+
+	Social Media Task
+	Abstraction Short quiz - due May 17th 11:59 EST
+	Exceptions Short Videos
+	Start to take a look at interview q/a videos
+
 
 Day 56 Polymorphism 
 

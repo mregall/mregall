@@ -1,4 +1,171 @@
-5/14/2022
+5/17/2022
+
+Day 59 Collections 
+
+day59_collections
+____________________________________________________________
+
+Collection Framework
+    Collection
+    List
+    Set
+____________________________________________________________
+
+Collection Framework: a group of interfaces and class that define how data structures will handle data
+
+    -> only work with objects, not primitive types   
+
+main interfaces:
+
+    collection: the parent of all other collections types. this interface defines the most common action(methods) that a collection should have
+
+        Ex: add, remove, size
+
+    list: ordered(index), allows duplicates
+
+    set: unordered(no index), does not allow duplicates
+
+Classes that implement the List interface:
+
+    ArrayList: data structure that uses arrays internally. Resizable array
+
+        -> useful for storing/reading information
+
+        -> faster than Vector, because ArrayList is not synchronized
+
+    LinkedList: data structure that uses nodes internally
+
+        -> Node: an object that has the element, the reference of the previous node, and the reference of the next node
+
+            ex:     node{
+                        element
+                        previous
+                        next
+                    }
+
+        -> useful for manipulating data
+
+    Vector: legacy version of ArrayList, it uses array internally, but its synchronized
+
+        synchronized(thread safe): multiple threads cannot access at the same. if there is multiple threads they will go one a time
+
+            ex: atm -> you want to access to atm one a time, so it is thread safe
+                if the atm was not thread safe then multiple people(threads) can interact at the same time -> that could cause problems like over drafting
+
+        - useful for thread safety
+
+Classes that implement the Set interface:
+
+    HashSet: data structure that uses HashMap internally. Hashing algorithm, which means its handles data fast and efficiently 
+
+    LinkedHashSet: data structure that has hash table and linked list implementation. Insertion order is maintained
+
+    TreeSet: implements the SortedSet interface. Elements are stored in their natural order(sorted)
+        -> cannot have null element
+
+Tomorrow:
+    What is the advantage of the collection framework
+    What is the advantage of the polymorphic references
+
+
+
+Day 58 Exceptions 
+
+day58_exceptions
+____________________________________________________________
+
+Exceptions hierarchy 
+throws vs throw
+____________________________________________________________
+
+day58_exceptions
+
+Exceptions
+
+	issue that stops the normal flow of execution 
+
+Error
+	
+	problem not related to code
+
+Throwable is the parent of Error and Exception classes
+
+Exception class:
+	
+	Parent of all exception types
+
+	-> direct child classes are checked exceptions:
+		 exceptions that must be handled in compile time
+
+RunTimeException class:
+
+	child of Exception
+
+	-> child classes of the RunTimeException are unchecked, so they occur during runtime
+
+	Example of IndexOutOfBoundsException
+
+           possible references for IndexOutOfBoundsException
+
+             IndexOutOfBoundsException obj =  new IndexOutOfBoundsException();
+
+             RunTimeException obj =  new IndexOutOfBoundsException();
+             
+             Exception obj =  new IndexOutOfBoundsException();
+
+Rule for multiple catch blocks:
+
+	when you define multiple catch blocks the Exceptions should be the most specific in the beginning and become more general as they go down
+
+	ex:
+        try{
+
+        } catch (IndexOutOfBoundsException e){
+
+        } catch (RuntimeException e){
+
+        } catch (Exception e){
+
+        }
+
+throws
+
+	added to a method signature to allow the program to compile
+
+	-> doesn't handle the exception but allow compiling. If the exception condition is met the exception will still be thrown and the program will stop
+
+	-> useful to ignore checked exceptions
+
+throw
+
+	how exceptions are thrown(caused)
+
+	throw an exception object
+
+	syntax:
+
+		throw new ExceptionType();
+
+difference between try/catch vs throws
+
+	try/catch -> handle exceptions. Define the set of statements that should be executed if a specific exceptions happens
+
+	throws: allowing the program to compile and if exception happens the program still stops
+
+day58_exceptions.bank
+
+Custom Exceptions
+	-> we did for practice to understand how exceptions work
+
+	we made a class 
+
+		inherited the RuntimeException class we made an unchecked exception
+
+		inherited the Exception class we made a checked exception
+
+	call the super constructors to assign the messages
+
+	when we created/throw a checked exception, as the person creating the class/object/file, I did not want to handle it, I wanted the users to handle the exception, so we used throws to ignore the exception, allowing the code compile
 
 Day 57 Exceptions 
 

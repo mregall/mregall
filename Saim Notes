@@ -1,4 +1,303 @@
-5/17/2022
+5/21/2022
+
+Day 61 Maps 
+
+day61_maps
+____________________________________________________________
+
+Collection Framework
+    Queue
+    Iterator
+
+Maps
+____________________________________________________________
+
+Queue: 
+    child of Collection interface
+
+    interface that follows FIFO: first in, first out
+
+    oracle definition: Queue typically, but do not necessarily, order the elements in a FIFO manner
+
+    PriorityQueue: 
+        class the implements the Queue interface
+            -> even thought it implements Queue the order of the elements is not based on insertion order
+
+            internally is working with some priority, by default it is in ascending order
+
+    ArrayDeque: 
+        class that implements Deque
+
+        usually be faster than stack using LIFO, and faster than a LinkedList used for as a queue
+
+    Deque: interface that defines methods that allows access to the beginning and end of the collection
+        child of Queue interface
+
+        -> LinkedList also implements the Deque
+
+        defines methods like: addFirst, offerLast, peekFirst, etc 
+
+    Methods of Queue:
+
+        add()
+        remove()
+        element(): checks what is at the top of the queue
+
+            -> these methods face an issue there will be an exception thrown
+
+        offer() --> same as add()
+        poll()  --> same as remove()
+        peek()  --> same as element()
+
+            -> these methods face an issue they will return null
+
+        -> most likely if you want to use FIFO function these methods are useful
+
+____________________________________________________________
+
+Iterable interface
+
+    parent of the Collection interface
+
+    any class that implements the Collection interface can use the iterator, which means it can use a for loop and create its own iterator object
+
+    Iterator object is a way to manually iterate through the elements of the collection one at a time
+
+    method of iterator:
+
+        next(): moves to the next element, and returns it
+        hasNext(): check if there is an element after it, returns boolean
+        remove(): remove the current element from the collection
+
+    syntax to create the object:
+
+        Iterator<dataType> name = collection.iterator();
+
+____________________________________________________________
+
+Map
+
+    interface that maintains the key/value elements
+
+    does not inherit the Collection interface
+
+    Entry: key/value pair
+
+        keys must be unique
+        values can be duplicate
+
+Class that implement the Map interface
+
+    HashMap: the order is not guaranteed    
+        null key is allowed
+
+    LinkedHashMap: insertion order is maintained
+        null key is allowed
+
+    TreeMap: implements SortedMap. The entries are sorted by the keys in natural order
+        null key is not allowed
+
+    HashTable: the order is not guaranteed 
+        synchronized (thread safe)
+        does not allow null keys or values
+
+    Note: 
+        insertion order: the order the elements are added to the collection
+
+        natural order: entries are added and sorted based on the keys
+            ascii, small -> large
+
+syntax of HashMap
+
+    Map< key, value > name = new HashMap<>();
+
+methods
+
+    put( k , v): 
+        add the entry (key/value) to the map
+
+        -> if the key exist the value will be changed/updated
+
+    get( k ):
+        return the value that is related to the given key argument
+
+        Q: What if we get a key that doesn't exist --> null
+
+    remove( k ) 
+        remove the entire entry (both key and value) based on the given key argument
+
+    containsKey( k )
+        return boolean. checks if the map has the given key argument
+
+    containsValue( v ) 
+        return boolean. checks if the map has the given value argument
+
+    keySet(): returns a Set of the keys in the map
+
+    values(): return the Collection of values in the map
+
+    entrySet(): returns the entries in the map
+
+        getKey()
+        getValue()
+
+
+Day 60 Collections 
+
+day60_collections
+____________________________________________________________
+
+Collection Framework
+    Collection
+    Stack
+    Queue
+____________________________________________________________
+
+Collection Framework: a group of interfaces and class that define how data structures will handle data
+
+    -> only work with objects, not primitive types   
+
+main interfaces:
+
+    collection: the parent of all other collections types. this interface defines the most common action(methods) that a collection should have
+
+        Ex: add, remove, size
+
+    list: ordered(index), allows duplicates
+
+    set: unordered(no index), does not allow duplicates
+
+Classes that implement the List interface:
+
+    ArrayList: data structure that uses arrays internally. Resizable array
+
+        -> useful for storing/reading information
+
+        -> faster than Vector, because ArrayList is not synchronized
+
+    LinkedList: data structure that uses nodes internally
+
+        -> Node: an object that has the element, the reference of the previous node, and the reference of the next node
+
+            ex:     node{
+                        element
+                        previous
+                        next
+                    }
+
+        -> useful for manipulating data
+
+    Vector: legacy version of ArrayList, it uses array internally, but its synchronized
+
+        synchronized(thread safe): multiple threads cannot access at the same. if there is multiple threads they will go one a time
+
+            ex: atm -> you want to access to atm one a time, so it is thread safe
+                if the atm was not thread safe then multiple people(threads) can interact at the same time -> that could cause problems like over drafting
+
+        - useful for thread safety
+
+    Stack: data structure that following last in, first out
+        see below for details about the Stack
+
+Classes that implement the Set interface:
+
+    HashSet: data structure that uses HashMap internally. Hashing algorithm, which means its handles data fast and efficiently 
+
+    LinkedHashSet: data structure that has hash table and linked list implementation. Insertion order is maintained
+
+    TreeSet: implements the SortedSet interface. Elements are stored in their natural order(sorted)
+        -> cannot have null element
+
+What is the advantage/purpose of the collection framework
+
+    these data structures all define different ways to handle and use data
+    there is different implementation/algorithms to solve a problem
+
+    -> performance of an action:
+        different collections can have different performance for different actions:
+            ex: adding, removing, editing, searching
+
+What is the advantage of the polymorphic references
+
+    polymorphic references, especially the interface reference of the objects allows flexibly with methods, return types, and constructors 
+
+    example: constructor of the collection type objects have the parameter of collection, it means any object that has is a relation with the collection interface can be used to call that constructor
+
+        -> it means you can make an ArrayList from a HashSet object
+            or a TreeSet from an ArrayList
+
+    ex of method:
+
+        public static List<> method()
+
+            -> this method can return any object that implements the List
+
+        public static void method(List<>)
+
+            -> this method can be called by given an argument of any object that implements the List
+
+Stack
+
+    LIFO: Last in, First out
+
+        ex:
+
+            Book1
+
+            add another book:
+
+            Book2
+            Book1
+
+            add another book:
+
+            Book3
+            Book2
+            Book1
+
+            so right now if you wanted to remove a book from the stack it would be Book3 because it was the most recent added to the stack
+
+    methods for LIFO:
+
+        push(): add the element to the top of the stack
+        peek(): return the element at the top of the stack. does not remove it, only lets you see what there
+        pop(): remove the element at the top of the stack, and returns it
+
+    difference between push vs add:
+        functionality is the same, add elements to the stack
+
+        add method (from collection interface) returns boolean
+
+        push method (from stack) returns the object it added
+
+Queue
+
+    interface that follows FIFO: first in, first out
+
+        -> think of a line of people. first person in line will get helped first
+
+    classes that implemented Queue:
+
+        PriorityQueue: data structure stores elements randomly. null is not allowed
+
+        ArrayDeque: implements Deque interface
+
+            Deque interface: allowing access to elements from the beginning and the end
+
+                -> LinkedList is also implementing this interface
+
+    methods:
+
+            add()     <---->  offer()
+
+            remove()  <----> poll()
+
+            element() <----> peek()
+
+        the methods on the left side: add, remove, element will cause an exception if they are not used correctly. 
+
+        the methods on the right side: offer, poll, peek will return null
+
 
 Day 59 Collections 
 

@@ -1,4 +1,233 @@
-5/21/2022
+5/28/2022
+
+Day 63 Functional Interface & Lambda Expression 
+
+day63_functional_interface
+____________________________________________________________
+
+Functional Interface
+Lambda
+____________________________________________________________
+
+Sharing soon:
+	
+	oca material/ practice quizzes 
+	extra topics notes
+	study guide unit 5 + 6 - last assessment
+	Social Media Solution
+
+Reminder: Polymorphism quiz due tonight
+
+____________________________________________________________
+
+Functional Interface
+
+	not used for inheritance
+		-> not inherited
+		-> not intend to be implemented to a class to be overridden
+
+	act as function/custom method
+
+	define one abstract method
+		-> trying to define more than one abstract method in a functional interface would say a syntax issue
+
+		common names for those methods: test, apply, function
+
+	@FunctionalInterface annotation used before the interface line
+
+	Q: If you don't inherit these interface, how would we implement the abstract method?
+
+		lambda expression
+
+	+ improve code efficiency 
+	+ stream methods
+
+Lambda Expression:
+	
+	functions/method without name	
+
+	instance of the functional interface
+		-> allows you to define the implementation of the abstract method
+
+	syntax:
+
+		() -> {};
+
+		(parameters) -> {statements};
+
+		Note: parenthesis for the parameter is only needed if there is more than one parameter
+		Note: curly brackets for the statements are only needed if there is multiple lines
+
+____________________________________________________________
+
+Generics
+
+	<> brackets define that any type/object can be used
+
+	T is a common name <T>
+	also: U, R (return type)
+
+____________________________________________________________
+
+Functional Interface built in Java:
+	
+	Predicate
+		defines a function that takes one object as the argument and returns boolean
+
+		boolean test(T t)
+
+		-> p is a common name for the argument name in the lambda 
+
+		example we have used:
+			removeIf method when we used the lambda to remove the elements
+
+			the parameter of the removeIf method was a Predicate functional interface
+
+	Consumer
+		defines a function that takes one object as the argument and does not return anything
+
+		void test(T t)
+
+	ex:
+		forEach method from collections takes the Consumer argument
+
+
+	Function<T, R> 
+		defines a function that takes one object(any type) as the argument and returns one object(any type)
+
+			R apply(T t);
+
+
+
+Day 62 Maps 
+
+day62_maps
+____________________________________________________________
+
+Maps Practice
+Enum 
+____________________________________________________________
+
+Map
+
+    interface that maintains the key/value pairs
+
+    Entry: key/value pair
+
+        keys must be unique
+        values can be duplicate
+
+Class that implement the Map interface
+
+    HashMap: the order is not guaranteed    
+        null key is allowed
+
+    LinkedHashMap: insertion order is maintained
+        null key is allowed
+
+    TreeMap: implements SortedMap. The entries are sorted by the keys in natural order
+        null key is not allowed
+
+    HashTable: the order is not guaranteed 
+        synchronized (thread safe)
+        does not allow null keys or values
+
+syntax of HashMap
+
+    Map< key, value > name = new HashMap<>();
+
+Looping through map
+
+    We cannot loop directly in the map
+
+    To iterate through a map use 
+
+        keySet(): returns a Set of the keys in the map
+
+        values(): return the Collection of values in the map
+
+        entrySet(): returns the entries in the map
+
+            getKey()
+            getValue()
+____________________________________________________________
+
+Database
+
+    when you get information from a database you will get the information as a
+
+    List< Map<String, String>> 
+
+    where the  List< Map<String, String>> is an ArrayList that holds Map<String, String> as the elements
+
+    each Map<String, String> is would contain the information about whatever data you are looking at, for example people would have keys of FIRST_NAME, AGE, LOCATION, etc
+
+    so everyone Person would have their information from the database as a key/value pair and the ArrayList holds all those maps
+
+    Example from the code: 
+
+        System.out.println(list.get(0).get("LAST_NAME"));
+
+            this could give the last name from the first person in the ArrayList
+
+        System.out.println("First name: " + list.get(list.size() - 1).get("FIRST_NAME"));
+
+            this would give the first name from the last index of the ArrayList 
+
+____________________________________________________________
+
+Enum: Enumeration
+
+    it is special datatype that is used to define constant variables
+
+Examples:
+
+    enum Direction{
+        NORTH, EAST, SOUTH, WEST
+    }
+
+    enum Grade {
+        A, B, C, D, F
+    }
+
+The enum define Fields (variables)
+
+    usually written in uppercase letters since they are constants
+
+Enums act like a class to they have some variables, methods
+
+-- Using the enum 
+
+    -> We can make objects out of our enum 
+
+        LetterGrade grade;
+        grade = LetterGrade.A;
+
+    > Note: we can only use fields that the enum has declared
+        Doing LetterGrade.H would given syntax error
+
+
+    -> Enums can also be used with switch statements:
+
+        Ex: 
+
+        switch (grade) {
+            case A:
+                System.out.println("You got an A!");
+                break;
+            case B:
+                System.out.println("Not bad");
+                break;
+            case C:
+                System.out.println("You could do better");
+                break;
+            case D:
+                System.out.println("Not so good");
+                break;
+            case F:
+                System.out.println("You failed");
+        }
+
 
 Day 61 Maps 
 

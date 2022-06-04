@@ -1,4 +1,58 @@
-5/28/2022
+5/31/2022
+
+Day 64 Functional Interface & Lambda Expression 
+
+day64_functional_interface
+____________________________________________________________
+
+Functional Interface
+Lambda
+____________________________________________________________
+
+Functional interface:
+	an interface that defines one abstract method that is implemented by a lambda expression
+
+Lambda Expression: defining a function with no name
+	
+	() -> {}
+	(parameters)  ->  {statements}
+
+Recap of main built in functional interface:
+
+Predicate<T> 
+	defines a function that takes one object as the argument and returns boolean
+
+	method: test()
+
+Consumer<T>:
+	defines a function that takes one object as the argument and does not return anything
+
+	method: accept()
+
+Function<T, R>:
+	defines a function that takes one object(any type) as the argument and returns one object(any type)
+
+	method: apply()
+
+BiPredicate<T, U> 
+	defines a function that takes two object as the arguments and returns boolean
+
+	method: test()
+
+BiConsumer<T, U>:
+	defines a function that takes two object as the argument and does not return anything
+
+	method: accept()
+
+BiFunction<T, U, R>:
+	defines a function that takes two object(any type) as the argument and returns one object(any type)
+
+	method: apply()
+____________________________________________________________
+
+
+
+
 
 Day 63 Functional Interface & Lambda Expression 
 

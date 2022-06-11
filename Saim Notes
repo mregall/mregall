@@ -1,4 +1,109 @@
-5/31/2022
+6/4/2022
+
+Day 65 Streams
+
+day65_streams
+____________________________________________________________
+
+Streams
+____________________________________________________________
+
+After class: Unit 5 & 6 Assessment
+	last topic on this is maps 
+
+Extra topic module on canvas
+
+Java Module Completion Assignment
+	https://forms.gle/zYT22Y2g1YJcxCUE8
+____________________________________________________________
+
+Stream
+
+	not a data structure
+	also added in Java 8 after lambda
+
+	 java.util.stream 
+
+	method that accepts an input from a data structure
+
+	doesn't change the data structures
+
+	the method
+		stream() gathers the elements and then allows you to do an action
+
+		or
+
+		Stream.of(array) creates a Stream from an array
+
+	Stream methods:
+
+		distinct(): gets rid of duplicates
+
+		collect(): method to take all elements to allow conversion to another type
+
+			arguments:
+
+				Collectors.toList(): returns elements as a List
+
+			ex: 
+
+				list.stream().distinct().collect(Collectors.toList());
+
+		toArray(): elements are converted to the array
+
+			Arrays.stream(arr).distinct().toArray();
+
+		skip(): allows to skip a certain amount of elements from the data structure
+			-> act a little like removing them
+
+			int argument for how many elements will be skipped
+
+			ex: stream().skip(5)
+
+		limit(): only keeps the defined number of elements
+
+			int argument for how many elements there will be total
+
+		map(): allows to change the elements based on given lambda argument
+
+			Function functional interface argument
+
+				ex: 
+					map( p -> p * 10)
+
+		filter(): allows to filter the elements, return specific ones
+
+			Predicate functional interface argument
+
+			ex:
+				filter( p -> p % 2 == 0)
+
+		count(): allows you to count certain elements
+
+			commonly used with filter:
+				ex:
+					filter().count()
+
+		forEach(): allow to iterate through the elements
+
+		allMatch(): checks if all elements match the defined lambda
+
+			Predicate functional interface argument
+			returns boolean
+			ex:
+				allMatch( p -> p % 2 == 0) 
+
+		anyMatch(): checks if one element match the defined lambda
+
+			Predicate functional interface argument
+			returns boolean
+
+		noneMatch(): checks if no element match the defined lambda
+
+			Predicate functional interface argument
+			returns boolean	
+
+____________________________________________________________
 
 Day 64 Functional Interface & Lambda Expression 
 

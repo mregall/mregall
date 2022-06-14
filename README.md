@@ -1,6 +1,6 @@
 - 👋 Hi, I’m @mregall
-- 👀 I’m interested learning to be a DevOps engineer.   
-- 🌱 I’m currently learning SDET at Cydeo
+- 👀 
+- 🌱 
 - 💞️ I’m looking to collaborate on furthering our knowledge and careers. 
 - 📫 How to reach me good question...
 

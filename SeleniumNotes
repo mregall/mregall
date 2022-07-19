@@ -1,3 +1,2308 @@
+07/07/2022
+
+
+
+WHY DO WE NEED PARALLEL TESTING?
+
+- 100 TESTS, 1 TEST = 1 MIN, 1 MACHINE : TOTAL DURATION OF TEST RUNNING TIME --> 100 MINS
+- 100 TESTS, 1 TEST = 1 MIN, 2 MACHINE : TOTAL DURATION OF TEST RUNNING TIME --> 50 MINS
+- 100 TESTS, 1 TEST = 1 MIN, 4 MACHINE : TOTAL DURATION OF TEST RUNNING TIME --> 25 MINS
+- 100 TESTS, 1 TEST = 1 MIN, 10 MACHINE : TOTAL DURATION OF TEST RUNNING TIME --> 10 MINS
+
+----------------------------------------------------------------------
+
+- What is the difference in between plugin and dependency?
+
+- BASICALLY THEY ARE BOTH SOME JAR FILES.
+- BUT, the difference is the DEPENDENCIES are not involved in the MAVEN LIFECYCLES.
+- PLUGINS are involved in maven life cycles.
+- What does this mean?
+- It means we can pass additional configurations under our plugins, and when we run our different maven lifecycles, the configurations will be executed.
+
+------------------------------------------------------------------------------
+
+- How did you implement PARALLEL TESTING in your project?
+- How did you implement PARALLEL TESTING while you still have SINGLETON DESIGN PATTERN?
+
+
+#1- WE ADD "MAVEN SUREFIRE PLUGIN" WITH ADDITIONAL CONFIGURATIONS THAT ENABLES PARALLEL TESTING.
+
+
+         <plugin>
+                <groupId>org.apache.maven.plugins</groupId>            --> THE COMPANY NAME
+                <artifactId>maven-surefire-plugin</artifactId>        --> PROJECT NAME
+                <version>3.0.0-M5</version>                            --> VERSION OF THE PLUGIN
+                <configuration>                                    --> We provide addition configurations
+                    <parallel>methods</parallel>                --> We run .feature files in parallel
+                    <threadCount>4</threadCount>            --> How many threads we want to generate
+                    <testFailureIgnore>true</testFailureIgnore> --> Will not stop if a test fails
+                    <includes>
+                        <include>**/CukesRunner*.java</include> --> when we use "mvn test" lifecycle, it will find the .java class that has the name contains "CukesRunner"
+                    </includes>
+                </configuration>
+        </plugin>
+
+
+#2- We adjust our Driver Singleton logic to be able to handle multi-threads.
+
+How do we change our Driver to handle multi-threads?
+#1- Driver.getDriver() method name stays same.
+#2- We wrap our "driver" instance with InheritableThreadLocal
+
+    private static InheritableThreadLocal<WebDriver> driverPool = new InheritableThreadLocal<>();
+
+#3- Now that we are using "InheritableThreadLocal", we adjust our code in .getDriver() method to use methods coming from "InheritableThreadLocal"
+
+Instead of using : "driver" we use "driverPool.get()"
+Instead of using : driver = new ChromeDriver(); we use --> driverPool.set(new ChromeDriver());
+Instead of using : driver == null --> driverPool.remove();
+
+- We didn't touch the Singleton Design Pattern logic we previously created.
+
+    if(driver == null){
+        create new
+    }
+
+    return driver;
+
+- We still have Singleton Design Pattern.
+- Even if we run our features in parallel, every thread using WebDriver instance will be Singleton in itself.
+
+
+------------------------------------------------------------------------------
+
+- When we kick off our mvn lifecycle, it will execute the code we in our Runner class.
+- If we have specific tag in there, and this tag is in only a few of our feature files, it will only run those feature files in parallel.
+
+------------------------------------------------------------------------------
+
+- "pretty" plugin:
+- basically it just prints out additional information about the scenario that is being executed.
+
+------------------------------------------------------------------------------
+
+publish = true;
+    --> will enable a functionality from cucumber to generate a public link for the report of our final execution of our code
+    --> the link will be automatically generated and printed in the console
+    --> it will be ready to share with anyone
+
+------------------------------------------------------------------------------
+https://cucumber.io/docs/cucumber/api/
+We can run our project using some maven commands from outside of intelliJ using the line below:
+
+    mvn test -Dcucumber.filter.tags=@smoke
+
+- Why do we need this?
+- To be able to run our code from outside of our intelliJ, possibly from Jenkins or from command line.
+
+07/06/2022
+
+Topics:     #1- dryRun - review
+            #2- tags   - review
+            #3- Background
+            #4- Hooks
+            #5- Html Reports
+            #6- Parameterization
+            #7- dataTables
+            #8- scenario outlines
+            #9- cucumber rerun
+            #10-report generation
+            #11- parallel testing
+
+
+==========================================================================
+
+
+RERUN: 
+
+    - CUCUMBER RERUN IS A PLUGIN COMING FROM CUCUMBER
+    - This plugin allows us to keep track of the FAILED scenarios.
+    - All we have to do is use the plugin, and provide where it should be creating the .txt file.
+
+
+HOW TO IMPLEMENT RERUN PLUGIN?
+
+#1- 
+    syntax:    add appropriate plugin under "plugins" in our runner class
+
+    plugin = {
+                "html:target/cucumber-report.html",
+                "rerun:target/rerun.txt"
+        },
+
+        "rerun: --> plugin name
+
+        target/ --> where I want to store my rerun.txt
+
+        rerun.txt" --> file name and file type. I can pass any file name here.
+
+
+#2- CREATE A NEW TEST RUNNER CLASS.
+    - This runner class will be pointing directly to the rerun.txt file that is generated by our plugin.
+    - It will only have one job.
+    - When we run it, it will execute the "failed" scenarios that are stored in the rerun.txt
+
+ 
+
+    @RunWith(Cucumber.class)
+    @CucumberOptions(
+
+        glue = "com/cydeo/step_definitions",
+        features = "@target/rerun.txt"
+
+    )
+    public class FailedTestRunner {
+    }
+
+
+Q: Why do we need RERUN and FailedTestRunner?
+
+    - Mostly to save time when tests fails.
+    - If we have hundreds of tests, and only few of them are failing, we don't want to execute all of the hundreds of the tests again.
+    - Thats why we can just execute the failed tests that are automatically stored under the rerun.txt using our FailedTestRunner.
+
+- FailedTestRunner cannot change or edit the rerun.txt.
+- Therefore even if the tests are passing, the lines will still in the rerun.txt, which is normal.
+- We can delete rerun.txt by going Maven --> clean
+
+
+===========================================================
+
+
+#1- close project intellij and open again
+#2- reload the project
+#3- file > invalidate cache
+     file > restart intellij
+#4- go to ~/.m2 file > go in the repository > select all folder > delete
+    then maven --> reload 
+
+
+
+07/05/2022
+
+Topics:           #1- dryRun - review
+                  #2- tags   - review
+                  #3- Background
+                  #4- Hooks
+                  #5- Html Reports
+                  #6- Parameterization
+                  #7- dataTables
+                  #8- scenario outlines
+
+ Upcoming topics: #9- cucumber rerun
+                  #10-report generation
+                  #11- parallel testing
+
+
+  ======================================================================
+
+  DATA DRIVEN TESTING:
+   
+  - Execute the same test with multiple sets of test data.
+
+  •Assume, you need to test login form with 50 different sets of test data
+  •As a manual tester, you do log in with all the 50 different sets of test data for 50 times
+  •As an automation tester, you create a test script and run 50 times by changing the test data on each run or you create 50 test scripts to execute the scenario
+  •We can achieve Data-driven framework using:
+    - TestNG's data provider
+    - Cucumber scenario outlines
+    - Excel apache poi
+
+YOU MUST HAVE EXCEL
+
+TODAYS TOPICS
+
+1- Excel hierarchy
+2- What is APACHE POI (dependency)
+3- Implement the the APACHE POI dependency
+4- How to read an Excel file
+5- How to write to an Excel file
+6- We will implement Selenium with APACHE POI
+7- Do Data Driven Testing
+
+
+===========================================================
+
+MICROSOFT OFFICE files:
+   - Excel
+   - Word
+   - Powerpoint
+   - outlook
+   - access
+
+We can automate actions that we do in MS Office program files using Java.
+We can use Apache POI library for MS office files automation.
+
+How to use it:
+   #1 - look up Apache POI dependency in mvnrepository
+   #2 - add the dependency to pom xml
+   <dependency>
+       <groupId>org.apache.poi</groupId>
+       <artifactId>poi-ooxml</artifactId>
+       <version>5.1.0</version>
+   </dependency>
+
+
+It is a library provided by Apache Foundation. We use many apache libraries in projects.
+
+It can automate MS office files.
+
+Today we will go over basics of reading and writing with MS Excel.
+
+=====================================================================
+
+Excel Extensions:
+   xls -> old one
+   xlsx -> newer one
+
+First lets open new MS Excel document and save in out project:
+
+1. Create new Excel workbook: Open Excel --> File -> New From template -> Blank 
+  workbook
+2. Save file as: "SampleData" on your desktop -> File -> Save as -> Desktop
+3. Right click sheet name and change it to "Employees"
+3. Find "SampleData" excel file in your Desktop
+4. Click and hold --> Drag and drop into the project folder from IntelliJ
+5. Select "Refactor”
+
+======================================================================
+
+Excel hierarchy:
+   Workbook > Worksheet > Row > Cell
+
+How to read using Apache POI:
+   XSSFWorkbook > XSSFSheet > XSSFRow > XSSFCell
+
+XSSF -> Xml spreadsheet format.
+It is used for working with xlsx files.
+If your file is old version like xls,
+then we need to use HSSFWorkbook etc
+
+XSSFWorkbook -> xlsx
+HSSFWorkbook -> xls
+
+HSSF -> Horrible Spreadsheet format
+
+============================
+
+HOW TO READ EXCEL FILE?
+
+String path = "SampleData.xlsx";
+
+        // to read from excel we need to load it to FileInputStream
+        FileInputStream fileInputStream = new FileInputStream(path);
+        //workbook>sheet>row>cell
+
+        // <1> Create a workbook
+        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+
+        // <2> We need to get specific sheet from currently opened workbook
+        XSSFSheet sheet = workbook.getSheet("Employees");
+
+Goto Row 1 and Cell 1:
+   System.out.println(worksheet.getRow(1).getCell(1));
+
+   emailElem.sendKeys(worksheet.getRow(1).getCell(1));
+
+==========================================
+
+HOW TO WRITE INTO EXCEL FILE?
+
+#1 Open the workbook using FileInputputStream
+
+FileInputputStream fis = new FileInputputStream("Employees.xlsx");
+XSSFWorkbook workbook = new XSSFWorkbook(fis);
+
+#2 Goto the worksheet
+ XSSFSheet sheet = workbook.getSheetAt(0);
+
+#3 if the cell was empty, we need to first create it.
+   XSSFCell cell = sheet.getRow(0).createCell(3);
+
+#4 Type the value using setCellValue method:
+   cell.setCellValue("Salary");
+
+#5 To save changes, we need to open file using outPutStream:
+
+FileOutputStream outputStream = new FileOutputStream(filePath);
+//save/write changes to the workbook
+ workbook.write(outputStream);
+
+#6 close streams and workbook. good to do.
+
+outputStream.close();
+workbook.close();
+in.close();
+
+===========================================================================
+
+Count number of rows:
+
+#1 - getPhysicalNumberOfRows() method
+//find out number of rows in the worksheet
+
+int rowsCount = dataSheet.getPhysicalNumberOfRows();
+System.out.println("rowsCount = " + rowsCount);
+
+-this method starts counting from 1. and not 0.
+-if there are empty rows in between, it will not count them.
+- it ignores empty rows
+EX:
+   row with data
+   row with data
+   Row with empty
+   row with data
+Result will be 3. because we have empty row
+
+#2 - getLastRowNum() method:
+
+int usedRowsCount = dataSheet.getLastRowNum();
+System.out.println("usedRowsCount = " + usedRowsCount);
+
+- it starts counting from 0
+- it counts empty rows as well
+- good fit to use with for loop, especially if there are empty rows
+
+   row with data
+   Row with empty
+   Row with empty
+   row with data
+It will return 3. since it starts counting from 0.
+
+=============================================================================
+
+Cucumber Day1 and Day2 Notes
+
+Today's schedule: #1- dryRun
+                  #2- tags
+                  #3- html reports
+
+Upcoming topics:  #4- Background
+                  #5- Hooks
+                  #6- Parameterization
+                  #7- dataTables
+                  #8- scenario outlines
+                  #9- parallel testing
+                  #10- report generation
+
+
+- We will be focusing more on "Tell me about your framework?" question.
+
+
+=========================================================
+
+First project: Maven + Selenium + TestNG
+
+- src
+        - main
+        - test
+            - java
+                - com.cydeo
+                    - tests
+                        - base
+                        - tests (rest of our test packages)
+                    - utilities
+                        - Driver
+                        - ConfigurationReader
+                        - BrowserUtils
+                    - pages
+
+
+    - configuration.properties
+    - pom.xml 
+
+
+====================================================================
+
+DDT: DATA DRIVEN TESTING FRAMEWORK
+    - Data Driven Testing:  Executing the same tests against different test data.
+    - Data Driven Testing Framework : is the framework we are able to read data from an external file and use it in our source code.
+    - We can get the data from:
+        - MS Excel
+        - MS Access
+        - Database
+        - Feature files
+        - Configuration.properties
+
+- Keyword Driven Testing:
+    - Creating testing structure based on some keywords that are executable.
+    - This requires a lot of time to invest in to even make it work, but also it is hard to maintain, and hard to scale since the object repositories, and keyword repositories have to me maintained and expanded as the framework gets bigger.
+
+
+- TDD : TEST DRIVEN DEVELOPMENT: (BUG FREE DEVELOPMENT)
+- There is a repeating development cycle with TDD.
+
+#1- Write tests before writing any source code.
+#2- Run the tests, and tests will fail.
+#3- Write minimum amount of code to make the tests pass.
+#4- Run the tests, and tests will PASS.
+#5- REFACTOR AND REPEAT
+
+
+- In TDD developers are writing @Tests in the preferred PROGRAMMING LANGUAGE.
+- That's why it is not readable or understandable for the non-technical team members of the team
+- That's why we will be using BDD.
+
+- @Test (s) are written in programming language
+- Scenarios are written in English in Gherkin language.
+
+-----------------------------------------------------------------------------
+
+- Why are we not using TestNG and using JUNIT?
+    #1- Because the community mostly using Cucumber with JUNIT.
+    - more questions
+    - more answers
+    - more demand
+    - more opportunities
+    #2- We don't need all of the annotations coming from TestNG
+
+
+- BDD has 2 layers.
+
+#1- Business layer: FEATURE FILES
+    - Feature files will be storing the different features, scenarios, and re-usable steps in Gherkin language.
+    - Business side is mostly for collaboration with non-technical people
+
+#2- Implementation layer: STEP DEFINITIONS
+    - Technical people implement the 'STEP DEFINITIONS' to convert steps (from feature files) into concrete actions.
+
+-----------------------------------------------------------------------------------------------
+
+- Is Cucumber a testing tool?
+    - Cucumber is not automation tool
+    - Cucumber is a tool that is used to implement BDD
+    - Therefore, it does not come with any assertions or any programming logic.
+    - That's why we have to use the dependencies with "cucumber-java", "cucumber-junit" to be able to develop some programming logic and also be able to generate some test approach with assertions.
+
+
+TestNG Assertions: Assert.assertTrue(boolean, "failure message");
+JUNIT Assertions: Assert.assertTrue("failure message", boolean);
+
+--------------------------------------------------------------------------------
+
+Given, When, Then, And, But
+
+    --> all of these keywords we use in the feature files are only for communication (making sense) purpose
+    --> they dont change the functionality of the step_definitions
+
+- Our code will be executed in the order we create in the feature files.
+- Each scenario will be executed by top to bottom, and each step will be calling it step_definition method from its own package &class.
+
+GIVEN: is used for pre-conditions
+
+Ex:
+     Given user is already logged in and ready to do something
+     Given user is already on the home page
+     Given user is already on the login page
+     Given user is already on the search page
+
+
+     Given I am on the search page
+
+     Given driver is logged in
+
+     Given officer is logged in
+
+
+WHEN: is used for when some actions happen
+
+    When user enters librarian user name
+
+    When user clicks to some link
+
+    When user searches for something
+
+
+AND: is used for when you many repeating lines of any keyword
+BUT: is similar for "AND" but for when we are comparing or some negative scenario happening
+THEN: is used for when the verification is happening
+
+    - Then user should see title is something
+
+    - Then user should see the dashboard
+
+    - Then user should see the image is displayed
+
+
+
+-----------------------------------------------------------------------------------------------
+
+ DRYRUN
+
+- Dryrun: turns on and off the running of step_definitions.
+- If I don't want to actually run my code, and just want to get my snippets for implementing, I will turn dryRun on by giving "true" value
+
+dryRun = true --> do not run my step_definitions, but only check if any step is missing snippet
+dryRun = false --> this will turn off dryRun, and our code will run as expected.
+
+--> How do we generate step_definition "snippets" for unimplemented steps:
+
+#1- We can run our Runner class to auto-generate our snippets
+#2- We can write new step in feature file and hover on them to select option provided by IntelliJ to generate my snippets.
+
+
+-----------------------------------------------------------------------------------------------
+
+TAGS : Tags are used to group different scenarios together
+
+    - We can use tags to include or exclude some scenarios.
+
+    - If we put the @Tag on top of the .feature file, it will effect the whole feature file
+    - If we put it on top of a Scenario, it will only effect that scenario
+    - You can have as many tags as you want for a feature file or a scenario
+
+- How do we include or exclude different tags together?
+- How do we use different tags together?
+
+- or :
+    - "or" keyword can be used for checking condition
+    - when we use or, we are being LESS specific, less selective
+    - if either one of the tags are matching, the scenario or feature will be executed
+    - or is like || in java.
+    - if either one of the sides are matching, it will execute the scenario or feature file.
+
+- and
+    - "and" keyword can be used for checking conditions as well
+    - when we use "and" keyword, we are being MORE specific
+    - "and" is similar to "&&" in java
+    - the tags on the both side has to be matching for a scenario or feature to be executed
+
+- and not
+    - "and not" keyword can be used for excluding conditions
+
+    @Regression and not @eating
+
+-----------------------------------------------------------------------------------------------
+
+Preferences > Plugins
+Plugins:
+    Cucumber for java
+    Gherkin
+
+Cucumber BDD Automation Framework:
+
+Structure / Layers:
+
+    #1 Feature files and scenarios
+        - we add file that has extension .feature
+        - type scenario in Gherkin and English languages
+        - feature files goto src/test/resources/features package
+
+        EX:
+        Scenario: User search title verification
+        Given User is on Google home page
+        When User searches for apple
+        Then User should see apple in the title
+
+    #2 Step defition classes with implementation methods:
+        - step def classes goto step_definions package
+        - we add a java class with methods
+        - each method will have a matching Gherkin scenario step:
+
+        public class Google_StepDefinitions {
+
+            @Given("User is on Google home page")
+            public void user_is_on_google_home_page() {
+                Driver.getDriver().get("https://www.google.com");
+
+            }
+
+    #3. Page objects and utilites.
+        Inside step definition methods, we write selenium automation code using our Utilities and page object model classes. add assertions.
+
+        POM classes goto pages package
+        Utility classes goto utilites package.
+
+    #4 CukesRunners:
+        They goto runners package, and in runners class, we define path to step definitions, and feature files, tags, report plugs etc:
+
+    @RunWith(Cucumber.class)
+    @CucumberOptions(
+            features = "src/test/resources/features",
+            glue = "com/cybertek/step_definitions",
+            dryRun = false
+    )
+    public class CukesRunner {
+    }
+========================================
+
+ @RunWith(Cucumber.class) -> this annotation comes from junit.
+ It basically saying to run the class as Cucumber BDD tests.
+
+ features => we define address of/path to feature files in our project
+ glue => location/path that points to step definitions
+ dryRun = false => run the cucumber feature files
+ dryRun = true => do not run, just check if all feature file scenario steps have a matching step defition
+
+-----------------------------------------------------------------------------------------------
+
+- WHERE DO YOU RUN YOUR TESTS FROM?
+- WHAT IS THE TRIGGERING POINT OF YOUR FRAMEWORK?
+    - CukesRunner
+    - TestRunner
+    - Runner
+    - Runner class is the class where we control/trigger our whole framework.
+
+#1- Runner class should know which type of report we should be generating
+#2- Runner class should know where we store our step_definitions
+#3- Runner class should know where we store our feature files
+#4- Runner class should know if we want to run our tests dryRun = true or false
+#5- Runner class should know which features or scenarios we want to run through tags
+
+- How do we generate different types of reports?
+- We provide "plugin" keyword in our Runner class under @CucumberOptions
+
+
+
+
+Cucumber Day1 and Day2 Notes
+
+Today's schedule: #1- dryRun
+                  #2- tags
+                  #3- html reports
+
+Upcoming topics:  #4- Background
+                  #5- Hooks
+                  #6- Parameterization
+                  #7- dataTables
+                  #8- scenario outlines
+                  #9- parallel testing
+                  #10- report generation
+
+
+- We will be focusing more on "Tell me about your framework?" question.
+
+
+=========================================================
+
+First project: Maven + Selenium + TestNG
+
+- src
+        - main
+        - test
+            - java
+                - com.cydeo
+                    - tests
+                        - base
+                        - tests (rest of our test packages)
+                    - utilities
+                        - Driver
+                        - ConfigurationReader
+                        - BrowserUtils
+                    - pages
+
+
+    - configuration.properties
+    - pom.xml 
+
+
+====================================================================
+
+DDT: DATA DRIVEN TESTING FRAMEWORK
+    - Data Driven Testing:  Executing the same tests against different test data.
+    - Data Driven Testing Framework : is the framework we are able to read data from an external file and use it in our source code.
+    - We can get the data from:
+        - MS Excel
+        - MS Access
+        - Database
+        - Feature files
+        - Configuration.properties
+
+- Keyword Driven Testing:
+    - Creating testing structure based on some keywords that are executable.
+    - This requires a lot of time to invest in to even make it work, but also it is hard to maintain, and hard to scale since the object repositories, and keyword repositories have to me maintained and expanded as the framework gets bigger.
+
+
+- TDD : TEST DRIVEN DEVELOPMENT: (BUG FREE DEVELOPMENT)
+- There is a repeating development cycle with TDD.
+
+#1- Write tests before writing any source code.
+#2- Run the tests, and tests will fail.
+#3- Write minimum amount of code to make the tests pass.
+#4- Run the tests, and tests will PASS.
+#5- REFACTOR AND REPEAT
+
+
+- In TDD developers are writing @Tests in the preferred PROGRAMMING LANGUAGE.
+- That's why it is not readable or understandable for the non-technical team members of the team
+- That's why we will be using BDD.
+
+- @Test (s) are written in programming language
+- Scenarios are written in English in Gherkin language.
+
+-----------------------------------------------------------------------------
+
+- Why are we not using TestNG and using JUNIT?
+    #1- Because the community mostly using Cucumber with JUNIT.
+    - more questions
+    - more answers
+    - more demand
+    - more opportunities
+    #2- We don't need all of the annotations coming from TestNG
+
+
+- BDD has 2 layers.
+
+#1- Business layer: FEATURE FILES
+    - Feature files will be storing the different features, scenarios, and re-usable steps in Gherkin language.
+    - Business side is mostly for collaboration with non-technical people
+
+#2- Implementation layer: STEP DEFINITIONS
+    - Technical people implement the 'STEP DEFINITIONS' to convert steps (from feature files) into concrete actions.
+
+-----------------------------------------------------------------------------------------------
+
+- Is Cucumber a testing tool?
+    - Cucumber is not automation tool
+    - Cucumber is a tool that is used to implement BDD
+    - Therefore, it does not come with any assertions or any programming logic.
+    - That's why we have to use the dependencies with "cucumber-java", "cucumber-junit" to be able to develop some programming logic and also be able to generate some test approach with assertions.
+
+
+TestNG Assertions: Assert.assertTrue(boolean, "failure message");
+JUNIT Assertions: Assert.assertTrue("failure message", boolean);
+
+--------------------------------------------------------------------------------
+
+Given, When, Then, And, But
+
+    --> all of these keywords we use in the feature files are only for communication (making sense) purpose
+    --> they dont change the functionality of the step_definitions
+
+- Our code will be executed in the order we create in the feature files.
+- Each scenario will be executed by top to bottom, and each step will be calling it step_definition method from its own package &class.
+
+GIVEN: is used for pre-conditions
+
+Ex:
+     Given user is already logged in and ready to do something
+     Given user is already on the home page
+     Given user is already on the login page
+     Given user is already on the search page
+
+
+     Given I am on the search page
+
+     Given driver is logged in
+
+     Given officer is logged in
+
+
+WHEN: is used for when some actions happen
+
+    When user enters librarian user name
+
+    When user clicks to some link
+
+    When user searches for something
+
+
+AND: is used for when you many repeating lines of any keyword
+BUT: is similar for "AND" but for when we are comparing or some negative scenario happening
+THEN: is used for when the verification is happening
+
+    - Then user should see title is something
+
+    - Then user should see the dashboard
+
+    - Then user should see the image is displayed
+
+
+
+-----------------------------------------------------------------------------------------------
+
+ DRYRUN
+
+- Dryrun: turns on and off the running of step_definitions.
+- If I don't want to actually run my code, and just want to get my snippets for implementing, I will turn dryRun on by giving "true" value
+
+dryRun = true --> do not run my step_definitions, but only check if any step is missing snippet
+dryRun = false --> this will turn off dryRun, and our code will run as expected.
+
+--> How do we generate step_definition "snippets" for unimplemented steps:
+
+#1- We can run our Runner class to auto-generate our snippets
+#2- We can write new step in feature file and hover on them to select option provided by IntelliJ to generate my snippets.
+
+
+-----------------------------------------------------------------------------------------------
+
+TAGS : Tags are used to group different scenarios together
+
+    - We can use tags to include or exclude some scenarios.
+
+    - If we put the @Tag on top of the .feature file, it will effect the whole feature file
+    - If we put it on top of a Scenario, it will only effect that scenario
+    - You can have as many tags as you want for a feature file or a scenario
+
+- How do we include or exclude different tags together?
+- How do we use different tags together?
+
+- or :
+    - "or" keyword can be used for checking condition
+    - when we use or, we are being LESS specific, less selective
+    - if either one of the tags are matching, the scenario or feature will be executed
+    - or is like || in java.
+    - if either one of the sides are matching, it will execute the scenario or feature file.
+
+- and
+    - "and" keyword can be used for checking conditions as well
+    - when we use "and" keyword, we are being MORE specific
+    - "and" is similar to "&&" in java
+    - the tags on the both side has to be matching for a scenario or feature to be executed
+
+- and not
+    - "and not" keyword can be used for excluding conditions
+
+    @Regression and not @eating
+
+-----------------------------------------------------------------------------------------------
+
+Preferences > Plugins
+Plugins:
+    Cucumber for java
+    Gherkin
+
+Cucumber BDD Automation Framework:
+
+Structure / Layers:
+
+    #1 Feature files and scenarios
+        - we add file that has extension .feature
+        - type scenario in Gherkin and English languages
+        - feature files goto src/test/resources/features package
+
+        EX:
+        Scenario: User search title verification
+        Given User is on Google home page
+        When User searches for apple
+        Then User should see apple in the title
+
+    #2 Step defition classes with implementation methods:
+        - step def classes goto step_definions package
+        - we add a java class with methods
+        - each method will have a matching Gherkin scenario step:
+
+        public class Google_StepDefinitions {
+
+            @Given("User is on Google home page")
+            public void user_is_on_google_home_page() {
+                Driver.getDriver().get("https://www.google.com");
+
+            }
+
+    #3. Page objects and utilites.
+        Inside step definition methods, we write selenium automation code using our Utilities and page object model classes. add assertions.
+
+        POM classes goto pages package
+        Utility classes goto utilites package.
+
+    #4 CukesRunners:
+        They goto runners package, and in runners class, we define path to step definitions, and feature files, tags, report plugs etc:
+
+    @RunWith(Cucumber.class)
+    @CucumberOptions(
+            features = "src/test/resources/features",
+            glue = "com/cybertek/step_definitions",
+            dryRun = false
+    )
+    public class CukesRunner {
+    }
+========================================
+
+ @RunWith(Cucumber.class) -> this annotation comes from junit.
+ It basically saying to run the class as Cucumber BDD tests.
+
+ features => we define address of/path to feature files in our project
+ glue => location/path that points to step definitions
+ dryRun = false => run the cucumber feature files
+ dryRun = true => do not run, just check if all feature file scenario steps have a matching step defition
+
+-----------------------------------------------------------------------------------------------
+
+- WHERE DO YOU RUN YOUR TESTS FROM?
+- WHAT IS THE TRIGGERING POINT OF YOUR FRAMEWORK?
+    - CukesRunner
+    - TestRunner
+    - Runner
+    - Runner class is the class where we control/trigger our whole framework.
+
+#1- Runner class should know which type of report we should be generating
+#2- Runner class should know where we store our step_definitions
+#3- Runner class should know where we store our feature files
+#4- Runner class should know if we want to run our tests dryRun = true or false
+#5- Runner class should know which features or scenarios we want to run through tags
+
+- How do we generate different types of reports?
+- We provide "plugin" keyword in our Runner class under @CucumberOptions
+
+
+
+
+06/25/2022
+
+Today's schedule : - Actions practice
+                   - Page Object Model (POM)
+                   - Syncronization
+
+
+===============================================================================
+
+ - src
+        - main
+        - test
+            - java
+                - com.cydeo
+                    - tests
+                        - base
+                        - tests (rest of our test packages)
+                    - utilities
+                        - Driver
+                        - ConfigurationReader
+                        - BrowserUtils
+                    - pages
+
+
+    - configuration.properties
+    - pom.xml 
+
+--------------------------------------------------------------------------------
+
+- The reason we have created different packages, and different utility classes, different type of file (.properties) are
+    - re-usability
+    - to organize our code
+    - less code
+    - efficient
+    - easy to maintain
+    - to centralize
+    - avoid hard coding
+
+
+#1- configuration.properties : to centralize and avoid hard coding some of the important test data
+#2- TestBase: we can centralize and re-use setup/teardown methods, some important variables and objects etc.
+#3- ConfigurationReader : to be able to repeatedly and easily read from our configuration.properties file
+#4- Driver : to be able to instantiate our object in less line of code and also be able to steadily pass the same driver instance around in our project
+#5- BrowserUtils : to centralize and easy to re-use some of the general utility methods
+    - utility methods that are not specific to one page and can be applied in different pages
+
+--------------------------------------------------------------------------------
+
+Page Object Model Design Pattern (POM)
+
+#1- WHAT IS Page Object Model Design Pattern?
+
+    - Creating java class for each page of the web application.
+    - All of the related web elements to current page will be stored to its own .java class.
+    - We can also store related re-usable utility methods in its "page" class as well.
+
+
+- We have centralized pretty much everything re-usable such as:
+    - important test data: in our configuration.properties
+    - utility methods in utilities packages under different classes 
+        - Driver
+        - ConfigurationReader
+        - BrowserUtils
+- The only thing that we didn't centralize or create a structure around is LOCATING WEB ELEMENTS.
+- PAGE OBJECT MODEL DESIGN PATTERN SOLVES THIS ISSUE WE CURRENTLY HAVE.
+
+--------------------------------------------------------------------------------
+
+- How are we going to implement POM Design Pattern?
+
+#1- Every time we create a java class for a new page of our application, we will initialize our driver instance and the object that class.
+
+    - PageFactory.initElements(driver, this);
+    - This method basically initializes the driver instance and the object of the class.
+    - After this line we will be able to use THE OBJECT of the class, to reach the avaiable web elements. 
+
+#2- Instead of using .findElement method we will use @FindBy annotation
+
+
+regular email format : 
+    sometext@domain.com
+    sometext@domain.gov
+    sometext@domain.edu
+
+- When we implement POM Design pattern we solve StaleElementReferenceException by default.
+
+- How it works?
+    - Every time we want to use WebElement located using @FindBy annotation, it will be re-located in the line we are using it.
+    - Basically it will automatically do a "fressness check" which will eliminate the StaleElementReferenceException
+
+=============================================================================
+
+
+  --- SYNCHRONIZATION ---
+
+- What is synchronization? Why do we need it?
+
+- Definition: Multiple things working at the same time.
+- We need synchronization because we need to make sure our driver and our browser are on the same page at all times.
+    
+#1- Thread.sleep():
+    - This is not coming from Selenium library.
+    - This method comes from JAVA library
+    - It does not wait for ANY CONDITION TO HAPPEN.
+    - It will wait for the given duration no matter what.
+    - Therefore this is not a good practice to use.
+
+#2- implicitlyWait(10);
+    - This is coming from Selenium library.
+    
+- Does it wait for any condition to happen?
+- Yes, it is waiting for ONE condition to happen when it is triggered.
+- ImplicitlyWait is ONLY triggered when findElement (@FindBy) method can NOT find a web element with given locator.
+- It will wait until the web element is found or timer runs out.
+
+- By default, timer value is 0. We need to change it to custom number we want to change.
+- We use it once, and it will be applied to the rest of our driver session life.
+
+- What happens when the timer for implicitlyWait runs out?
+- NoSuchElementException is thrown by findElement method.
+
+
+.
+.
+.
+findElement(LOCATOR); ----> TIMER STARTS
+                                10
+                                9
+                                8
+                                .
+                                .
+                                1
+                                0 ---> NOSUCHELEMENTEXCEPTION IS THROWN IF WEB ELEMENT IS NOT FOUND
+
+
+- If web element is found, the execution will continue with no problem.
+- Even if the timer has some time left in it, code execution will continue.
+
+- What is POLLING?
+- POLLING is how many times the driver checks the DOM (HTML page) to see if the web element is there (or condition happened) or not.
+- By default, polling happens every 500 ms (or twice in 1 second)
+
+- FluentWait:
+    - Very similar to ExplicitWaits (WebDriverWait).
+    - We can change the polling time.
+
+- ExplicitWait: (WebDriverWait)
+    - Comes from Selenium library.
+    - It can wait for different conditions to happen on the page.
+    - By default it does POLLING every 500ms.
+    - If given timer runs out, TimeOutException.
+
+- How to use explicit waits?
+
+#1- Create object of WebDriverWait class.
+
+    WebDriverWait wait = new WebDriverWait(Driver.getDriver(), 10);
+
+#2- Use the object we just created to create our condition.
+
+    wait.until(ExpectedConditions.visibilityOf());
+    wait.until(ExpectedConditions.invisibilityOf());
+    wait.until(ExpectedConditions.titleIs());
+    wait.until(ExpectedConditions.titleContains());
+    wait.until(ExpectedConditions...);
+
+alertIsPresent()
+elementSelectionStateToBe()
+elementToBeClickable()
+elementToBeSelected()
+frameToBeAvaliableAndSwitchToIt()
+invisibilityOfTheElementLocated()
+invisibilityOfElementWithText()
+presenceOfAllElementsLocatedBy()
+presenceOfElementLocated()
+textToBePresentInElement()
+textToBePresentInElementLocated()
+textToBePresentInElementValue()
+titleIs()
+titleContains()
+visibilityOf()
+visibilityOfAllElements()
+visibilityOfAllElementsLocatedBy()
+visibilityOfElementLocated()    
+
+
+- What is the difference in between ExplicitWait and ImplicitlyWait?
+    - ImplicitlyWait is waiting for ONLY one condition to happen, which is if web element is located or not. 
+    - NoSuchElementException will be thrown by findElement() method if web element is not found during the polling of ImplicitlyWait
+
+    - ExplicitWait can wait for many different conditions to happen.
+    - TimeOutException will be thrown if condition does not happen.
+
+
+====================================================================================================
+
+
+
+
+06/22/2022
+
+Today's Schedule: - Actions practice
+                  - JavaScript Executer
+
+
+=============================================================================
+
+
+--- ACTIONS ---
+
+Actions class in Selenium:
+
+- Actions class is used for advanced mouse and keyboard actions using Selenium
+- Like double click, hover over an element, right click, drag drop, etc
+- Press keyUp or keyDown on the keyboard etc.
+
+When doing test automation, at some steps, we will need to perform advanced actions to simulate user.
+
+How to use Actions class?
+
+   #1 -> Create object of Actions class and pass the driver to constructor
+      Actions actions = new Actions(driver);
+
+   #2 -> call the required method or methods for a particular webelement or in general
+
+   #3 -> add perform() or build().perform() at the end
+
+
+Some actions we can do using Actions class:
+
+Actions actions = new Actions(driver);
+
+Hover over and element:
+
+actions.moveToElement(elem).perform();
+
+Click and hold action:
+
+actions.clickAndHold(elem).perform()
+
+actions.dragAndDrop().perform()
+
+actions.doubleClick().perform()
+
+actions.contextClick().perform()
+
+
+----------------------------------------------------------------------
+
+--- JavascriptExecutor ---
+
+Q: What is it?
+- It is a simple interface coming from Selenium library that allows us to inject(pass) JavaScript methods(functions) into our Java-Selenium code.
+
+Q: Why do we need it?
+- Because JavaScript is a very strong web-development programming language.
+- Therefore it is useful to be able to pass JavaScript code in our Java-Selenium code in certain situations.
+
+Q: How do we use JavascriptExecutor?
+1- We need to downcast our driver type to JavascriptExecutor interface
+2- Now we can use the methods coming from JavascriptExecutor
+3- We pass our Javascript methods into .executeScript method which will apply it in our driver session.
+
+
+P.I.Q:
+
+Q: How many ways do you know how to scroll?
+
+#1-  window.scroll()  method with JSExecutor to scroll certain number of pixels.
+
+    First cast the driver to JavaScriptExecutor interface
+    JavaScriptExecutor js = (JavaScriptExecutor)driver;
+
+    Then run window.scrollBy(0, 1000) command using executeScript method.
+
+    Scroll down 1000 pixels
+    JavaScriptExecutor js = (JavaScriptExecutor)driver;
+    js.executeScript("window.scrollBy(0, 1000)");
+
+    Scroll up 1000 pixels
+    JavaScriptExecutor js = (JavaScriptExecutor)driver;
+    js.executeScript("window.scrollBy(0, -1000)");
+
+
+#2- arguments[0].scrollIntoView(true) --> JavaScript method which scrolls until element is visible.
+#3- PageUp, and PageDown keys using keyboard actions.
+#4- We can use the moveToElement() method from Actions class to scroll to certain web element
+
+
+
+06/21/2022
+
+Today's schedule : - Review Java Faker selenium practice
+                   - Upload
+                   - Actions
+
+
+=============================================================================
+
+Q: How do we handle downloads using Selenium?
+
+A:  - We do NOT. We can NOT handle(verify) downloads using only Selenium library.
+    - We can click to a link on a browser page.
+    - But once the file is downloaded, it will be out of scope for our selenium.
+    
+
+Q: How do we handle uploads using Selenium?
+    
+A:  - We can upload a file by simply passing the path of the file we want to upload.
+    - We use sendKeys, and pass the "path" as a String into the WebElement that can upload.
+
+
+- We just need to find the path of the file and pass it as a String.
+
+Windows: 
+
+#1- Right click on the file
+#2- Select "properties"
+#3- Go to "Security" tab
+#4- Get the path from "Object name"
+
+For windows, either double backward "\\" or single forward "/" works.
+
+String path ="C:\\Users\\hayat\\Desktop\\note.txt
+
+Mac:
+
+#1- Right click on the file
+#2- Press and hold "option" button from keyboard
+#3- Select "copy file as path name" option
+#4- Paste into IntelliJ
+
+--------------------------------------------------------------------------------
+
+Actions:
+    - Actions class is used to handle "advanced" mouse and keyboard actions.
+    - such as:
+        - moveToElement
+        - doubleClick
+        - dragAndDrop
+        - clickAndHold
+        - contextClick
+
+
+
+06/18/2022
+
+Today's Schedule: - Review Configuration properties
+                  - Java Faker
+                  - Practice
+                  - Driver utility 
+                  - Singleton Design pattern
+                  - Funeral of TestBase class
+
+
+===========================================================================================
+
+
+--- Configuration Properties ---
+
+
+ Why do we read data from configuration.properties?
+
+#1- To eliminate hard coding important test data.
+#2- We can easily do cross browser testing.
+
+- What is cross browser testing?
+- Running the same test against different browsers.
+
+- Just by changing the value of "browser" key from "chrome" to "firefox", our tests will be running in different browser.
+
+saucelabs
+
+#3- We can easily do DATA DRIVEN TESTING?
+- What is DATA DRIVEN TESTING?
+- Running the same set of tests against different set of data.
+
+- Since we are entering our test data from configuration.properties, we can change the value from there and we will be able to run same tests against different test data.
+
+----------------------------------------------------------------------------------------
+
+How do we read from configuration.properties?
+
+#1- Create Properties class object
+
+    Properties properties = new Properties();
+
+#2- We need to open the file in the Java memory
+
+    FileInputStream fileStream = new FileInputStream("pathOfTheFile");
+
+#3- We need to load the "properties" object with the fileStream
+
+    properties.load(fileStream);
+
+#4- Use properties object and getProperty method to pass "key" and read "value"
+
+    properties.getProperty("key") --> value
+                            browser -> chrome
+                            username -> helpdesk1@cydeo.com
+
+
+----------------------------------------------------------------------------------------
+
+- Why did we create ConfigurationReader?
+
+- We created the re-usable .getProperty() utility method in ConfigurationReader class
+- We can call this method in any class and any package when we need to read from configuration.properties file    
+
+
+=======================================================================================
+
+
+--- JAVAFAKER ---
+
+- JavaFaker is a library that allows us to generate random data in organized manner
+    - name
+    - address
+    - finance
+    - numerify: random digits in the order we want to get
+    - bothify : random alphanumeric in the order we want to get
+
+
+Faker faker = new Faker();
+
+String name = faker.name().fullName(); // Miss Samanta Schmidt
+String firstName = faker.name().firstName(); // Emory
+String lastName = faker.name().lastName(); // Barton
+
+String streetAddress = faker.address().streetAddress(); // 60018 Sawayn Brooks Suite 449
+
+
+======================================================================================
+
+
+--- Driver Utility ---
+
+- Why did we create Driver utility class and method?
+
+#1- We were having hard time passing the SAME(current) driver instance in different classes and different packages.
+#2- We had to write too many lines just to instantiate our "driver"
+#3- Now we are not only instantiating our driver in just one line, we are also optimizing the setups.
+    - determine the type of browser by reading from "configuration.properties" file
+    - window.maximize is implemented in our Driver util class
+    - timeOut.implicitlyWait is implemented in our Driver util class 
+
+- How are we able to return the same instance of our driver?
+- We implemented Singleton Design Pattern.
+
+- What is a design pattern?
+- Repetable solution to a repeating issue.
+
+- Singleton Design Pattern:
+- Singleton Design Pattern makes sure we are returning the same instance every time we call our method.
+- In our case we are trying to return the same instance of DRIVER
+
+--------------------------------------------------------------------------------
+
+How do we implement the Singleton Design Pattern?
+
+#1- Create private constructor.
+    - Once we create private constructor, we are closing access to the object the class (Driver util)
+    - We create private variable for our WebDriver to close access from outside.
+
+#2- Create getter method to deliver the object (WebDriver) in the way we want to deliver it.
+    - The way we deliver it with using Singleton Design Pattern.
+        - If first time calling of the method/object, it will create and do setups.
+        - Next time we call the same method/object, it will keep returning the same object until the sesion ends or we terminate the session ourselves.
+
+
+06/14/2022
+
+Today's Schedule: - Review WebTable
+                  - Create 1 more utility method
+                  - Properties Intro
+
+
+==================================================================================
+
+Q: What is properties file?
+A: - It is just another type of file just like .txt, and .pdf whatever.
+   - But this file has .properties extention.
+
+Q: Why do we use properties file? What makes it different then other type of files?
+A: - It stores value in "key=value" format
+   - We are trying to avoid hard coding some of the important test data in our project.
+
+Q: What is hard coding?
+A: - Writing data directly inside of the source code is called hard coding.
+    - If I have to go inside of my .java class to change the data, it means I hard coded that data.
+
+
+-----------------------------------------------------------------
+
+
+Q: How do we read from properties type of file?
+
+A: #1- Create Properties class' object.
+
+       Properties properties = new Properties();
+
+   #2- Create FileInputStream object to open file as a stream in Java memory.
+
+       FileInputStream file = new FileInputStream("pathOfTheFileWeAreTryingToOpen");
+
+   #3- Load "properties" object with the "file" we opened using FileInputStream
+
+       properties.load(file);
+
+   #4- We can use properties.getProperty method to read from the file we loaded. 
+       (configuration.properties)
+
+       properties.getProperty("key");  ---> value
+
+       browser ----> chrome
+       env ----> qa1.vytrack.com
+       username ----> tester5@cydeo.com
+
+--------------------------------------------------------------------------------       
+
+
+Q: Which part of this is hard coded in our code : key=value
+A: - "key" is what we write in our .java class.
+   - Therefore "key" will not change, and is hard coded.
+
+   - "value" is inside of our configuration.properties file. 
+   - We can change the value from outside of our code
+
+
+Q: What is ConfigurationReader? Why did we create this?
+A: - To create utility method and be able to read from configuration.properties file by just calling 
+     our ConfigurationReader.getProperty("key"); 
+   - We created the re-usable .getProperty() utility method in ConfigurationReader class
+   - We can call this method in any class and any package when we need to read from configuration.properties file
+
+
+06/12/2022
+
+Today's schedule: - Review 
+                  - Browser Utilities
+                  - WebTables
+
+==============================================================================
+
+
+  XPATH:
+
+Q: How many types of xpath do we have?
+A: 2 types
+
+#1- Absolute xpath:
+    - Starts with "/" single slash
+    - Starts from the root element -> "html" tag
+    - And it goes down 1 by 1
+    - Therefore it is not dependable
+    - If there is any change happens in the structure of the html page it will break easily
+
+#2- Relative xpath:
+    - Starts with "//" double slash
+    - "//" means jump to any given point/jump to first matching result
+
+    syntax: //tagName[@attribute='value']
+ 
+
+Q: Can we use "//" more than once in an xpath locator?
+A: Yes we can. We are not limited to just once. We can use as many time as we want.
+
+
+Q: How do we go from parent to direct child?
+A: "/" will take us to direct child
+
+    //tagName[@attribute='value']/directChildTag
+
+
+Q: How do we go from parent to any child?
+A: - "//" will take us to any child.
+   - It doesn't have to be directly under
+
+
+Q: How do we go from child to parent?
+A: - "/.."
+   - We do not have to provide tag name here. It will just take to the parent.
+
+----------------------------------------------------------
+
+Q: How do we handle dynamic web elements with XPATH and CSSSELECTOR ?
+
+A: #1- I can locate a parent/child that is not dynamic and move from there
+
+   #2- I will use the methods provided by - xpath: contains(), starts-with(), ends-with()
+
+                                          - cssSelector : contains --> *
+                                                       starts-with --> ^
+                                                       ends-with --> $
+
+xpath  --> //tagName[contains(@attribute, 'value')]
+cssSelector --> tagName[attribute* = 'value']
+
+xpath  --> //tagName[starts-with(@attribute, 'value')]
+cssSelector --> tagName[attribute^ = 'value']
+
+xpath  --> //tagName[ends-with(@attribute , 'value')]
+cssSelector --> tagName[attribute$ = 'value']
+    
+
+--------------------------------------------------------------------------------------
+
+Q: How do we go from sibling to sibling?
+A: - There are two methods for going from sibling to sibling
+   - "/preceding-sibling::tagName" will go to the sibling that comes before
+   - "/following-sibling::tagName" will go to the sibling that comes after
+
+- The web element we locate will become the starting point (point 0).
+- We decide whether we want to go preceding or following sibling.
+- We count and we pass the index number.
+
+    //tagName[@attribute='value']/preceding-sibling::tagName[index]
+    //tagName[@attribute='value']/following-sibling::tagName[index]
+
+
+ex:    //option[@value='3']
+
+
+    <select>
+2        <option value="1"> Orange 1</option>
+1        <option value="2"> Orange 2</option>
+0        <option value="3"> Orange 3</option>
+1        <option value="4"> Orange 4</option>
+2        <option value="5"> Orange 5</option>
+    </select>
+
+
+//option[@value='3']/preceding-sibling::option[1] --> this will point to Orange 1
+
+//option[@value='3']/following-sibling::option[2] --> this will point to Orange 5
+
+
+====================================================================================  
+
+
+  WEBTABLES:
+
+Q: HOW DO WE HANDLE WEBTABLES USING SELENIUM?
+A: We write custom locators using xpath or cssSelector and get the data we want to get.
+
+Q: How do we create HTML web tables?
+A: <table> tag creates html web tables.
+
+#1- We create the table tag
+#2- We create rows first
+#3- We create cells inside of the rows
+
+td: table data    -> used to create cells inside of a table
+th: table header  -> used to create cells, but it will make content bolded and centered
+tr: table row     -> used to create rows inside of table
+
+
+------------------------------------------------------------------------------------
+
+http://practice.cydeo.com/tables
+
+
+P1_ WRITE A LOCATOR THAT RETURNS THE TABLE 1 ITSELF
+
+    //table[@id='table1']
+
+
+P2_ WRITE A LOCATOR THAT RETURNS ALL OF THE ROWS INSIDE OF TABLE 1
+    
+    //table[@id='table1']//tr
+
+
+P3_ WRITE A LOCATOR THAT RETURNS ALL OF THE ROWS INSIDE OF BODY - TABLE 1 
+
+   //table[@id='table1']/tbody//tr
+
+
+P4_ WRITE A LOCATOR THAT RETURNS ONLY 3RD ROW IN THE BODY
+
+    //table[@id='table1']//tbody//tr[3]
+
+
+P5_ WRITE A LOCATOR THAT RETURNS ALL OF THE CELLS IN ALL OF THE ROW (IN BODY)
+
+    //table[@id='table1']/tbody//tr//td
+
+
+P6_ WRITE A LOCATOR THAT RETURNS ALL OF THE FIRST NAMES FROM TABLE
+
+    //table[@id='table1']//tbody//tr//td[2]
+
+
+P7_ WRITE A LOCATOR THAT RETURNS FRANKS CELL SPECIFICALLY
+
+   //table[@id='table1']//tbody//tr[2]//td[2]
+
+   We are saying:
+
+    //tr[2] : get me the second row in the <tbody>
+    //td[2] : get me the second cell in the 2nd row.
+    
+
+P8_ WRITE A LOCATOR THAT RETURNS FRANKS CELL SPECIFICALLY USE FRANKS TEXT
+
+    //table[@id='table1']//tbody//tr[2]//td[.='Frank']
+
+
+P9_ WRITE A LOCATOR THAT RETURNS $51 CELL SPECIFICALLY USE FRANKS TEXT
+
+    //table[@id='table1']//tbody//tr[2]//td[.='Frank']/following-sibling::td[2]
+
+
+P10_ WRITE A LOCATOR THAT RETURNS JASONS DUE AMOUNT BASED ON JASONS NAME
+    
+    1- We can locate Jason, go to parent row, and come back in the same row to get "Due" cell
+    //table[@id='table1']//tbody//td[.='Jason']/../td[4]
+
+    2- We can use the sibling method from xpath
+    //table[@id='table1']//tbody//td[.='Tim']/following-sibling::td[2]
+
+
+P11_ WRITE A LOCATOR THAT RETURNS Tim's last name  BASED ON tim's NAME
+
+    //table[@id='table1']/tbody//td[.='Tim']/../td[1]
+
+    //table[@id='table1']/tbody//td[.='Tim']/preceding-sibling::td
+
+    
+P12_ WRITE A LOCATOR THAT RETURNS ALL EMAILS THAT HAS $50 DUE DATE
+
+    //table[@id='table1']/tbody//td[.='$50.00']/preceding-sibling::td[1]
+
+    
+06/11/2022
+
+Today's Schedule: - Review Iframe
+                  - Create CRM_Utilities class
+                  - Windows Handling
+                  - Create Browser_Utilities class
+
+
+========================================================================================
+
+
+Q: How do we handle dynamic web elements with XPATH and CSSSELECTOR ?
+
+A: #1- I can locate a parent/child that is not dynamic and move from there
+
+   #2- I will use the methods provided by - xpath: contains(), starts-with(), ends-with()
+
+                                          - cssSelector : contains --> *
+                                                       starts-with --> ^
+                                                       ends-with --> $
+
+xpath  --> //tagName[contains(@attribute, 'value')]
+cssSelector --> tagName[attribute* = 'value']
+
+xpath  --> //tagName[starts-with(@attribute, 'value')]
+cssSelector --> tagName[attribute^ = 'value']
+
+xpath  --> //tagName[ends-with(@attribute , 'value')]
+cssSelector --> tagName[attribute$ = 'value']
+    
+
+--------------------------------------------------------------------------------------
+
+Q: How do we go from sibling to sibling?
+A: - There are two methods for going from sibling to sibling
+   - "/preceding-sibling::tagName" will go to the sibling that comes before
+   - "/following-sibling::tagName" will go to the sibling that comes after
+
+- The web element we locate will become the starting point (point 0).
+- We decide whether we want to go preceding or following sibling.
+- We count and we pass the index number.
+
+    //tagName[@attribute='value']/preceding-sibling::tagName[index]
+    //tagName[@attribute='value']/following-sibling::tagName[index]
+
+
+ex:    //option[@value='3']
+
+
+    <select>
+2        <option value="1"> Orange 1</option>
+1        <option value="2"> Orange 2</option>
+0        <option value="3"> Orange 3</option>
+1        <option value="4"> Orange 4</option>
+2        <option value="5"> Orange 5</option>
+    </select>
+
+
+//option[@value='3']/preceding-sibling::option[1] --> this will point to Orange 1
+
+//option[@value='3']/following-sibling::option[2] --> this will point to Orange 5
+
+
+------------------------------------------------------------------------------------
+
+ex #1: locate month May using its value
+
+        (//option[@value='4'])[1]
+
+ex #2: locate month of March using May locator as a base and use sibling method
+
+        (//option[@value='4'])[1]/preceding-sibling::option[2]
+
+
+ex #3: locate month of October using May locator as a base and use sibling method
+
+        (//option[@value='4'])[1]/following-sibling::option[5]
+
+
+====================================================================================
+
+
+ WINDOWS:
+
+Q: Is there any difference for selenium if it is a tab or window?
+A: No. Regardless if it is a window or a tab it is all a WINDOW for Selenium.
+
+Q: How does Selenium knows which window is different from which?
+A: WindowHandles
+
+Q: What is a window handle?
+A: A randomly generated unique alphanumeric ID for each window.
+
+Q: Every window has their own window handle randomly generated by selenium.
+A: We don't have to do anything special for it.
+
+Q: How do we get the current window's handle?
+A: .getWindowHandle();
+
+Q: What is the return type?
+A: - String
+   - It will capture and return the current windows handle as a String.
+
+Q: How do we get all of the currently opened windows' handles?
+A: .getWindowHandles();
+
+Q: What is the return type?
+A: Set <String> 
+
+- Selenium will only return the window handles from the currently executed session.
+
+- Syntax: driver.switchTo().window(windowHandle);
+
+
+
+06/08/2022
+
+Today's schedule: - Alert review
+                  - Iframe
+
+
+============================================================================
+
+Q: What is an iframe?
+A:  - An iframe is HTML within another HTML page.
+   - Most of the time it is used to create independent sections in a page for advertisements, maps, video content or anything independent.
+
+Q: How do we handle iframes?
+A: - Selenium WebDriver can focus on one thing at a time.
+   - Therefore we must switch its focus from the default <html> to iframe <html> before being able to do any action inside of it.
+
+Q: What happens if we do not switch to inner frame?
+A: If we try to locate any web element before switching, we will get NoSuchElementException
+
+Q: How many ways we have to switch to inner iframe?
+A: 3   
+
+ #1- by index:
+        - starts from 0
+        - we count
+
+    syntax: driver.switchTo().frame(index);
+
+ #2- by id-name value
+        - if there is id or name attribute we can just pass their values as a string
+
+    syntax: driver.switchTo().frame("id-name value"); 
+
+ #3- by locating it as a web element
+        - we locate the iframe tag itself as a web element and pass it into the method.
+
+    syntax: driver.switchTo().frame(WebElement);
+    syntax: driver.switchTo().frame(driver.findElement(By.locator));
+
+Q: How do we go switch driver's focus to default iframe?
+
+A: - driver.switchTo().parentFrame(); // if you have nested frame and if you want to switch 1 frame to direct parent of this frame we are using parentFrame() method
+
+   - driver.switchTo().defaultContent(); // defaultContent() method will switch to main HTML (Parent of all HTML)
+
+
+ 1    <html>
+
+2        <html>
+3            <html> --> driver.switchTo().parentFrame(); --> will focus to 2
+            </html> --> driver.switchTo().defaultContent(); --> will focus to #1
+        </html>
+
+4        <html>  --> driver.switchTo().parentFrame(); --> will focus to #1 
+        </html> --> driver.switchTo().defaultContent(); --> will focus to #1 
+
+
+    <html>
+
+- The only time parentFrame() method and defaultContent() method will make any difference in use is if we have iframe inside of another iframe.
+- Otherwise if we have 1 layer of iframe they will both switch back to default html
+
+   
+
+    
+
+06/07/2022
+
+Today's schedule:
+    - Reviews: - Dropdown
+               - Alert
+    - Practices: 
+    - Iframes
+
+ =====================================================================================
+ 
+ - DROPDOWNS:
+
+Q: How many types of dropdowns we have?
+A: 2
+
+#1- HTML Dropdowns (non-select)
+    - If the dropdowns are created using anything other than <select> tag, it is a "non-select dropdown"
+
+#2- Select Dropdowns
+    - If dropdown is created using <select> tag, it is a select dropdown
+    - To be able to use the Select class from Selenium, it has to be <select> dropdown.
+
+ ----------------------------------------------  
+
+Q: How do you handle dropdowns?
+
+1. First I will inspect and see what type of dropdown it is.
+2. If it is HTML dropdown (non-select), I will just locate with any locator and click.
+3. If it is <select> dropdown, I will use Select class coming from Selenium library.
+
+------------------------------------------------
+
+Q: Syntax of how do we handle Select dropdown?
+
+1. We create object of Select class
+2. We need to locate the dropdown <select> tag itself and pass it into the Select constructor.
+
+    Select dropdownName = new Select(driver.findElement(By.LOCATOR));
+
+3. We can use the object for handling the dropdowns.
+
+    dropdownName.selectByVisibleText("content(text) btw opening and closing <option> tag"); 
+    dropdownName.selectByValue("value of value attribute");
+    dropdownName.selectByIndex(int); // starts form 0
+
+
+Q: How do we select options from a Select dropdown?
+A: We can use 3 methods provided by Selenium library
+    - selectByIndex
+    - selectByValue
+    - selectByVisibleText    
+
+----------------------------------------------------
+
+Q: How do we get currently selected option?
+A: .getFirstSelectedOption();
+   - this method can be used to get the default value
+   - also can be used to get the value after selecting something.
+   - return type is single WebElement
+
+
+Q: How do we get all of the options from a Select dropdown?
+A: .getOptions method
+   - return type is List<WebElement>
+
+
+=================================================================
+
+
+- ALERT:
+
+Q: What is an alert?
+A: - Some pop-ups happening on the page.
+   - Developers use alerts to get users attention to deliver some content.
+
+
+Q: How many types of alerts do we have?
+A: We have 2 types of Alerts.
+
+1. HTML Alert (Non-JS Alert)
+    - This will be present inside of the <html> page as some web element.
+    - There is nothing special about this alert, we just locate and click
+
+2. Javascript Alert
+    - We have 3 types of Javascript alerts
+
+    #1- Information/Warning Alert: 
+        - User can ONLY accept this alert.
+
+    #2- Confirmation Alert:
+        - User can accept and decline.
+
+    #3- Prompt Alert:
+        - User can accept, decline, and also sendKeys.
+
+
+Q: How do we handle Alerts using Selenium?
+A: - I will check the type of the alert.
+   - After making sure it is a JS alert, I will use Alert from Selenium library to switch drivers focus to the Alert itself.
+
+    Alert alert = driver.switchTo().alert();
+
+    alert.accept();
+    alert.dismiss();
+    alert.sendKeys("string");
+
+=====================================================
+
+Links for Alert Practices:  - https://chercher.tech/practice/practice-pop-ups-selenium-webdriver
+                            - https://demoqa.com/alerts
+
+
+06/05/2022
+
+Today's schedule:
+    - TestNG Review
+    - Practice TestNG with Selenium
+    - DropDown
+    - Alert
+    - Iframe
+
+========================================================================================
+
+- TestNG: (Test Next Generation)
+
+- What is TestNG?
+- TestNG is a UNIT TESTING FRAMEWORK.
+
+- Is this tool created for testers?
+- No. It is created for developers.
+
+- Is this the only UNIT TESTING FRAMEWORK?
+- No.
+- JUnit
+- NUnit
+
+- How do we create structures or change behaviors of methods using TestNG?
+- ANNOTATIONS
+
+- Using annotations we can change the behaviors of the methods.
+
+- Common annotations:
+    - @Test
+    - BeforeMethod, AfterMethod
+    - BeforeClass, AfterClass
+    - BeforeTest, AfterTest
+    - BeforeSuite, AfterSuite
+
+- @Test :
+    - This annotation will convert a regular Java method into a runnable TestNG test.
+    - Each test run by default in alphabetical order.
+    - But we can change the running order using priority
+    - Each test is independent from each other UNLESS we create dependency.
+
+    @Test (priority = 1)
+    public void test1(){
+        //code
+
+        //assertion
+
+        //code (this code will not be ran if assertion fails)
+
+        //assertion
+    }
+
+    @Test (priority = 2, dependsOnMethods="test1")
+    public void test2(){
+
+    }
+
+- BeforeMethod:
+    - This will run once before each test.
+    - The number of tests we have will determine the number this method will be running.
+    - If I have 10 @Test, this will run 10 times before each one of them.
+
+- AfterMethod:
+    - Same as BeforeMethod, but it will run after.
+    - It will just run once after each @Test.
+
+
+- BeforeClass:
+    - This will run ONLY ONE TIME in each class, before everything else.
+    - This does not care the number of @Test we have in the class.
+    - Regardless it runs one time.
+
+- AfterClass
+    - Same as BeforeClass, but it will run after.
+    - It will just run once after everything is done in the class.
+
+- Ex: If we want to open a new browser before each test, and close the browser after each test, where do we put our setup and teardown lines?
+    #1- BeforeMethod : WebDriver driver = WebDriverFactor.getDriver("chrome");
+    #2- AfterMethod    : driver.close();
+
+- Assertions:
+    - What do assertions do?
+    - Assertions are used to verify if actual = expected
+    - String, int, List<WebElement>, List<String>
+    - Assertions determine if a test passes or fails.
+
+- Which assertions we have seen so far?
+
+    - Assert.assertEquals() 
+        - Accepts 2 arguments.
+        - Both arguments have to be same type. 
+        - It will compare and determine fail or pass.
+        --> assertEquals(1,1)
+        --> assertEquals("a","a")
+        --> assertEquals(actual:driver.getTitle(),expected:"Google", "optional message")
+
+    - Assert.assertTrue()
+        - Accepts a boolean value.
+        - If boolean returns true --> test passes
+        - If boolean returns false --> test fails
+        -->assertTrue(true);
+        -->assertTrue(1==1);
+        -->assertTrue(element.isDisplayed(),"optional message");
+
+    - Assert.fail()
+        - If you call this method in a @Test your test will fail regardless. 
+
+
+ =========================================================================
+ 
+  === Stale Eleement Reference Exception ===
+
+There are 2 situations that we can get this exception: 
+1- navigation (handle with reassingn(relocate) the element)
+2- when element deleted from both html and page (handle with try catch)
+This practice is about when navigation refresh happens sometime you can receive this exception and we should know how to handle it with relocating
+
+relocating means; you will find element again;
+cydeoLink = driver.findElement(By.xpath("//a[text()='CYDEO']"));   
+
+
+------------------------------------------------------------------------------------
+
+
+
+06/01/2022
+
+Today's schedule:
+    - Reviews
+    - Stale Element Reference Exception
+    - TestNG Intro
+
+- Reminder: 
+        Short videos: - 3 videos about Dropdown 
+                      - Alert
+                      - Frames  
+
+===============================================================================
+
+- XPATH :
+
+- How do you handle dynamic web elements?
+- How do you handle web elements that has dynamic attribute value?
+
+#1- We use xpath methods such as contains, starts-with, and ends-with.
+    - We locate the part of the attribute that is not dynamic, and use that part within the xpath locators to locate the web element.
+
+#2- We can locate the static (stable) parent or child web elements and move from there.
+
+
+------------------------------------------------------------------------------------
+
+- How do we move from parent to direct child using xpath?
+    - We use "/" single slash to go to direct child.
+
+- How do we move from parent to any child using xpath?
+    - We use "//" double slash to go to any child.
+
+- How do we move from child to parent using xpath?
+    - We use "/.."
+    - This will take our locator to the parent of currently located web element.
+
+- What is the syntax with the indexing in xpath?
+- How do we use indexes with xpath?
+    - //tagName[@attribute='value'][3]
+    - If we use indexes without paranthesis, this way will only work in direct siblings. 
+
+    - (//tagName[@attribute='value'])[3]
+    - If we use indexes with paranthesis, this way it will work and index through the whole html page.
+
+
+------------------------------------------------------------------------------------
+
+findElement vs findElements()
+
+- findElement
+    - returns single web element
+    - return type: WebElement (coming from Selenium)
+    - it will throw NoSuchElementException if it cannot find a web element with given locator.
+
+- findElementS:
+    - returns List of WebElements
+    - return type : List<WebElement>
+    - it will NOT throw exception, it will return empty list
+
+
+------------------------------------------------------------------------------------
+
+- driver.manage().timeouts().impilicitlyWait(10, TimeUnit.SECONDS);
+
+- Basically this line will allow our driver to wait UP TO given time if driver cannot immedieatly locate a web element.
+
+- We write it one time, and it is applied to the whole driver session.
+- Driver does not have to wait until 10 second is ended. If it finds the web element before maybe in 2 second or 5 seconds it will continue with execution.
+
+
+------------------------------------------------------------------------------------
+
+- checkboxes & radiobuttons
+    
+- How do you handle checkboxes and radio buttons using Selenium?
+
+#1- We can click
+#2- We can check if they are selected or not. --> - isSelected(); 
+#3- We can check if they are enabled or not. --> isEnabled();
+
+- isSelected(); --> if web element is selected, it will return true, if not false.
+- isEnabled(); --> if web element is enabled, it will return true, if not false.
+
+
+=================================================================================
+
+
+
+
+
+05/29/2022
+Today's Schedule: - Xpath Review
+                  - Handling Dynamic WebElement
+                  - isDisplayed false practice
+                  - FindElements
+                  - Checkbox and Radio Button
+
+ ==========================================================================                 
+- Whats is xpath?
+    - XPATH is one of 8 locators of Selenium.
+    - XPATH allows us to create custom locators.
+    - We can use any attribute and any attribute value to create our own custom locator.
+    - Xpath can move from parent to child and child to parent
+
+
+- How do we move from parent to direct child?
+    - We use "/" single slash to move to direct child
+
+1-    <div id="uh98">
+2-        <div>
+3-            <a href="https://google.com"> Google 1 </a> 
+4-        </div>
+5-        <div>
+6-            <a href="https://google.com"> Google 2 </a> 
+7-        </div>
+8-        <div>
+9-            <a href="https://google.com"> Google 3 </a> 
+10-       </div>   
+     </div>
+
+ex#1: write locator returning #2 using "/"
+    //div[@id='uh98']/div
+
+ex#2: write locator returning #3 using "/"
+    //div[@id='uh98']/div/a
+
+ex#3: write locator returning #5 
+    //div[@id='uh98']/div   --> 1 of 3
+    (//div[@id='uh98']/div)[2] --> This would return us the 2nd div (line #5)   
+
+==========================================================
+
+- How do we move to any child using xpath?
+    - We use "//" double slash to move to any child.
+
+- What does "//" means in xpath?
+    - It means jump to the point I will be giving to you.
+    - Or start from anywhere.
+
+- Indexing using xpath locator:
+    - If there are more than 1 matching results for an xpath locator, we can use indexes to select exactly which one we want.
+
+    <div>
+        <a href="https://google.com"> Google 1 </a>
+        <a href="https://google.com"> Google 2 </a>
+        <a href="https://google.com"> Google 3 </a>
+
+    </div>
+
+    ex: //a[@href='https://google.com'] --> this will return me 3 matching results.
+
+    - I can use indexes to select exactly a specific one.
+    
+
+    (//a[@href='https://google.com'])[1] ---> returns Google 1
+    (//a[@href='https://google.com'])[2] ---> returns Google 2
+    (//a[@href='https://google.com'])[3] ---> returns Google 3
+
+    - *** For xpath indexes start from 1
+
+ ===================================================================
+
+- How do we move from child to parent?
+- We use "/.."
+- We do not have to provide any tag name when we are moving from child to parent.
+- It will automatically move to direct parent
+
+1-    <div id="uh98">
+2-        <div>
+3-            <a href="https://google.com"> Google 1 </a> 
+4-        </div>
+5-        <div>
+6-            <a href="https://google.com"> Google 2 </a> 
+7-        </div>
+8-        <div>
+9-            <a href="https://google.com"> Google 3 </a> 
+10-       </div>
+11- </div>
+
+ex: Locate Google 2 link using its text with xpath
+    
+1-    //a[.='Google 2']      --> this locator is returning me line 6
+
+2-    //a[.='Google 2']/..   --> this locator is returning me line 5
+
+3-   //a[.='Google 2']/../.. --> this locator is returning me line 1
+
+======================================================================
+
+--> P.I.Q: 
+    - How do you handle dynamic web elements?
+    - How do you handle web elements with dynamic attribute value?
+
+    - Dynamic attribute value: means some part of an attribute value is changing when the page is refreshed.
+
+Answer#1: we use xpath methods: contains, starts-with, and ends-with
+
+1-    //tagName[contains(@attribute, 'value')]
+2-    //tagName[starts-with(@attribute, 'value')]
+3-    //tagName[ends-with(@attribute, 'value')]
+
+Answer#2: we can also locate a static (stable) parent or child web element, locate that, and move to desired web element.
+
+
+data-ved = '0ahUKEwiRvK3x9oT4AhXxoI4IHbl0DLEQ39UDCAY'
+data-ved = '0ahUKEwj1uJSu94T4AhU2m44IHToJDK0Q39UDCAY'
+
+//input[contains(@data-ved,'UDCAY')]
+//input[starts-with(@data-ved,'0ahUKEw')]
+
+
 5/22/2022
 Today's schedule:  #1- Review
                    #2- Task1
@@ -163,8 +2468,6 @@ css: NA
 CSS : NA
 
 xpath can do more than css, but it is little bit complex
-
-
 
 
         ==============  CSS SELECTOR  ============

@@ -1,0 +1,246 @@
+5/22/2022
+Today's schedule:  #1- Review
+                   #2- Task1
+                   #3- Create utility class
+                   #4- Task2
+                   #5- cssSelector
+
+==========================================================================
+
+<a href="https://tesla.com" name="uh68" class="ff58" id="bb22">TESLA CYBERTRUCK </a>
+
+1- id: 
+    
+syntax: driver.findElement(By.id("bb22"));
+
+2- name:
+   
+syntax: driver.findElement(By.name("uh68"));
+
+3- className: 
+   
+syntax: driver,findElement(By.className("ff58"))
+
+4- linkText: anchor (<a> tag only)
+    
+syntax: driver.findElement(By.linkText("TESLA CYBERTRUCK"))
+
+5- partialLinkText: anchor (<a> tag only)
+    
+syntax: driver.findElement(By.partialLinkText("TESLA");
+        driver.findElement(By.partialLinkText("CYBERTRUCK");
+
+6- tagName:
+
+syntax: driver.findElement(By.tagName("a"))
+
+7- cssSelector: tagname[attribute='value']
+
+syntax: driver.findElement(By.cssSelector("a[href='https://tesla.com']")
+
+- What happens if we provide name,class attribute value and there is more than 1 result?
+- It will find and return the first matching result.
+
+
+
+
+
+
+                   =============  XPATH  ==============
+
+- xpath is one of 8 locators in Selenium.
+- xpath allows us to create custom locators using any given attribute and value.
+- We can also use the text of the web element create locator using XPATH.
+
+    - xpath syntax is different than cssSelector.
+
+There are 2 types of XPATH:
+
+#1- ABSOLUTE XPATH:
+    - Starts with single slash "/"
+    - Starts looking from the root/parent/ascendent element in the HTML page
+    - It starts from the html tag and it goes 1 by 1 until we reach the desired web element
+    - Usually it is very very long, and it is NOT dependable.
+    - Because it is long, it is not stable, therefore it is NOT used much.
+    - It is not recommended to use it as locator in our code.
+
+    <html>
+        <head>
+            <title> Title of the page </title>
+        </head>
+        <body>
+            <div>
+                <div> 
+                    <a href=""> TEXT </a>
+                </div>
+            </div>
+
+        </body>
+
+    </html>
+                                
+ex: locating link <a> tag above using absolute xpath
+
+    /html/body/div/div/a
+
+- With any minimal change in the HTML code, this locator will be breaking. Therefore, not good practice to use ABSOLUTE XPATH.
+
+
+#2- RELATIVE XPATH:
+    - Starts with double slash "//"
+    - "//" means that you can start anywhere in the HTML page
+    - Since we are allowed to start anywhere in the HTML page, relative xpath is very dependable and useful
+    - The only time your relative xpath is supposed to be breaking is if ONLY the attribute value you use is changed.
+
+--> MAIN SYNTAX
+
+    //tagName[@attribute='value']
+
+
+ex: <a href="https://www.tesla.com" id="uh7" name="bb95"> TESLA </a>
+
+#1- locating with href    : //a[@href='https://www.tesla.com']
+#2- locating with id     : //a[@id='uh7']
+#3- locating with name     : //a[@name='bb95']
+
+
+    - We are NOT limited with id, name, class, or href attributes.
+    - We can use any custom attribute and their value with XPATH locator.
+
+
+COMMONLY USED XPATH SYNTAXES:
+
+    #1 - //tagName[@attribute='value']
+    #2 - //tagName[contains(@attribute, 'value')]
+    #3 - //tagName[.='text']
+    #4 - //*[@attribute='value']
+
+EXPLANATIONS:
+    #1- //tagName[@attribute='value']
+    
+    - We are saying, get me the web element with given tagName, where attribute value is as provided.
+
+    #2- //tagName[contains(@attribute, 'value')]
+    
+    - Looks for the tagName that has matching or containing attribute value
+
+    #3- //tagName[.='text']
+    
+    - This locator will return the web element with given text.
+    - Works in similar way to linkText locator. But linkText only works with links.
+    - Xpath will work with any web element.
+    - . --> stands for text in xpath
+
+    #4- //*[@attribute='value']
+
+    - * --> is used when we do not want to search by a tagName.
+    - If we want to be less specific, we pass *, and it will only match and return whatever attribute and value is provided. 
+
+
+     === HOW TO GO FROM CHILD TO PARENT and PARENT TO CHILD IN XPATH? ===
+          
+-We go from parent to child using "/“
+-We use "/.." this goes from child to parent
+-We use ”/following-sibling::tagname” this goes to the next sibling.
+-We use “/preceding-sibling::tagname”this goes to previous sibling.
+
+
+            ==== CSS vs XPATH ====
+
+-Css is slightly faster than xpath on IE, other browsers it is negligible.
+-Css is easier to read and write
+
+1.css cannot locate using text of web elements
+xpath://*[.="Don't Click!"]
+css: NA
+
+2.It cannot find from matches base on index (different parent)
+xpath:--> (xpathFormula)[indexNumber]
+css: NA
+
+3.child to parent NA
+//button/../ --> goes back to parent
+CSS : NA
+
+xpath can do more than css, but it is little bit complex
+
+
+
+
+        ==============  CSS SELECTOR  ============
+
+- cssSelector is one of 8 locators of Selenium.
+- With cssSelector we are able to create CUSTOM locators.
+- Using cssSelector you will be able to locate web elements with ANY OF THE ATTRIBUTES PROVIDED inside of the tag
+- We are not just limited to name, class, or id attributes anymore
+- We can use ANY attribute inside of the tag.
+
+=== There are two different types of syntaxes for cssSelector. ===
+
+#1.syntax:	tagName[attribute='value’]	
+
+     ex: <a href="https://www.tesla.com" id="uh7" name="bb95"> TESLA </a>
+
+    #1- locate above link with cssSelector using id:
+         
+        a[id='uh7']
+
+    #2- locate above link with cssSelector using name:
+
+        a[name='bb95']
+
+    #3- locate above link with cssSelector using href:    
+
+        a[href='https://www.tesla.com']
+
+  NOTE: If you want to be less specific, you don't have to pass tagName with this locator.
+
+    [attribute='value']
+
+    [id='uh7']
+
+    [name='bb95']
+
+
+#2.syntax:  Second syntax is limited to use with "id" and "class" only.
+
+    tagName#idValue
+    tagName.classValue
+
+    # ---> stands for id attribute
+    . ---> stands for class attribute
+
+ex: <a href="https://www.tesla.com" id="uh7" name="bb95" class="kk99"> TESLA </a>
+
+#1- locate above link with cssSelector syntax #2 using id:
+
+    a#uh7 --> this will return me the above web element
+
+
+#2- locate above link with cssSelector syntax #2 using class attribute value:
+
+    a.kk99
+
+
+NOTE: If you want to be less specific, you dont even have to type the tagName.
+    
+    #idValue
+    .classValue
+
+
+=== HOW TO MOVE FROM PARENT TO CHILD USING CSSSELECTOR? ===
+
+- We use ">" sign to move from parent to child.
+
+    syntax: tagName[attribute='value'] > childTagName
+
+ex: Locating "Forgot password" header from http://practice.cydeo.com/forgot_password
+
+    div[id='content'] > div > h2
+    div[class='example'] > h2
+
+== Why do we need to move from parent to child? ==
+    - Sometimes the web element we are trying to locate does not have a unique attribute/value.
+    - In this scenario, we can locate one of the parents that has a unique attribute value, and move down to child web element we are trying to locate.
+
+* We CANNOT go from CHILD TO PARENT using cssSelector.
